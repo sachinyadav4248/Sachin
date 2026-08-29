@@ -1,0 +1,16 @@
+{
+    "name": "SizzleStreet.Services",
+    "rootNamespace": "SizzleStreet.Services",
+    "references": [
+        "SizzleStreet.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

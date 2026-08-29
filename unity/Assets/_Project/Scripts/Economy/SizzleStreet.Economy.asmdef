@@ -1,0 +1,16 @@
+{
+    "name": "SizzleStreet.Economy",
+    "rootNamespace": "SizzleStreet.Economy",
+    "references": [
+        "SizzleStreet.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

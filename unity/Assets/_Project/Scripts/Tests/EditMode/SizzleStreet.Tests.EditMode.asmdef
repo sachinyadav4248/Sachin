@@ -1,0 +1,28 @@
+{
+    "name": "SizzleStreet.Tests.EditMode",
+    "rootNamespace": "SizzleStreet.Tests",
+    "references": [
+        "SizzleStreet.Core",
+        "SizzleStreet.Economy",
+        "SizzleStreet.Save",
+        "SizzleStreet.Serialization",
+        "SizzleStreet.Services",
+        "SizzleStreet.Simulation",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": []
+}

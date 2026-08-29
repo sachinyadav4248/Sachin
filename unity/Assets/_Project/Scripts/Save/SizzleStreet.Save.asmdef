@@ -1,0 +1,16 @@
+{
+    "name": "SizzleStreet.Save",
+    "rootNamespace": "SizzleStreet.Save",
+    "references": [
+        "SizzleStreet.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

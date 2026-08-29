@@ -1,0 +1,17 @@
+{
+    "name": "SizzleStreet.Simulation",
+    "rootNamespace": "SizzleStreet.Simulation",
+    "references": [
+        "SizzleStreet.Core",
+        "SizzleStreet.Economy"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}

@@ -1,0 +1,19 @@
+{
+    "name": "SizzleStreet.Gameplay",
+    "rootNamespace": "SizzleStreet.Gameplay",
+    "references": [
+        "SizzleStreet.Core",
+        "SizzleStreet.Economy",
+        "SizzleStreet.Save",
+        "SizzleStreet.Services",
+        "SizzleStreet.Simulation"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": []
+}

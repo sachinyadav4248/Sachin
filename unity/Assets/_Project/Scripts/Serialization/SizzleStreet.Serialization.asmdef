@@ -1,0 +1,17 @@
+{
+    "name": "SizzleStreet.Serialization",
+    "rootNamespace": "SizzleStreet.Serialization",
+    "references": [
+        "SizzleStreet.Save",
+        "Unity.Nuget.Newtonsoft-Json"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}
