@@ -71,8 +71,40 @@ game, and the reason to keep hands on the device.
 
 Full design: [`docs/02-game-design-document.md`](docs/02-game-design-document.md).
 
+## Documents
+
+| Phase | Document |
+| --- | --- |
+| 0 | [Project charter](docs/00-project-charter.md) — placeholders, budgets, standards |
+| 1 | [Requirements](docs/01-requirements.md) — personas, KPIs, acceptance criteria |
+| 2 | [Game design](docs/02-game-design-document.md) — the loop, the economy, the FTUE |
+| 3 | [Technical architecture](docs/03-technical-architecture.md) — assemblies, saves, offline trust |
+| 4 | [Implementation](docs/04-implementation.md) — what exists, what does not, what order to build it |
+| 5 | [Content pipeline](docs/05-content-pipeline.md) — asset budgets and specifications |
+| 6 | [Monetisation and LiveOps](docs/06-monetisation-and-liveops.md) — placements, IAP, experiments |
+| 7 | [QA and testing](docs/07-qa-and-testing.md) — test layers, edge cases, release gates |
+| 8 | [Build, release and compliance](docs/08-build-release-and-compliance.md) — API levels, Data Safety, CI |
+| 9 | [Analytics](docs/09-analytics.md) — event taxonomy, funnels, feeding telemetry back |
+| 10 | [Maintenance and scaling](docs/10-maintenance-and-scaling.md) — cadence, tech debt, stop conditions |
+
+Plus [`IP-GUARDRAILS.md`](IP-GUARDRAILS.md), which applies to every commit, and
+[`data/balance/REPORT.md`](data/balance/REPORT.md), which is generated.
+
 ## Status
 
-Phases 0–4 are implemented as code and documentation in this repository. Art, audio,
-storefront assets and live SDK keys are not — see each phase document for its Definition of
-Done and what remains open.
+The design is complete across all eleven phases and the systems code is written. Two things
+are worth being plain about before reading further.
+
+**The C# has never been compiled.** There is no Unity installation and no .NET toolchain in
+the environment this was built in, so none of it has been through a compiler and the
+edit-mode tests have never run. The economy those tests check *has* been executed — in
+Python, against the same golden values — so the formulas are trustworthy and the C#
+expressing them is not yet. Treat the first Unity open as a compile-and-fix pass.
+
+**There is no game to play.** No UI, no scenes, no art, no audio, no bootstrap, and only null
+implementations of the ad, analytics and config services. What exists is the loop's logic,
+the economy, the save system, and the tests for them.
+[`docs/04-implementation.md`](docs/04-implementation.md) lists what is missing and the order
+to build it in. The gate that matters is a grey-box scene with a joystick and one shop —
+everything before it is scaffolding, and everything after it is worthless if the loop is not
+fun.

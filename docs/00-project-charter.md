@@ -60,7 +60,10 @@ concatenation or lambda closures.
 ## 4. Code standards
 
 - PascalCase types and methods, camelCase locals and parameters, `_camelCase` private
-  fields. One public type per file, file named for the type.
+  fields. One public type per file, named for the type — except tightly coupled data
+  contracts, where splitting one idea across five files makes it harder to read, not easier.
+  `GameEvents.cs` holds every event payload; `EconomySettings.cs` holds every settings
+  interface. Both are read and changed as a unit.
 - XML documentation on every public API. Comments explain constraints, not mechanics.
 - An assembly definition per module. Dependencies point one way: `Gameplay` and `UI` may
   depend on `Core` and `Economy`; nothing depends on `UI`.
