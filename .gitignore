@@ -23,3 +23,8 @@ secrets.env
 # Python
 __pycache__/
 *.pyc
+
+# Android build output
+android/**/bin/
+android/**/obj/
+dist/

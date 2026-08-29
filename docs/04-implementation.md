@@ -5,8 +5,12 @@
 > about two seconds, with no editor and no licence. This works because the runtime assemblies
 > set `noEngineReferences`, so the plain .NET SDK compiles exactly the sources Unity would.
 >
-> Still unverified: anything engine-shaped. `Gameplay` (a `MonoBehaviour`), scenes, prefabs,
-> assets, and the frame budget.
+> There is also a playable Android build in `android/` — a grey box, but a real installable
+> APK running the real simulation. See [`android/README.md`](../android/README.md).
+>
+> Still unverified: anything engine-shaped. `Gameplay` (a `MonoBehaviour`), Unity scenes,
+> prefabs, assets, the frame budget — and the Android build's drawing and touch layer, which
+> has never been run on a device.
 
 ## What exists
 
@@ -19,9 +23,10 @@
 | `Services` | `IAdService`, `IAnalyticsService`, `IRemoteConfigService` | Ads, analytics and config behind interfaces, each with a null implementation |
 | `Serialization` | `NewtonsoftJsonCodec` | The single place the JSON dependency lands |
 | `Gameplay` | `PlayerController` and its anchors | The joystick, movement, and proximity interaction |
-| `Tests/EditMode` | Golden values, save, simulation, economy | 114 tests, all passing |
+| `Tests/EditMode` | Golden values, save, simulation, economy, played sessions | 125 tests, all passing |
+| `android/` | Grey-box Android build: wiring, rendering, input | Installable APK, ~28 MB |
 
-## Four things the code found that the design had wrong
+## Five things the code found that the design had wrong
 
 Two came from writing it, and two more from the first time it was compiled and run — in code
 that had already been written, reviewed and documented.
@@ -52,7 +57,14 @@ staffed shop reported that it earned nothing while closed — the single most va
 the game silently worth zero. It returns infinity now.
 `AnInstantHandoverImposesNoThroughputLimit` guards it.
 
-None of the four was visible in the design documents. Two became visible the moment the code
+**A served customer never left the queue.** Filling an order left the customer in
+`Paying`, still holding their slot. After a few orders every slot was held by somebody who
+had already been served, no new customer could be admitted, and the shop quietly stopped
+earning. It presents as an arrival-rate bug, which is nowhere near where the problem is.
+Found by wiring the Android build, where the shop simply stopped after a couple of minutes.
+`AServedCustomerLeavesSoTheQueueCanRefill` and `TheShopKeepsTakingOrdersIndefinitely` guard it.
+
+None of the five was visible in the design documents. Two became visible the moment the code
 had to say exactly what happened, and two more the moment a compiler and a test runner did.
 That second pair is the argument for the verification harness: they sat in reviewed,
 documented, plausible-looking code, and cost about a minute to find once anything actually
@@ -76,8 +88,10 @@ executed it.
 1. ~~Get it compiling and the edit-mode tests green.~~ Done, headlessly. Open it in Unity
    once to confirm the editor agrees, which is a formality rather than a task.
 2. Bootstrap plus the CSV-to-ScriptableObject importer, so the game runs on real balance.
-3. A joystick and a grey-box scene — one shop, four stations, one counter. This is the first
-   moment anyone can answer whether the loop is fun.
+3. ~~A joystick and a grey-box scene — one shop, four stations, one counter.~~ Done, as a
+   native Android build rather than a Unity scene (`android/`). This is the first moment
+   anyone can answer whether the loop is fun, and that answer should now be gathered before
+   anything below is started.
 4. The Drive-Thru, then staff hiring, then offline earnings on resume.
 5. HUD and upgrade UI.
 6. Ads and analytics behind their interfaces, starting with the offline doubler.
@@ -97,4 +111,7 @@ worthless if the answer there is no.
 - [x] Code compiles against netstandard2.1 with zero warnings
 - [x] All 114 edit-mode tests pass, headlessly and in CI
 - [ ] Confirmed inside the Unity editor — no editor in this environment
-- [ ] UI, bootstrap, configs and concrete services — not started
+- [x] Balance data reaches the game — generated as C# from `config.py`, no runtime parsing
+- [x] A playable build exists on a real device target — grey-box Android APK
+- [ ] Played by anyone. **This is the gate.** The loop has never been in front of a human
+- [ ] Unity UI, scenes, prefabs and concrete services — not started

@@ -19,6 +19,7 @@ open the next one down the street.
 | --- | --- |
 | `docs/` | One document per SDLC phase — charter, requirements, GDD, architecture, content pipeline, monetisation, QA, release, analytics, maintenance |
 | `unity/` | The Unity project root. Game code lives in `unity/Assets/_Project/Scripts`, split into assembly definitions per module |
+| `android/` | A playable Android build that does not need Unity — the grey-box prototype, running the same simulation |
 | `tools/balance/` | Python reference implementation of the economy, the balance-table generator, and its test suite |
 | `data/balance/` | Generated CSV balance tables, consumed by the Unity importer into ScriptableObjects |
 | `ATTRIBUTIONS.md` | Every third-party asset and licence; source for the in-game attributions screen |
@@ -39,8 +40,17 @@ Config (see [`docs/06-monetisation-and-liveops.md`](docs/06-monetisation-and-liv
 ### Verifying the code
 
 ```sh
-./tools/verify/run.sh     # compile the runtime and run all 114 tests, no Unity needed
+./tools/verify/run.sh     # compile the runtime and run all 125 tests, no Unity needed
 ```
+
+### Building a playable APK
+
+```sh
+./android/build.sh        # → dist/SizzleStreet-0.1.0-greybox.apk
+```
+
+Needs the .NET 8 SDK with the `android` workload and an Android SDK; see
+[`android/README.md`](android/README.md).
 
 ### Balance tooling
 
@@ -107,10 +117,13 @@ against netstandard2.1 (Unity's own target) and runs all 114 edit-mode tests in 
 seconds, with no editor and no licence. What has *not* been verified is anything
 engine-shaped: `Gameplay`, scenes, prefabs, assets, frame rate.
 
-**There is no game to play.** No UI, no scenes, no art, no audio, no bootstrap, and only null
-implementations of the ad, analytics and config services. What exists is the loop's logic,
-the economy, the save system, and the tests for them.
+**There is a game you can play, but it is a grey box.** `android/` builds an installable APK
+that runs the real simulation behind coloured rectangles — no art, no audio, no ads, one
+location. It exists to answer the only question worth asking this early: is the loop fun?
+Everything before that gate is scaffolding, and everything after it is worthless if the
+answer is no.
+
+**The Unity project is still mostly empty.** No UI, no scenes, no prefabs, no bootstrap, and
+only null implementations of the ad, analytics and config services.
 [`docs/04-implementation.md`](docs/04-implementation.md) lists what is missing and the order
-to build it in. The gate that matters is a grey-box scene with a joystick and one shop —
-everything before it is scaffolding, and everything after it is worthless if the loop is not
-fun.
+to build it in.

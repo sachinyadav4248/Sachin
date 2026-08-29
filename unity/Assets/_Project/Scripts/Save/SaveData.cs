@@ -38,7 +38,7 @@ namespace SizzleStreet.Save
 
         public EconomyState Economy { get; set; } = new EconomyState();
 
-        public List<LocationState> Locations { get; set; } = new List<LocationState>();
+        public List<LocationSaveState> Locations { get; set; } = new List<LocationSaveState>();
 
         public MetaState Meta { get; set; } = new MetaState();
 
@@ -53,7 +53,7 @@ namespace SizzleStreet.Save
 
             data.Economy.Cash = startingCash;
             data.Economy.Gems = startingGems;
-            data.Locations.Add(new LocationState { Index = 0, IsUnlocked = true });
+            data.Locations.Add(new LocationSaveState { Index = 0, IsUnlocked = true });
             return data;
         }
     }
@@ -95,19 +95,32 @@ namespace SizzleStreet.Save
     }
 
     [Serializable]
-    public sealed class LocationState
+    public sealed class LocationSaveState
     {
         public int Index { get; set; }
 
         public bool IsUnlocked { get; set; }
 
-        public List<StationState> Stations { get; set; } = new List<StationState>();
+        public List<StationSaveState> Stations { get; set; } = new List<StationSaveState>();
 
-        public List<ChannelState> Channels { get; set; } = new List<ChannelState>();
+        public List<ChannelSaveState> Channels { get; set; } = new List<ChannelSaveState>();
     }
 
+    /// <summary>
+    /// One station's persisted state.
+    /// </summary>
+    /// <remarks>
+    /// Named <c>...SaveState</c> rather than <c>StationState</c> because the simulation
+    /// already has a <c>StationState</c>, and that one is an FSM state — Idle, Producing,
+    /// Blocked. Two public types with the same name meaning entirely different things
+    /// collided in the first piece of gameplay code that both saved and ran the chain, which
+    /// is every piece of gameplay code eventually.
+    ///
+    /// Renaming the class is safe for existing saves: the serialiser writes member names, not
+    /// type names, so the JSON is unchanged.
+    /// </remarks>
     [Serializable]
-    public sealed class StationState
+    public sealed class StationSaveState
     {
         public string Id { get; set; } = string.Empty;
 
@@ -122,7 +135,7 @@ namespace SizzleStreet.Save
     }
 
     [Serializable]
-    public sealed class ChannelState
+    public sealed class ChannelSaveState
     {
         public string Id { get; set; } = string.Empty;
 

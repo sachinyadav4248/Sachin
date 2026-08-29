@@ -272,6 +272,35 @@ namespace SizzleStreet.Tests
         }
 
         [Test]
+        public void AServedCustomerLeavesSoTheQueueCanRefill()
+        {
+            // Regression. A fully served customer sat in Paying and kept their slot, so after
+            // a few orders every slot was held by somebody who had already paid, nobody new
+            // could be admitted, and the shop stopped earning. It presents as an arrival-rate
+            // bug, which is nowhere near where the problem is.
+            var counter = NewCounter(ServingChannel.Counter);
+            for (var i = 0; i < counter.Capacity; i++)
+            {
+                counter.TryAdmit(new Customer());
+            }
+
+            Assert.That(counter.HasRoom, Is.False);
+
+            var abandoned = new List<Customer>();
+            counter.Tick(0.1, abandoned);
+
+            var stack = new CarryStack(50);
+            stack.TryAdd(50);
+            counter.TryServe(stack, 1.0, out _);
+
+            var paid = new List<Customer>();
+            Assert.That(counter.CollectPaid(paid), Is.EqualTo(1));
+            Assert.That(paid[0].State, Is.EqualTo(CustomerState.Leaving));
+            Assert.That(counter.HasRoom, Is.True, "a slot must free up when a customer leaves");
+            Assert.That(counter.TryAdmit(new Customer()), Is.True);
+        }
+
+        [Test]
         public void AnUnservedCarBlocksTheDriveThruLane()
         {
             // The Drive-Thru is not a second counter. One missed order costs more than one sale
@@ -412,6 +441,33 @@ namespace SizzleStreet.Tests
             shop.Tick(1.0);
 
             Assert.That(shop.FinishedItems, Is.Zero);
+        }
+
+        [Test]
+        public void TheShopKeepsTakingOrdersIndefinitely()
+        {
+            // The end-to-end version of the same bug: run the loop long enough that every
+            // original customer has been served, and check the shop is still trading.
+            var shop = BuildShop(out var economy, staffed: true);
+            var counter = shop.Counters[0];
+            var stack = new CarryStack(50);
+
+            for (var step = 0; step < 400; step++)
+            {
+                shop.Tick(0.25);
+                if (counter.HasRoom)
+                {
+                    counter.TryAdmit(new Customer());
+                }
+
+                shop.CollectFinished(stack);
+                shop.Serve(counter, stack);
+            }
+
+            Assert.That(economy.Cash, Is.GreaterThan(0.0));
+            Assert.That(
+                counter.HasRoom || counter.QueueLength < counter.Capacity + 1, Is.True,
+                "the queue must not be permanently jammed with customers who already paid");
         }
 
         [Test]

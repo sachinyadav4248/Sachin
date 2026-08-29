@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    A playable Android build of Sizzle Street, without Unity.
+
+    This is the grey-box prototype the build order calls for: the first thing that installs
+    on a phone and answers whether the loop is fun. It is not the 3D game the design
+    documents describe - there is no art, no animation and no audio - but the rules it runs
+    are not a mock-up of the real ones, they are literally the same source files that
+    tools/verify tests. The simulation stays the single source of truth; only the presentation
+    is throwaway.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-android34.0</TargetFramework>
+    <SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
+    <OutputType>Exe</OutputType>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>false</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+
+    <ApplicationId>com.sizzlestreetgames.sizzlestreet</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>0.1.0-greybox</ApplicationDisplayVersion>
+    <ApplicationTitle>Sizzle Street</ApplicationTitle>
+
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+
+    <!--
+      arm64 for real phones, x64 so the thing can be smoke-tested in an emulator. Dropping
+      the 32-bit ABIs roughly halves the download; anything that old is below the minimum
+      spec anyway.
+    -->
+    <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <!--
+      Linking stays off. The save model is serialised by reflection, and a trimmer with no
+      way to see that removes members it believes are unused - which surfaces as a save that
+      silently loses fields, on a device, after release. Size is the cheaper thing to spend.
+    -->
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <PublishTrimmed>false</PublishTrimmed>
+    <DebugSymbols>false</DebugSymbols>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+
+    <!-- AOT requires the trimmer, and the trimmer is off for the reason above. -->
+    <RunAOTCompilation>false</RunAOTCompilation>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The presentation layer: throwaway, and the only part written for this build. -->
+    <Compile Include="*.cs" />
+
+    <!-- The game itself, shared verbatim with the Unity project and the test harness. -->
+    <Compile Include="../../unity/Assets/_Project/Scripts/Core/**/*.cs" />
+    <Compile Include="../../unity/Assets/_Project/Scripts/Economy/**/*.cs" />
+    <Compile Include="../../unity/Assets/_Project/Scripts/Save/**/*.cs" />
+    <Compile Include="../../unity/Assets/_Project/Scripts/Simulation/**/*.cs" />
+    <Compile Include="../../unity/Assets/_Project/Scripts/Services/**/*.cs" />
+    <Compile Include="../../unity/Assets/_Project/Scripts/Serialization/**/*.cs" />
+  </ItemGroup>
+
+</Project>

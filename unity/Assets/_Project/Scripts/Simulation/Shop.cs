@@ -25,6 +25,7 @@ namespace SizzleStreet.Simulation
         private readonly List<Station> _chain = new List<Station>(4);
         private readonly List<ServiceCounter> _counters = new List<ServiceCounter>(2);
         private readonly List<Customer> _abandonedBuffer = new List<Customer>(8);
+        private readonly List<Customer> _paidBuffer = new List<Customer>(8);
         private readonly ComboTracker _combo;
         private readonly IEconomyService _economy;
 
@@ -46,6 +47,9 @@ namespace SizzleStreet.Simulation
 
         /// <summary>Customers who gave up on the last tick and need despawning.</summary>
         public IReadOnlyList<Customer> RecentlyAbandoned => _abandonedBuffer;
+
+        /// <summary>Customers who paid and left on the last tick, and need despawning.</summary>
+        public IReadOnlyList<Customer> RecentlyPaid => _paidBuffer;
 
         public void AddStation(Station station)
         {
@@ -83,10 +87,15 @@ namespace SizzleStreet.Simulation
             FlowDownChain();
 
             _abandonedBuffer.Clear();
+            _paidBuffer.Clear();
             var breaks = 0;
             for (var i = 0; i < _counters.Count; i++)
             {
                 breaks += _counters[i].Tick(deltaSeconds, _abandonedBuffer);
+
+                // Served customers have to actually leave, or every slot ends up held by
+                // somebody who already paid and the shop silently stops taking orders.
+                _counters[i].CollectPaid(_paidBuffer);
             }
 
             if (breaks > 0)

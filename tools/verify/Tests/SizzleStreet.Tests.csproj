@@ -28,6 +28,14 @@
 
   <ItemGroup>
     <Compile Include="../../../unity/Assets/_Project/Scripts/Tests/EditMode/**/*.cs" />
+
+    <!--
+      The Android build's wiring layer. It was written without a single Android type in it,
+      which means the exact code that ships in the APK can be driven headlessly here. There
+      is no emulator in CI and no device; this is what stands in for one, and it covers
+      everything in that build except drawing and touch handling.
+    -->
+    <Compile Include="../../../android/SizzleStreet.Android/GameWorld.cs" />
   </ItemGroup>
 
 </Project>

@@ -161,6 +161,42 @@ namespace SizzleStreet.Simulation
             return customer != null && _queue.Remove(customer);
         }
 
+        /// <summary>
+        /// Clears out everyone who has been served and paid, so the queue can refill.
+        /// </summary>
+        /// <param name="paid">Receives the departing customers, for despawning.</param>
+        /// <remarks>
+        /// Without this the queue never drains. Serving a full order leaves the customer in
+        /// <see cref="CustomerState.Paying"/> and still occupying a slot, so after a few orders
+        /// every slot is held by somebody who has already paid, nobody new can be admitted, and
+        /// the shop quietly stops earning. It looks exactly like an arrival-rate bug, which is
+        /// where anyone would waste an afternoon looking for it.
+        /// </remarks>
+        public int CollectPaid(List<Customer> paid)
+        {
+            if (paid == null)
+            {
+                throw new ArgumentNullException(nameof(paid));
+            }
+
+            var released = 0;
+            for (var i = _queue.Count - 1; i >= 0; i--)
+            {
+                var customer = _queue[i];
+                if (customer.State != CustomerState.Paying)
+                {
+                    continue;
+                }
+
+                customer.CompletePayment();
+                _queue.RemoveAt(i);
+                paid.Add(customer);
+                released++;
+            }
+
+            return released;
+        }
+
         /// <summary>Items per second this channel can physically hand over.</summary>
         /// <remarks>
         /// A non-positive handover time means the exchange is instantaneous, so it imposes no
