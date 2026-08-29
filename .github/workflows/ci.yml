@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  balance:
+    name: Economy and balance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Economy and pacing tests
+        working-directory: tools/balance
+        run: python3 -m unittest discover -v
+
+      - name: Balance tables are in sync
+        # Generation is deterministic, so a diff here means someone changed config.py without
+        # regenerating - and the tables the game ships no longer match the numbers the tests
+        # just verified.
+        run: |
+          python3 tools/balance/generate_tables.py
+          if ! git diff --exit-code -- data/balance unity/Assets/_Project/Scripts/Tests/EditMode/GoldenValues.g.cs; then
+            echo "::error::Balance output is stale. Run tools/balance/generate_tables.py and commit the result."
+            exit 1
+          fi
+
+  runtime:
+    name: Runtime code
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build and test without Unity
+        # The runtime assemblies set noEngineReferences, so the same sources Unity compiles
+        # build here in seconds with no editor and no licence.
+        run: ./tools/verify/run.sh

@@ -140,12 +140,53 @@ namespace SizzleStreet.Simulation
             }
         }
 
+        /// <summary>How many units this station could produce right now.</summary>
+        /// <remarks>
+        /// Bounded by whichever runs out first: room in the output buffer, work waiting from
+        /// upstream, or restockable supplies. Knowing this <em>before</em> accumulating
+        /// progress is what stops the station banking work it had no materials to do.
+        /// </remarks>
+        private int ProducibleUnits()
+        {
+            var limit = _settings.OutputBuffer - _outputCount;
+            if (limit <= 0)
+            {
+                return 0;
+            }
+
+            if (!IsChainHead && _workInProgress < limit)
+            {
+                limit = _workInProgress;
+            }
+
+            if (UsesSupplies && _supplies < limit)
+            {
+                limit = _supplies;
+            }
+
+            return limit > 0 ? limit : 0;
+        }
+
         /// <summary>Advances the station by <paramref name="deltaSeconds"/>.</summary>
         /// <remarks>
+        /// <para>
         /// Produces as many units as the elapsed time allows rather than capping at one. A
         /// late-game station can exceed one unit per frame, and a cap would silently discard
         /// throughput the player has paid for — a bug that presents as the upgrade doing
         /// nothing.
+        /// </para>
+        /// <para>
+        /// Progress only accrues for time the station could actually work. An earlier version
+        /// added progress for the whole elapsed time and clamped afterwards, which meant a
+        /// station holding two units of flour and given ten seconds produced its two, then kept
+        /// a full unit of progress banked — and handed it over for free the instant somebody
+        /// restocked it. Work done during a stall is work that did not happen.
+        /// </para>
+        /// <para>
+        /// Partial progress <em>is</em> preserved when the worker simply walks away mid-unit:
+        /// that case returns early, before progress is touched, so the station resumes where it
+        /// stopped rather than restarting.
+        /// </para>
         /// </remarks>
         public void Tick(double deltaSeconds)
         {
@@ -160,15 +201,12 @@ namespace SizzleStreet.Simulation
                 return;
             }
 
-            if (_outputCount >= _settings.OutputBuffer)
+            var producible = ProducibleUnits();
+            if (producible <= 0)
             {
-                State = StationState.Blocked;
-                return;
-            }
-
-            if (!HasMaterials())
-            {
-                State = _outputCount > 0 ? StationState.OutputReady : StationState.Idle;
+                State = _outputCount >= _settings.OutputBuffer
+                    ? StationState.Blocked
+                    : _outputCount > 0 ? StationState.OutputReady : StationState.Idle;
                 return;
             }
 
@@ -181,7 +219,8 @@ namespace SizzleStreet.Simulation
 
             _progress += rate * deltaSeconds;
 
-            while (_progress >= 1.0 && _outputCount < _settings.OutputBuffer && HasMaterials())
+            var produced = 0;
+            while (_progress >= 1.0 && produced < producible)
             {
                 if (!IsChainHead)
                 {
@@ -195,13 +234,14 @@ namespace SizzleStreet.Simulation
 
                 _progress -= 1.0;
                 _outputCount++;
+                produced++;
             }
 
-            // Hold partial progress rather than discarding it, so a station that unblocks or
-            // gets restocked resumes where it stopped instead of restarting the unit.
-            if (_progress > 1.0)
+            if (produced >= producible && _progress >= 1.0)
             {
-                _progress = 1.0;
+                // The station ran out of room or materials partway through the tick. The rest
+                // of that time it stood idle, so it did not start the next unit.
+                _progress = 0.0;
             }
 
             if (_outputCount >= _settings.OutputBuffer)

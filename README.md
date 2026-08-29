@@ -36,6 +36,12 @@ Balance values are **never** hard-coded in logic. They live in ScriptableObjects
 handful of values that need to move without a client release are overridden by Remote
 Config (see [`docs/06-monetisation-and-liveops.md`](docs/06-monetisation-and-liveops.md)).
 
+### Verifying the code
+
+```sh
+./tools/verify/run.sh     # compile the runtime and run all 114 tests, no Unity needed
+```
+
 ### Balance tooling
 
 The economy is specified once, in Python, and ported to C# — the two implementations are
@@ -95,11 +101,11 @@ Plus [`IP-GUARDRAILS.md`](IP-GUARDRAILS.md), which applies to every commit, and
 The design is complete across all eleven phases and the systems code is written. Two things
 are worth being plain about before reading further.
 
-**The C# has never been compiled.** There is no Unity installation and no .NET toolchain in
-the environment this was built in, so none of it has been through a compiler and the
-edit-mode tests have never run. The economy those tests check *has* been executed — in
-Python, against the same golden values — so the formulas are trustworthy and the C#
-expressing them is not yet. Treat the first Unity open as a compile-and-fix pass.
+**The runtime code compiles and its tests pass — but nothing has been opened in Unity.**
+Every runtime assembly is Unity-free by construction, so `./tools/verify/run.sh` builds them
+against netstandard2.1 (Unity's own target) and runs all 114 edit-mode tests in about two
+seconds, with no editor and no licence. What has *not* been verified is anything
+engine-shaped: `Gameplay`, scenes, prefabs, assets, frame rate.
 
 **There is no game to play.** No UI, no scenes, no art, no audio, no bootstrap, and only null
 implementations of the ad, analytics and config services. What exists is the loop's logic,

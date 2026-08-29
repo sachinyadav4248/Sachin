@@ -1,0 +1,25 @@
+# Build output from the headless verification harness
+tools/verify/**/bin/
+tools/verify/**/obj/
+
+# Unity
+unity/[Ll]ibrary/
+unity/[Tt]emp/
+unity/[Oo]bj/
+unity/[Bb]uild/
+unity/[Bb]uilds/
+unity/[Ll]ogs/
+unity/[Uu]ser[Ss]ettings/
+unity/[Mm]emoryCaptures/
+unity/*.csproj
+unity/*.sln
+
+# Secrets. Never committed - CI supplies these, and the build fails loudly without them.
+google-services.json
+*.keystore
+*.jks
+secrets.env
+
+# Python
+__pycache__/
+*.pyc

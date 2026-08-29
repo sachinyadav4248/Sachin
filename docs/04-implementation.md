@@ -1,10 +1,12 @@
 # Phase 4 — Implementation
 
-> **Status: written, not compiled.** This environment has no Unity installation and no .NET
-> toolchain. None of the C# described here has been through a compiler and the edit-mode
-> tests have never been executed. The economy it implements *has* been executed — in Python,
-> against the same golden values the C# asserts — so the formulas are trustworthy and the C#
-> expressing them is not yet. The first Unity open is a compile-and-fix pass.
+> **Status: compiles, and its tests pass.** `./tools/verify/run.sh` builds every runtime
+> assembly against netstandard2.1 — Unity's own target — and runs all 114 edit-mode tests in
+> about two seconds, with no editor and no licence. This works because the runtime assemblies
+> set `noEngineReferences`, so the plain .NET SDK compiles exactly the sources Unity would.
+>
+> Still unverified: anything engine-shaped. `Gameplay` (a `MonoBehaviour`), scenes, prefabs,
+> assets, and the frame budget.
 
 ## What exists
 
@@ -17,9 +19,12 @@
 | `Services` | `IAdService`, `IAnalyticsService`, `IRemoteConfigService` | Ads, analytics and config behind interfaces, each with a null implementation |
 | `Serialization` | `NewtonsoftJsonCodec` | The single place the JSON dependency lands |
 | `Gameplay` | `PlayerController` and its anchors | The joystick, movement, and proximity interaction |
-| `Tests/EditMode` | Golden values, save, simulation, economy | 60-odd tests, none yet run |
+| `Tests/EditMode` | Golden values, save, simulation, economy | 114 tests, all passing |
 
-## Two things the code found that the design had wrong
+## Four things the code found that the design had wrong
+
+Two came from writing it, and two more from the first time it was compiled and run — in code
+that had already been written, reviewed and documented.
 
 **A station has two inputs, not one.** The first draft merged work in progress from the
 upstream station with the restockable supplies the player fetches. Under that model the
@@ -33,8 +38,25 @@ primary fails verification, then saves immediately to promote it. That save rota
 file became total loss one launch later. Rotation is now skipped while the primary is known
 bad. `ARecoveryDoesNotDestroyTheBackup` guards it.
 
-Neither was visible in the design documents. Both were visible the moment the code had to
-say exactly what happened.
+**A stalled station banked free work.** `Station.Tick` accrued progress across the whole
+elapsed tick and clamped afterwards, so a station holding two units of flour and given ten
+seconds produced its two and kept a full unit of progress in hand — which it handed over free
+the instant somebody restocked it. Progress now only accrues for time the station could
+actually work. `AStalledStationDoesNotBankWorkItCouldNotDo` guards it, and
+`AWorkerLeavingMidUnitKeepsThePartialProgress` guards the other half of the rule.
+
+**An instantaneous handover reported no capacity at all.**
+`ServiceCounter.ServeCapacityPerSecond` returned zero for a non-positive serve time,
+conflating "instant" with "impossible". Because idle rate takes a minimum against it, a fully
+staffed shop reported that it earned nothing while closed — the single most valuable thing in
+the game silently worth zero. It returns infinity now.
+`AnInstantHandoverImposesNoThroughputLimit` guards it.
+
+None of the four was visible in the design documents. Two became visible the moment the code
+had to say exactly what happened, and two more the moment a compiler and a test runner did.
+That second pair is the argument for the verification harness: they sat in reviewed,
+documented, plausible-looking code, and cost about a minute to find once anything actually
+executed it.
 
 ## What is not built
 
@@ -51,7 +73,8 @@ say exactly what happened.
 
 ## Order to build the rest
 
-1. Get it compiling and the edit-mode tests green. Nothing below is meaningful until then.
+1. ~~Get it compiling and the edit-mode tests green.~~ Done, headlessly. Open it in Unity
+   once to confirm the editor agrees, which is a formality rather than a task.
 2. Bootstrap plus the CSV-to-ScriptableObject importer, so the game runs on real balance.
 3. A joystick and a grey-box scene — one shop, four stations, one counter. This is the first
    moment anyone can answer whether the loop is fun.
@@ -71,6 +94,7 @@ worthless if the answer there is no.
 - [x] Service interfaces with null implementations for offline play
 - [x] Assembly boundaries enforced by `noEngineReferences`
 - [x] Edit-mode tests written for every rule above
-- [ ] **Code compiles** — blocked, no toolchain in this environment
-- [ ] Edit-mode tests pass — blocked on the same
+- [x] Code compiles against netstandard2.1 with zero warnings
+- [x] All 114 edit-mode tests pass, headlessly and in CI
+- [ ] Confirmed inside the Unity editor — no editor in this environment
 - [ ] UI, bootstrap, configs and concrete services — not started

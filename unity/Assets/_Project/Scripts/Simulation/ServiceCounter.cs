@@ -162,8 +162,18 @@ namespace SizzleStreet.Simulation
         }
 
         /// <summary>Items per second this channel can physically hand over.</summary>
+        /// <remarks>
+        /// A non-positive handover time means the exchange is instantaneous, so it imposes no
+        /// limit at all — hence infinity rather than zero. Returning zero conflated
+        /// "instantaneous" with "impossible", and since this feeds the idle rate through a
+        /// <c>Min</c>, it silently reported that a fully staffed shop earned nothing while
+        /// closed. Shipping configurations always use a positive time; zero is a test
+        /// convenience and it should mean what it says.
+        /// </remarks>
         public double ServeCapacityPerSecond =>
-            _settings.ServeSeconds <= 0.0 ? 0.0 : Capacity / _settings.ServeSeconds;
+            _settings.ServeSeconds <= 0.0
+                ? double.PositiveInfinity
+                : Capacity / _settings.ServeSeconds;
 
         private Customer FindServable()
         {

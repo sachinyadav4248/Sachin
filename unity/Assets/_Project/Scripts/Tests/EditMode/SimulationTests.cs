@@ -106,6 +106,47 @@ namespace SizzleStreet.Tests
         }
 
         [Test]
+        public void AStalledStationDoesNotBankWorkItCouldNotDo()
+        {
+            // Regression. Progress used to accrue for the whole elapsed tick and then get
+            // clamped, so a station with two units of flour and ten seconds produced its two
+            // and kept a full unit of progress in hand - which it handed over free the instant
+            // somebody restocked it. Time spent stalled is time the station did nothing.
+            var station = Head(buffer: 100, supplies: 2);
+            station.PlayerPresent = true;
+            station.Tick(10.0);
+
+            Assert.That(station.OutputCount, Is.EqualTo(2));
+            Assert.That(station.Progress, Is.Zero, "a stalled station holds no banked progress");
+
+            station.Restock();
+            station.Tick(0.5);
+
+            Assert.That(
+                station.OutputCount, Is.EqualTo(2),
+                "half a second of work must not complete a unit from nothing");
+        }
+
+        [Test]
+        public void AWorkerLeavingMidUnitKeepsThePartialProgress()
+        {
+            // The other half of the rule: progress genuinely earned is not thrown away just
+            // because the player walked off.
+            var station = Head(buffer: 100, output: 1.0);
+            station.PlayerPresent = true;
+            station.Tick(0.5);
+
+            var partial = station.Progress;
+            Assert.That(partial, Is.GreaterThan(0f));
+
+            station.PlayerPresent = false;
+            station.Tick(5.0);
+
+            Assert.That(station.Progress, Is.EqualTo(partial).Within(1e-6));
+            Assert.That(station.OutputCount, Is.Zero);
+        }
+
+        [Test]
         public void ADownstreamStationWaitsForWorkFromUpstream()
         {
             // The bug this guards: with work-in-progress and restockable supplies merged into
@@ -249,6 +290,27 @@ namespace SizzleStreet.Tests
             Assert.That(
                 second.State, Is.EqualTo(CustomerState.Queueing),
                 "the second car cannot order until the first is served");
+        }
+
+        [Test]
+        public void AnInstantHandoverImposesNoThroughputLimit()
+        {
+            // Regression. A non-positive serve time means the exchange is instantaneous, so it
+            // limits nothing. Reporting zero capacity conflated "instant" with "impossible",
+            // and because idle rate takes a minimum against it, a fully staffed shop reported
+            // that it earned nothing at all while closed.
+            var counter = NewCounter(ServingChannel.Counter);
+
+            Assert.That(counter.ServeCapacityPerSecond, Is.EqualTo(double.PositiveInfinity));
+        }
+
+        [Test]
+        public void ARealHandoverTimeBoundsThroughput()
+        {
+            var counter = new ServiceCounter(
+                new TestChannelSettings { BaseSlots = 3, ServeSeconds = 0.8 }, seed: 7);
+
+            Assert.That(counter.ServeCapacityPerSecond, Is.EqualTo(3.0 / 0.8).Within(1e-9));
         }
 
         [Test]

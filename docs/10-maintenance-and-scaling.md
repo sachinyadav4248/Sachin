@@ -26,7 +26,7 @@ Carried openly rather than discovered later.
 
 | Item | Cost | When it bites |
 | --- | --- | --- |
-| **None of the C# has been compiled** | A compile-and-fix pass | The first Unity open |
+| Nothing has been opened in Unity | Probably an afternoon | The first editor open |
 | No UI layer at all | Weeks | Before any playtest |
 | No ScriptableObject importer; CSVs are not yet read by the game | Days | Before balance means anything in-engine |
 | Only null service implementations | Days | Before monetisation exists |
@@ -36,8 +36,10 @@ Carried openly rather than discovered later.
 | No server, so clock advancement is possible | Bounded by the offline cap | Accepted for v1 |
 | No play-mode or device tests | Days | Before the first release |
 
-The first row is the one that matters. Everything else in this repository is downstream of
-whether the code compiles, and that is unknown.
+The runtime code compiles and its 114 tests pass, headlessly and in CI, so the top row is
+much smaller than it was: what remains is Unity agreeing with a compiler that has already
+accepted the same sources against the same target framework. The rows that matter now are the
+second and the last — there is no UI, and nothing has been run on a device.
 
 ## 4. Update cadence
 

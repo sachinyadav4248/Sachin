@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Headless compilation of every Unity-free assembly in the game.
+
+    The game's runtime code deliberately avoids UnityEngine (the asmdefs set
+    noEngineReferences), which is what makes this possible: the same sources that Unity
+    compiles can be built and tested by the plain .NET SDK, with no editor and no licence.
+
+    Targeting netstandard2.1 rather than net8.0 is the point. Unity compiles against
+    netstandard2.1, so building here against anything newer would happily accept APIs that
+    fail in the real player - and the failure would surface on a device rather than in CI.
+  -->
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <AssemblyName>SizzleStreet.Runtime</AssemblyName>
+    <RootNamespace>SizzleStreet</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!--
+      Gameplay/ is excluded: PlayerController is a MonoBehaviour and genuinely needs Unity.
+      Everything else in the game is here.
+    -->
+    <Compile Include="../../../unity/Assets/_Project/Scripts/Core/**/*.cs" />
+    <Compile Include="../../../unity/Assets/_Project/Scripts/Economy/**/*.cs" />
+    <Compile Include="../../../unity/Assets/_Project/Scripts/Save/**/*.cs" />
+    <Compile Include="../../../unity/Assets/_Project/Scripts/Simulation/**/*.cs" />
+    <Compile Include="../../../unity/Assets/_Project/Scripts/Services/**/*.cs" />
+    <Compile Include="../../../unity/Assets/_Project/Scripts/Serialization/**/*.cs" />
+  </ItemGroup>
+
+</Project>

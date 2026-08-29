@@ -6,13 +6,21 @@
 | --- | --- | --- |
 | Python unit tests | `python3 -m unittest discover` in `tools/balance` | The economy specification: 41 tests |
 | Python balance tests | The same | Simulated pacing against `config.PACING`: 16 tests |
-| C# edit-mode tests | Unity Test Runner | Golden values, saves, the production chain, the ledger |
+| C# edit-mode tests | `tools/verify/run.sh`, and Unity Test Runner | Golden values, saves, the production chain, the ledger: 114 tests |
 | Play-mode tests | Unity Test Runner | Scene wiring, pooling, the FTUE sequence — **not written** |
 | Device matrix | Manual, per release | Frame rate, memory, thermals, input |
 | Soak | Automated, nightly | 30 minutes of continuous play |
 
-The Python tests are the only ones that have ever run. The C# tests are written and have
-never been executed, because this environment has no Unity and no .NET toolchain.
+The C# tests run **without Unity**. Every runtime assembly sets `noEngineReferences`, so the
+plain .NET SDK compiles the same sources and runs the same tests against netstandard2.1 —
+Unity's own target — in about two seconds. `./tools/verify/run.sh`, and a CI job.
+
+That was worth building for a reason beyond speed. The first time those tests executed, they
+failed twice, in code that had been written, reviewed and documented but never compiled: a
+station banked a free unit of work across a stall, and a fully staffed shop reported that it
+earned nothing while closed. Both are the kind of bug that survives any amount of reading.
+
+Only the Unity Test Runner, play-mode tests and device work remain unrun.
 
 ## 2. The balance tests are the unusual part
 

@@ -1,9 +1,9 @@
-> **Status:** the code described here is written but **has not been compiled**. This
-> environment has no Unity installation and no .NET toolchain, so nothing below has been
-> through a compiler, and the C# tests have never been executed. The economy it implements
-> *has* been executed — in Python, against the same golden values the C# tests assert — so
-> the formulas are trustworthy and the C# expressing them is not yet. Treat the first Unity
-> open as a compile-and-fix pass. See the Definition of Done at the end.
+> **Status:** the code described here compiles and its tests pass. It has *not* been run
+> inside Unity — there is no editor here — but rule 1 below turned out to pay for itself
+> immediately: because the runtime assemblies contain no Unity types, the plain .NET SDK
+> compiles the same sources and runs the same tests. `./tools/verify/run.sh` builds them
+> against netstandard2.1 and runs 114 tests in about two seconds. What remains unverified is
+> everything engine-shaped: `Gameplay`, scenes, prefabs and assets.
 
 # Phase 3 — Technical Architecture
 
@@ -28,18 +28,25 @@ Four rules decide most of the structure:
 ## 2. Assemblies
 
 ```
-SizzleStreet.Core        clock, event bus, service locator, pooling, formatting
-SizzleStreet.Economy     the formulas, the ledger, upgrades, offline accrual   → Core
-SizzleStreet.Save        save model, serialisation, migration, storage         → Core
-SizzleStreet.Services    ads, analytics, remote config, IAP — interfaces first → Core
-SizzleStreet.Gameplay    stations, customers, channels, player, staff          → Core, Economy
-SizzleStreet.UI          HUD, panels, popups                                   → all
-SizzleStreet.Tests.EditMode                                                    → all
+SizzleStreet.Core           clock, event bus, service locator, pooling, formatting
+SizzleStreet.Economy        formulas, ledger, upgrades, offline accrual   → Core
+SizzleStreet.Save           save model, serialisation, migration, storage → Core
+SizzleStreet.Simulation     stations, customers, channels, combo, shop    → Core, Economy
+SizzleStreet.Services       ads, analytics, remote config — interfaces    → Core
+SizzleStreet.Serialization  the one place the JSON dependency lands       → Save
+SizzleStreet.Gameplay       MonoBehaviours: player, anchors               → all of the above
+SizzleStreet.UI             HUD, panels, popups                           → all
+SizzleStreet.Tests.EditMode                                               → all but Gameplay
 ```
 
-An assembly definition per module is not bureaucracy: it is what makes rule 1 enforceable.
-`SizzleStreet.Economy.asmdef` does not reference Unity's engine assembly, so a `using
-UnityEngine;` in the economy fails to compile rather than failing review.
+Everything above `Gameplay` sets `noEngineReferences`, so a stray `using UnityEngine;` in the
+economy fails to compile rather than failing review. `Gameplay` is the only assembly that
+touches the engine, and it holds no rules.
+
+That boundary is not decoration. Because those assemblies contain no Unity types, the plain
+.NET SDK compiles exactly the same sources — which is what `tools/verify/` does, running the
+whole test suite in about two seconds with no editor and no licence. The first time it ran it
+found two bugs in code that had already been written, reviewed and documented.
 
 ## 3. Folders
 
@@ -240,6 +247,8 @@ predictable.
 - [x] Save durability, versioning and recovery specified
 - [x] Offline trust model stated, including what it knowingly does not defend
 - [x] Pooling and performance techniques assigned to specific systems
-- [ ] **Code compiles** — not verified; no Unity or .NET toolchain in this environment
-- [ ] Edit-mode tests executed — blocked on the same
+- [x] Code compiles — against netstandard2.1, Unity's own target, with zero warnings
+- [x] Edit-mode tests executed — 114 passing, headlessly, in about two seconds
+- [x] Rule 1 enforced by construction and shown to pay for itself
+- [ ] Compiled inside Unity — no editor in this environment
 - [ ] Frame budget measured on a real device — blocked on a build
