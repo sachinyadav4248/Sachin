@@ -1,0 +1,7 @@
+location_index,channel_id,patience_seconds,min_order,max_order,price_multiplier,arrivals_per_second
+0,counter,30,2,5,1,0.22
+0,drive_thru,18,1,2,1.35,0.13
+1,counter,27.6,2,5,1,0.297
+1,drive_thru,16.56,1,2,1.35,0.1755
+2,counter,25.392,2,5,1,0.40095
+2,drive_thru,15.2352,1,2,1.35,0.236925

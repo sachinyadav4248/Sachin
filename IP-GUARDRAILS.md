@@ -65,4 +65,3 @@ competitor in the listing, and never use a competitor's screenshot in a comparis
 
 Preserve everything, change nothing, escalate to counsel immediately. Do not remove the
 allegedly infringing asset before it is documented, and do not respond directly.
-</content>

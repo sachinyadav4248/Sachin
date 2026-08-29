@@ -9,12 +9,11 @@ overridable at runtime by Remote Config. Where this document and the generated t
 
 **Serve → Earn → Upgrade → Expand**, sitting on a bed of idle income.
 
-The loop is legible at two time scales. Second to second, the player is a bottleneck-solver:
-the oven is the slow step, so the dough piles up, so you go stand at the oven. Session to
-session, the player is buying their way out of being the bottleneck at all — first with
-speed, then with capacity, then with staff who replace them entirely, at which point the
-shop earns while the app is closed and the interesting decision moves up a level to which
-location to open next.
+The loop is legible at two time scales. Second to second, the player is the bottleneck: one
+pair of hands doing every step in sequence, always behind. Session to session, they are
+buying their way out of being the bottleneck at all — first with speed, then with capacity,
+then with staff who replace them entirely, at which point the shop earns while the app is
+closed and the interesting decision moves up a level to which street to open next.
 
 Each of the four verbs feeds exactly one other:
 
@@ -60,11 +59,26 @@ Each of the four verbs feeds exactly one other:
                  └────────────┘ └──────────────┘
 ```
 
-The Oven is the deliberate bottleneck at level 0 — 0.45/s against Dough's 0.80/s. A new
-player discovers within ninety seconds that dough piles up while the oven crawls, which
-teaches the entire upgrade system without a tutorial step. Oven upgrades are also the most
-expensive per level (`growth` 1.12 against Dough's 1.09), so the bottleneck moves around as
-the player buys, rather than being solved once.
+**The player is the bottleneck at level 0, and the Oven is the bottleneck after that.** This
+is the most important thing about the chain, and it took a simulation to state it correctly.
+
+Dough, Topping and Boxing need a worker. The Oven does not — it is a machine that bakes
+unattended once loaded. So while the player is working the shop alone, an item's journey
+costs them the *sum* of the seconds they spend at each manned station, and the Oven's 0.45/s
+never binds at all: their own hands are slower than it. Every early upgrade is really an
+upgrade to how fast the player personally works.
+
+The moment cooks are hired, that changes completely. Manned stations move from the serial
+sum into the parallel set, the player's hands stop being the limit, and the Oven — which
+cannot be staffed, because there is nobody to be — becomes the thing holding the shop back.
+That is the lesson automation is there to teach: hiring does not remove the bottleneck, it
+moves it somewhere you have to spend differently to fix. Oven upgrades are correspondingly
+the most expensive per level (`growth` 1.12 against Dough's 1.09).
+
+*(The first draft of this document claimed the Oven was the level-0 bottleneck and that
+dough would visibly pile up in the first ninety seconds. The model says otherwise: nothing
+piles up while one pair of hands is doing every step in sequence. The design is better for
+the correction — it gives automation a consequence beyond going faster.)*
 
 ### Station state machine
 
@@ -148,7 +162,28 @@ normal combo is +50%). Drive-Thru orders apply an additional 1.35× channel mult
 The combo increments on every completed order and resets to zero on any expired customer.
 It is the only place where paying attention beats walking away, outside Rush Hour.
 
-### 3.3 Production rate
+### 3.3 Demand — the ceiling on everything
+
+```
+demand = Σ over channels (arrivalsPerSecond × averageOrderSize)
+         × marketingMultiplier × locationArrivalMultiplier
+throughput = min(demand, serial player rate, every parallel station and server rate)
+```
+
+A shop cannot sell faster than people walk in. Demand is what stops production upgrades
+compounding forever, and it is the reason expansion — not optimisation — is what grows the
+business.
+
+This was missing from the first draft, and its absence was not survivable: without a demand
+ceiling the simulated economy reached 470,000 cash per second within six hours and made
+every location unlock trivially cheap. Two things relieve the ceiling, and only two.
+**Signage** raises arrivals within a location, capped at 10 levels per location. **Expansion**
+raises them across the board and is the only uncapped lever.
+
+Defaults: Counter 0.22 arrivals/s at an average order of 3.5; Drive-Thru 0.13 at 1.5. About
+0.97 items per second of demand at the first location.
+
+### 3.4 Production rate
 
 ```
 outputPerSecond = baseOutput × count × stationMultiplier × staffMultiplier
@@ -159,7 +194,7 @@ stationMultiplier = speedPerLevel^level
 upgrade). `staffMultiplier` is 1.0 when the player works the station personally and comes
 from the staff tier when a hire works it.
 
-### 3.4 The progression invariant
+### 3.5 The progression invariant
 
 Cost is exponential in level. Income is at best exponential with a *smaller* base, and in
 practice sub-exponential because throughput is gated by the slowest station and by serving
@@ -171,11 +206,29 @@ and the player always knows which: wait (idle income), watch (rewarded doubler),
 or a pack), or expand (a new location resets the ratio at a higher band). A wall with no
 visible exit is a bug; a wall with an exit is the entire meta-game.
 
-The first wall is tuned to land at roughly 25–35 minutes of play, which is after the first
-session for Casey and inside the first session for Omar. It is where the No-Ads and starter
-offers first appear.
+What a player experiences as a wall is not "nothing is affordable" — with several cheap
+upgrade tracks running there is nearly always something to buy. It is the next *meaningful*
+step being out of reach while small purchases dribble out. So walls are measured against
+gates: hires and locations. Simulated, they land here:
 
-### 3.5 Idle rate and offline earnings
+| Gate | Reached at | Saved for |
+| --- | --- | --- |
+| First cook hired | 10.5 min | 10.5 min |
+| Second cook hired | 26.7 min | 16.2 min |
+| Shop fully staffed | 40.7 min | — |
+| Second location | 2.6 h | 1.8 h |
+| Third location | 10.7 h | 8.1 h |
+
+The 16-minute save at around the 27-minute mark is the first wall a player will describe as
+one, and it is where the No-Ads and starter offers appear. All times are active play;
+offline collection shortens the elapsed time for anyone returning a few times a day.
+
+Current numbers are in [`data/balance/REPORT.md`](../data/balance/REPORT.md), regenerated
+from the simulation. `tools/balance/test_simulate.py` asserts every one of these against the
+targets in `config.PACING`, so a tuning change that pushes the first hire past twenty
+minutes fails CI rather than shipping.
+
+### 3.6 Idle rate and offline earnings
 
 The idle rate is the throughput of the chain **as it runs without the player**, so it is
 determined entirely by what is automated:
@@ -205,7 +258,7 @@ If `now < lastSaveTime` the device clock has moved backwards. Elapsed is zero, n
 granted, and the stored timestamp is repaired forward. The game never grants time it cannot
 prove passed.
 
-### 3.6 Prestige (post-v1)
+### 3.7 Prestige (post-v1)
 
 ```
 multiplier = 1 + prestigeK × sqrt(totalEarnedThisRun / prestigeScale)
@@ -216,7 +269,7 @@ Defaults `prestigeK` 1.0, `prestigeScale` 1e6 — so a run that earns 1M returns
 prestige from becoming the only thing worth doing. Not in v1; the save schema reserves the
 fields so adding it later is a migration, not a rewrite.
 
-### 3.7 Balance tables
+### 3.8 Balance tables
 
 Generated, not hand-written. `tools/balance/generate_tables.py` emits:
 
@@ -228,11 +281,15 @@ Generated, not hand-written. `tools/balance/generate_tables.py` emits:
 | `data/balance/staff.csv` | Staff tiers per station: hire cost, speed multiplier |
 | `data/balance/locations.csv` | Unlock cost, price band, arrival multiplier, patience scale |
 | `data/balance/customer_patience.csv` | Patience per channel per location |
-| `data/balance/progression.csv` | Simulated time-to-afford and wall positions across the first N levels |
+| `data/balance/marketing_upgrades.csv` | Signage levels: cost, arrival multiplier, location required |
+| `data/balance/player_levels.csv` | Cumulative earnings threshold per level |
+| `data/balance/progression.csv` | Every event of a simulated 30-hour run |
+| `data/balance/golden_values.json` | Cases the C# economy must reproduce exactly |
+| `data/balance/REPORT.md` | Simulated pacing checked against the targets |
 
 `progression.csv` is the important one: it is the output of an actual simulation of the loop,
-and it is what makes "the first wall lands at 25–35 minutes" a checkable claim rather than an
-aspiration.
+and it is what turns the gate timings in §3.5 into checkable claims rather than
+aspirations.
 
 ## 4. Progression and content
 
@@ -246,9 +303,21 @@ see three level-up celebrations inside the first four minutes.
 ### Locations
 
 Sequential unlocks, each a fresh shop with its own stations and upgrade levels, a higher
-`locationBand` price multiplier and faster arrivals. Unlock cost is geometric with a very
-large growth factor, so a location is always a multi-session goal. Three locations in v1;
-the content pipeline supports adding more without a code change.
+`locationBand` price multiplier, faster arrivals, and a `costBand` that scales every upgrade
+price with it. That last one matters: without it a player arrives at the new street holding
+the fortune they saved for the unlock and buys every remaining upgrade in the game in a
+single tap.
+
+Unlock costs are geometric with a very large growth factor (85,000 then 21.25M), so a
+location is always a multi-session goal. Three locations in v1; adding more is data, not
+code.
+
+**Open risk: v1 runs out of content at around 20 hours of active play.** The simulation
+exhausts every purchase in the game at 19.5 hours — roughly six weeks at 25 minutes a day,
+or under three at 45. That is enough to reach the D30 target and not much more, and the
+8-hour save for the third location is the stretch where players are most likely to leave. A
+fourth location or the prestige system needs to land before the first cohort gets there;
+which one is a roadmap decision, not a balance one.
 
 ### Rush Hour — the hook
 
@@ -320,7 +389,7 @@ we do for D1: the first screen has one affordance on it.
 | ~30 s | First cash collected by walking over it |
 | ~45 s | First upgrade prompt appears above the Oven — the station they have already noticed is slow |
 | ~90 s | Drive-Thru opens; first car arrives; the second channel is introduced by use, not text |
-| ~3 min | First staff hire offered — the first time the shop does something without them |
+| ~3 min | First staff hire *offered* — affordable at around 10 minutes, and the first time the shop does anything without the player |
 | ~5 min | Player level 3; expansion map teased, locked |
 | First return | Offline earnings popup with the rewarded doubler — the first ad the player ever sees, and it is optional and pays them |
 | ~25–35 min | First real wall; No-Ads and starter offers appear |
@@ -385,4 +454,3 @@ by market.
 - [x] Art, audio and localisation direction set
 - [ ] First-wall timing validated against the simulation — see `data/balance/progression.csv`
 - [ ] Rush Hour tuned against real play sessions — needs a playable build
-</content>

@@ -1,0 +1,16 @@
+location_index,post_id,post_kind,hire_cost,speed_multiplier
+0,dough,station,250,0.85
+0,topping,station,400,0.85
+0,boxing,station,550,0.85
+0,counter,channel,800,1
+0,drive_thru,channel,1200,1
+1,dough,station,10000,0.85
+1,topping,station,16000,0.85
+1,boxing,station,22000,0.85
+1,counter,channel,32000,1
+1,drive_thru,channel,48000,1
+2,dough,station,400000,0.85
+2,topping,station,640000,0.85
+2,boxing,station,880000,0.85
+2,counter,channel,1280000,1
+2,drive_thru,channel,1920000,1

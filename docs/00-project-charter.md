@@ -95,4 +95,3 @@ concatenation or lambda closures.
 - [x] Architectural non-negotiables stated with reasons
 - [ ] Name cleared against trademark registers — **open, gates first submission**
 - [ ] Privacy policy and support email provisioned — **open, gates first submission**
-</content>

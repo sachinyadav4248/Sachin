@@ -76,4 +76,3 @@ Full design: [`docs/02-game-design-document.md`](docs/02-game-design-document.md
 Phases 0–4 are implemented as code and documentation in this repository. Art, audio,
 storefront assets and live SDK keys are not — see each phase document for its Definition of
 Done and what remains open.
-</content>

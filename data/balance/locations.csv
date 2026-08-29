@@ -1,0 +1,4 @@
+location_index,unlock_cost,price_band,arrival_multiplier,cost_band,patience_scale,price_level_cap,marketing_level_cap
+0,0.0,1,1,1,1,12,10
+1,85000,8,1.35,40,0.92,24,20
+2,21250000,64,1.8225,1600,0.8464,36,30

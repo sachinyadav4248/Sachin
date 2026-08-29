@@ -318,4 +318,3 @@ Feature: First-time user experience
 - [x] MoSCoW agreed for v1
 - [x] Acceptance criteria in Gherkin for every core system
 - [ ] Families-track decision made — **open, gates first submission**
-</content>
