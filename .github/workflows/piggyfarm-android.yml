@@ -1,0 +1,103 @@
+name: Piggy Farm Android
+
+on:
+  push:
+    branches: [main, piggyfarm-android]
+    paths: ['piggyfarm-android/**', '.github/workflows/piggyfarm-android.yml']
+  pull_request:
+    paths: ['piggyfarm-android/**', '.github/workflows/piggyfarm-android.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write   # only used by the temporary "ci-logs" step below; remove that step (and set `read`) once the build is stable
+
+concurrency:
+  group: piggyfarm-android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: piggyfarm-android
+        shell: bash
+    env:
+      # Optional release signing. Add these as repository secrets (see piggyfarm-android/README.md).
+      KEYSTORE_B64: ${{ secrets.PIGGY_KEYSTORE_BASE64 }}
+      PIGGY_KEYSTORE_PASSWORD: ${{ secrets.PIGGY_KEYSTORE_PASSWORD }}
+      PIGGY_KEY_ALIAS: ${{ secrets.PIGGY_KEY_ALIAS }}
+      PIGGY_KEY_PASSWORD: ${{ secrets.PIGGY_KEY_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: android-actions/setup-android@v3
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit tests, lint and debug APK
+        run: ./gradlew --stacktrace testDebugUnitTest lintDebug assembleDebug 2>&1 | tee "$RUNNER_TEMP/build-debug.log"
+
+      - name: Release bundle and APK (signed only if the keystore secrets exist)
+        run: |
+          if [ -n "$KEYSTORE_B64" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/piggyfarm-release.jks"
+            export PIGGY_KEYSTORE_PATH="$RUNNER_TEMP/piggyfarm-release.jks"
+            echo "Signing release with the repository keystore secrets."
+          else
+            echo "No keystore secrets: release outputs will be UNSIGNED (fine for checking R8, not uploadable to Play)."
+          fi
+          ./gradlew --stacktrace bundleRelease assembleRelease 2>&1 | tee "$RUNNER_TEMP/build-release.log"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: piggyfarm-debug-apk
+          path: piggyfarm-android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: warn
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: piggyfarm-release
+          path: |
+            piggyfarm-android/app/build/outputs/bundle/release/*.aab
+            piggyfarm-android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: warn
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reports
+          path: |
+            piggyfarm-android/app/build/reports
+            piggyfarm-android/app/build/outputs/mapping
+          if-no-files-found: ignore
+
+      # TEMPORARY: copy the tail of the build logs to an orphan branch so a failed build can be read without opening the Actions UI.
+      # Logs are public on a public repository. Delete this step when the build is green.
+      - name: Publish build log tail to the ci-logs branch
+        if: always() && github.event_name == 'push'
+        continue-on-error: true
+        working-directory: ${{ github.workspace }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/cilog"
+          for f in build-debug build-release; do
+            [ -f "$RUNNER_TEMP/$f.log" ] && tail -n 250 "$RUNNER_TEMP/$f.log" > "$RUNNER_TEMP/cilog/$f.tail.log"
+          done
+          echo "sha=$GITHUB_SHA ref=$GITHUB_REF_NAME job_status=${{ job.status }} run=$GITHUB_RUN_ID" > "$RUNNER_TEMP/cilog/status.txt"
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git checkout --orphan ci-logs-tmp
+          git rm -rf . > /dev/null 2>&1 || true
+          mkdir -p logs && cp "$RUNNER_TEMP"/cilog/* logs/
+          git add logs
+          git commit -m "ci log for $GITHUB_SHA" > /dev/null
+          git push --force origin HEAD:ci-logs

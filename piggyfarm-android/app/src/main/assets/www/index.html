@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Piggy Farm</title>
+<style>
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+  html,body{margin:0;height:100%;overflow:hidden;background:#8ed1ff;touch-action:none;
+    font-family:"Arial Rounded MT Bold","Baloo 2",Fredoka,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#fff}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+  .abs{position:fixed;pointer-events:none}
+  :root{--top:max(10px,env(safe-area-inset-top));--bot:max(20px,env(safe-area-inset-bottom))}
+  /* ---------- HUD */
+  #hud{top:var(--top);left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .chip{background:rgba(24,34,72,.55);border:2px solid rgba(255,255,255,.35);border-radius:16px;padding:3px 10px;font-weight:900;font-size:16px;
+    text-shadow:0 2px 0 rgba(0,0,0,.3);backdrop-filter:blur(3px);min-width:56px;text-align:center;white-space:nowrap}
+  #time{font-size:22px;min-width:70px}
+  #time.low{background:rgba(220,30,30,.78);animation:pulse .5s infinite alternate}
+  #hearts{font-size:16px;letter-spacing:1px}
+  .chip.coin{min-width:64px;background:rgba(130,86,0,.62)}
+  #stage{top:calc(var(--top) + 46px);left:50%;transform:translateX(-50%);font-size:13px;padding:2px 12px;background:rgba(138,90,255,.7)}
+  #objs{top:calc(var(--top) + 78px);left:6px;right:6px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px}
+  .obj{background:rgba(255,255,255,.92);color:#2a4a1a;border-radius:14px;padding:3px 10px;font-weight:900;font-size:16px;box-shadow:0 3px 0 rgba(0,0,0,.22)}
+  .obj small{font-size:11px;opacity:.7}
+  .obj.done{background:#8be36a;color:#134a00}
+  #bossbar{top:calc(var(--top) + 118px);left:22px;right:22px;height:22px;border-radius:12px;background:rgba(0,0,0,.45);overflow:hidden;display:none;border:2px solid rgba(255,255,255,.75)}
+  #bossfill{height:100%;width:100%;background:linear-gradient(90deg,#ff5a5a,#ffb347);transition:width .15s}
+  #bossname{position:absolute;inset:0;text-align:center;font-size:13px;font-weight:900;line-height:18px;text-shadow:0 1px 2px #000}
+  #combo{top:calc(var(--top) + 150px);left:0;right:0;text-align:center;font-size:28px;font-weight:900;
+    color:#ffe45c;text-shadow:0 3px 0 #b24a00,0 0 14px rgba(255,160,0,.6);opacity:0;transition:opacity .2s;padding:0 14px}
+  #pause,#mute{pointer-events:auto;top:calc(var(--top) + 42px);width:40px;height:40px;border-radius:50%;background:rgba(24,34,72,.55);border:2px solid rgba(255,255,255,.35);
+    display:flex;align-items:center;justify-content:center;font-size:18px;z-index:5}
+  #pause{left:12px}#mute{right:12px}
+  #banner{top:17%;left:14px;right:14px;text-align:center;opacity:0;transition:opacity .35s,transform .35s;transform:scale(.9);z-index:4}
+  #banner.show{opacity:1;transform:scale(1)}
+  #banner .card{display:inline-block;max-width:380px;background:linear-gradient(180deg,rgba(40,50,120,.82),rgba(20,30,70,.82));border:3px solid rgba(255,255,255,.85);border-radius:24px;padding:14px 20px;backdrop-filter:blur(4px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  #banner h2{margin:0;font-size:34px;text-shadow:0 3px 0 #c0407a}
+  #banner .th{font-size:15px;font-weight:700;opacity:.92;margin-top:2px}
+  #banner .ms{font-size:20px;font-weight:900;margin:10px 0 2px;color:#ffe45c;text-shadow:0 2px 0 #7a4a00}
+  #banner .md{font-size:14px;font-weight:800;color:#9ff0ff}
+  #banner .hn{font-size:14px;font-weight:600;margin-top:8px;line-height:1.35;opacity:.95}
+  /* ---------- controls: ONE floating stick (appears where the thumb lands) + JET + SHOOT */
+  .btn{pointer-events:auto;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;touch-action:none;border:4px solid rgba(255,255,255,.9);z-index:3}
+  #jump{right:18px;bottom:calc(var(--bot) + 132px);width:78px;height:78px;font-size:17px;color:#6b3a00;
+    background:radial-gradient(circle at 35% 30%,#fff1a8,#ffb300 60%,#e08a00);box-shadow:0 6px 0 #a35f00,0 10px 18px rgba(0,0,0,.3)}
+  #shoot{right:12px;bottom:calc(var(--bot) + 12px);width:108px;height:108px;font-size:19px;color:#fff;flex-direction:column;line-height:1.05;
+    background:radial-gradient(circle at 35% 30%,#ff9aa8,#ff3d5e 60%,#c4163a);box-shadow:0 6px 0 #8a0f29,0 10px 18px rgba(0,0,0,.3);text-shadow:0 2px 0 rgba(0,0,0,.3)}
+  #shoot span{font-size:34px}
+  .btn.down{transform:translateY(4px);filter:brightness(1.1)}
+  #fuelwrap{right:18px;bottom:calc(var(--bot) + 218px);width:78px;height:10px;border-radius:6px;background:rgba(0,0,0,.4);overflow:hidden;border:1px solid rgba(255,255,255,.5)}
+  #fuel{height:100%;width:100%;background:linear-gradient(90deg,#ffb300,#ffe45c);border-radius:6px}
+  #jl{left:14px;bottom:calc(var(--bot) + 14px);width:148px;height:148px;opacity:.28;transition:opacity .15s;z-index:3;border-radius:50%}
+  #jl.active{opacity:1}
+  .jbase{position:absolute;inset:0;border-radius:50%;border:4px solid rgba(255,255,255,.8);background:radial-gradient(circle,rgba(255,255,255,.3),rgba(20,30,60,.3));box-shadow:0 0 0 6px rgba(20,30,60,.16)}
+  .jknob{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;box-shadow:0 5px 0 rgba(0,0,0,.28),0 8px 14px rgba(0,0,0,.25);background:radial-gradient(circle at 35% 30%,#fff,#bfe8ff 70%)}
+  #arrow{width:0;height:0;border-left:17px solid transparent;border-right:17px solid transparent;border-bottom:36px solid #ffe45c;filter:drop-shadow(0 3px 0 rgba(0,0,0,.4));display:none;z-index:2}
+  /* online */
+  #emotes{left:8px;top:calc(var(--top) + 96px);display:grid;grid-template-columns:repeat(2,40px);gap:6px;z-index:6}
+  #emotes button{pointer-events:auto;width:40px;height:40px;border-radius:14px;border:2px solid rgba(255,255,255,.6);background:rgba(24,34,72,.55);font-size:21px;padding:0;line-height:1}
+  #mpScore{right:8px;top:calc(var(--top) + 96px);min-width:120px}
+  .mps{background:rgba(24,34,72,.62);border-radius:12px;padding:2px 8px 2px 6px;margin-bottom:4px;font-weight:800;font-size:13px;white-space:nowrap;display:flex;align-items:center;gap:5px;border:2px solid transparent}
+  .mps.me{border-color:#ffe45c}.mps i{width:10px;height:10px;border-radius:50%;display:inline-block}.mps b{margin-left:auto;padding-left:8px;color:#ffe45c}
+  #ntags{inset:0;overflow:hidden;z-index:2}
+  .ntag{position:absolute;left:0;top:0;padding:1px 9px;border-radius:12px;font-weight:900;font-size:12px;color:#1a1a3a;border:2px solid #fff;white-space:nowrap;box-shadow:0 2px 0 rgba(0,0,0,.25);will-change:transform}
+  #toast{position:fixed;left:50%;bottom:calc(var(--bot) + 8px);transform:translate(-50%,30px);background:rgba(24,34,72,.9);border:2px solid rgba(255,255,255,.6);border-radius:18px;padding:8px 18px;font-weight:800;font-size:15px;opacity:0;transition:all .3s;z-index:30;pointer-events:none;max-width:90vw;text-align:center}
+  #toast.show{opacity:1;transform:translate(-50%,0)}
+  #popwrap{inset:0;overflow:hidden;z-index:2}
+  .pop{position:absolute;transform:translate(-50%,-50%);font-weight:900;font-size:28px;color:#fff;text-shadow:0 2px 0 #3a7d1f,0 0 8px rgba(0,0,0,.4);animation:pop .9s ease-out forwards;white-space:nowrap}
+  .pop.gold{color:#ffe45c;font-size:34px;text-shadow:0 3px 0 #b24a00}
+  .pop.bad{color:#ff5a5a;text-shadow:0 2px 0 #5a0000}
+  .pop.good{color:#9dff7a;text-shadow:0 2px 0 #1f6a00}
+  @keyframes pop{0%{opacity:0;transform:translate(-50%,-30%) scale(.5)}20%{opacity:1;transform:translate(-50%,-80%) scale(1.15)}100%{opacity:0;transform:translate(-50%,-260%) scale(1)}}
+  @keyframes pulse{to{transform:scale(1.08)}}
+  @keyframes bob{0%,100%{transform:rotate(-3deg) translateY(0)}50%{transform:rotate(-3deg) translateY(-6px)}}
+  #flash{inset:0;background:rgba(255,40,40,.35);opacity:0;transition:opacity .35s}
+  /* ---------- overlays */
+  .overlay{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:max(18px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(60,140,220,.5),rgba(20,70,20,.66));z-index:10;overflow:auto}
+  .overlay.show{display:flex}
+  .overlay.hero{justify-content:space-between;background:linear-gradient(180deg,rgba(20,30,80,.5) 0%,rgba(20,30,80,0) 30%,rgba(20,30,80,0) 52%,rgba(16,24,70,.72) 100%)}
+  .overlay h1{margin:0;font-size:46px;line-height:1}
+  .overlay h2{margin:0;font-size:32px;text-shadow:0 3px 0 #c0407a}
+  .overlay p{margin:0;max-width:340px;font-size:16px;line-height:1.45;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,.5)}
+  .overlay .big{font-size:50px;letter-spacing:4px;filter:drop-shadow(0 4px 0 rgba(0,0,0,.25))}
+  #title{margin:6px 0 0;line-height:.84;text-align:center;font-weight:900;pointer-events:auto;animation:bob 3s ease-in-out infinite}
+  #title span{display:block;-webkit-text-stroke:9px #7a1f4e;paint-order:stroke fill;text-shadow:0 7px 0 #7a1f4e,0 14px 22px rgba(0,0,0,.35);letter-spacing:1px}
+  #title .l1{font-size:clamp(54px,18vw,92px);color:#ffe3f1}
+  #title .l2{font-size:clamp(46px,15vw,78px);color:#ffe45c;-webkit-text-stroke-color:#8a3a00;text-shadow:0 7px 0 #8a3a00,0 14px 22px rgba(0,0,0,.35);margin-top:-2px}
+  #title .sub{font-size:14px;-webkit-text-stroke:0;text-shadow:0 2px 0 rgba(0,0,0,.4);letter-spacing:3px;margin-top:10px;color:#fff;font-weight:800}
+  .menu-bot{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
+  .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  button.play{pointer-events:auto;font:inherit;font-weight:900;font-size:24px;letter-spacing:1px;color:#fff;border:none;min-width:200px;
+    padding:12px 34px;border-radius:40px;background:linear-gradient(180deg,#ff8fbd,#ee4f92);box-shadow:0 6px 0 #a32a62,0 12px 22px rgba(0,0,0,.3);text-shadow:0 2px 0 rgba(0,0,0,.25)}
+  button.play.alt{background:linear-gradient(180deg,#7fd0ff,#2f8fe0);box-shadow:0 6px 0 #1a5a9a,0 12px 22px rgba(0,0,0,.3)}
+  button.play.grn{background:linear-gradient(180deg,#8be36a,#3fae2a);box-shadow:0 6px 0 #1f7a10,0 12px 22px rgba(0,0,0,.3)}
+  button.play.pur{background:linear-gradient(180deg,#b894ff,#7a4ae0);box-shadow:0 6px 0 #4a2a9a,0 12px 22px rgba(0,0,0,.3)}
+  button.play.yel{background:linear-gradient(180deg,#ffe27a,#ffb300);box-shadow:0 6px 0 #a36a00,0 12px 22px rgba(0,0,0,.3);color:#5a3200;text-shadow:none}
+  button.play.sm{font-size:17px;padding:9px 22px;min-width:130px}
+  button.play:active{transform:translateY(4px);filter:brightness(1.08)}
+  button.play:disabled{opacity:.55}
+  .card2{background:rgba(20,30,80,.6);border:3px solid rgba(255,255,255,.55);border-radius:24px;padding:14px 16px;width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px;align-items:center;backdrop-filter:blur(4px)}
+  #wnav{display:flex;align-items:center;gap:8px}
+  #wnav button{pointer-events:auto;font:inherit;font-weight:900;font-size:18px;color:#fff;border:none;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.3)}
+  #wnum{font-size:15px;font-weight:800;min-width:120px}
+  #wtitle{pointer-events:auto}
+  #lvgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;width:100%;max-width:380px}
+  .lv{pointer-events:auto;font:inherit;border:none;border-radius:16px;padding:7px 0 5px;color:#fff;font-weight:900;font-size:20px;
+    background:linear-gradient(180deg,#8be36a,#3fae2a);box-shadow:0 4px 0 #1f7a10;line-height:1.1}
+  .lv small{display:block;font-size:11px;letter-spacing:1px;min-height:13px}
+  .lv.boss{background:linear-gradient(180deg,#ffb36a,#ee6a1f);box-shadow:0 4px 0 #9a3a0a}
+  .lv.dash{background:linear-gradient(180deg,#7fd0ff,#2f8fe0);box-shadow:0 4px 0 #1a5a9a}
+  .lv.locked{background:linear-gradient(180deg,#8a93a3,#5a6272);box-shadow:0 4px 0 #3a4252;opacity:.8}
+  .lv.cur{outline:3px solid #fff700}
+  #lvfoot{font-weight:800;font-size:16px}
+  .shopsec{font-weight:900;font-size:17px;margin-top:2px;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+  .shopgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+  .item{pointer-events:auto;font:inherit;border:3px solid transparent;border-radius:16px;padding:5px 2px;color:#fff;font-weight:800;font-size:12px;background:rgba(20,30,60,.55);line-height:1.15}
+  .item b{display:block;font-size:26px;line-height:1.1}
+  .item.on{border-color:#ffe45c;background:rgba(90,140,40,.75)}
+  .item.lock{opacity:.92}
+  #shop .sheet{width:100%;max-width:420px;max-height:50vh;overflow:auto;background:rgba(20,30,80,.6);border:3px solid rgba(255,255,255,.55);border-radius:24px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;pointer-events:auto}
+  .lbp{width:100%;border:3px solid #fff;border-radius:16px;padding:6px 12px;font-weight:900;font-size:17px;background:rgba(255,255,255,.12);text-align:left}
+  #lbRoomCode{font-size:clamp(34px,11vw,52px);letter-spacing:6px;font-weight:900;color:#ffe45c;text-shadow:0 4px 0 #8a3a00;-webkit-text-stroke:3px #8a3a00;paint-order:stroke fill}
+  #lbCode{font:inherit;font-weight:900;font-size:26px;text-align:center;letter-spacing:6px;text-transform:uppercase;width:170px;padding:8px;border-radius:18px;border:3px solid #fff;background:rgba(255,255,255,.92);color:#2a2a5a;pointer-events:auto;-webkit-user-select:text;user-select:text}
+  #lbStatus,#lbWait{font-weight:800;font-size:15px;min-height:20px;color:#fff6c0;text-shadow:0 2px 3px rgba(0,0,0,.5)}
+  #lbMode{display:flex;gap:8px}
+  #lbMode button.on{outline:4px solid #ffe45c}
+  #mpList{width:100%;max-width:360px;display:flex;flex-direction:column;gap:8px}
+  .mpr{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.14);border:3px solid transparent;border-radius:16px;padding:8px 12px;font-weight:900;font-size:19px}
+  .mpr.me{border-color:#ffe45c;background:rgba(255,228,92,.2)}.mpr em{font-style:normal;flex:1;text-align:left}.mpr b{color:#ffe45c}
+  @media (max-height:520px){
+    #jl{width:112px;height:112px}.jknob{width:46px;height:46px;margin:-23px 0 0 -23px}#objs{top:calc(var(--top) + 40px)}#banner{top:6%}#stage{top:calc(var(--top) + 2px)}#bossbar{top:calc(var(--top) + 76px)}#combo{top:calc(var(--top) + 100px)}
+    #jump{bottom:calc(var(--bot) + 96px);width:64px;height:64px}#shoot{width:88px;height:88px}#fuelwrap{bottom:calc(var(--bot) + 166px)}
+    .overlay h2{font-size:26px}#title .l1{font-size:46px;-webkit-text-stroke-width:7px}#title .l2{font-size:40px;-webkit-text-stroke-width:7px}
+    .overlay.hero{flex-direction:row;justify-content:space-between;align-items:center;padding-left:5vw;padding-right:6vw}.menu-bot{width:auto;min-width:240px}#title{align-self:flex-start;margin-top:calc(var(--top) + 8px);text-align:left}#title .sub{margin-top:6px;font-size:12px;letter-spacing:2px}
+    #emotes{top:calc(var(--top) + 52px)}#mpScore{top:calc(var(--top) + 52px)}
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="ntags" class="abs"></div>
+<div id="popwrap" class="abs"></div>
+<div id="flash" class="abs"></div>
+<div id="arrow" class="abs"></div>
+
+<div id="hud" class="abs">
+  <div class="chip" id="lvl">Lv 1</div>
+  <div class="chip coin" id="coins">🪙 0</div>
+  <div class="chip" id="time">90</div>
+  <div class="chip" id="hearts">❤️❤️❤️</div>
+</div>
+<div id="stage" class="abs chip" style="display:none"></div>
+<div id="objs" class="abs"></div>
+<div id="bossbar" class="abs"><div id="bossfill"></div><div id="bossname"></div></div>
+<div id="pause" class="abs">⏸</div>
+<div id="mute" class="abs">🔊</div>
+<div id="combo" class="abs"></div>
+<div id="banner" class="abs"><div class="card"><h2 id="bnTitle"></h2><div class="th" id="bnTheme"></div><div class="ms" id="bnMission"></div><div class="md" id="bnMod"></div><div class="hn" id="bnHint"></div></div></div>
+<div id="mpScore" class="abs" style="display:none"></div>
+<div id="emotes" class="abs" style="pointer-events:auto;display:none"></div>
+<div id="fuelwrap" class="abs"><div id="fuel"></div></div>
+<div id="jl" class="abs"><div class="jbase"></div><div class="jknob" id="jlk"></div></div>
+<div id="jump" class="abs btn">JET</div>
+<div id="shoot" class="abs btn"><span>🎯</span>SHOOT</div>
+<div id="toast"></div>
+
+<div id="menu" class="overlay hero show">
+  <h1 id="title"><span class="l1">Piggy</span><span class="l2">Farm</span><span class="sub">DASH · JUMP · SHOOT</span></h1>
+  <div class="menu-bot">
+    <button class="play" id="play">PLAY</button>
+    <div class="row"><button class="play alt sm" id="btnLevels">LEVELS</button><button class="play pur sm" id="btnShop">🛍️ SHOP</button></div>
+    <button class="play grn sm" id="btnOnline">🌍 PLAY ONLINE</button>
+    <div id="menuStars" style="font-weight:800;font-size:14px;text-shadow:0 2px 3px rgba(0,0,0,.5)"></div>
+  </div>
+</div>
+
+<div id="levels" class="overlay">
+  <h2 id="wtitle">World 1</h2>
+  <div id="wnav"><button id="wprev10">⏪</button><button id="wprev">◀</button><div id="wnum"></div><button id="wnext">▶</button><button id="wnext10">⏩</button></div>
+  <div id="lvgrid"></div>
+  <div style="font-size:12px;font-weight:700;opacity:.9">🏃 dash run &nbsp; 👑 boss</div>
+  <div id="lvfoot"></div>
+  <button class="play alt sm" id="lvback">BACK</button>
+</div>
+
+<div id="shop" class="overlay hero">
+  <div><h2>🛍️ Piggy Shop</h2><div id="shopCoins" style="font-weight:900;font-size:20px;margin-top:4px"></div></div>
+  <div class="sheet">
+    <div class="shopsec">🎩 Hats</div><div class="shopgrid" id="shopHats"></div>
+    <div class="shopsec">🎨 Skins</div><div class="shopgrid" id="shopSkins"></div>
+    <button class="play alt sm" id="shopBack" style="align-self:center;margin-top:6px">BACK</button>
+  </div>
+</div>
+
+<div id="lobby" class="overlay hero">
+  <div><h2>🌍 Play Online</h2><p style="margin:6px auto 0">Play with friends anywhere in the world!</p></div>
+  <div class="card2" id="lbHome">
+    <div style="font-weight:800">You are <b id="lbName" style="color:#ffe45c"></b> <button class="play alt sm" id="lbReroll" style="min-width:0;padding:2px 12px;font-size:16px">🎲</button></div>
+    <button class="play grn sm" id="lbQuick">⚡ QUICK PLAY</button>
+    <button class="play sm" id="lbCreate">🏠 CREATE ROOM</button>
+    <div class="row" style="align-items:center"><input id="lbCode" maxlength="5" placeholder="CODE" autocomplete="off" autocapitalize="characters"><button class="play alt sm" id="lbJoin" style="min-width:0">JOIN</button></div>
+    <div id="lbStatus"></div>
+    <button class="play alt sm" id="lbBack" style="min-width:110px">BACK</button>
+  </div>
+  <div class="card2" id="lbRoom" style="display:none">
+    <div id="lbCodeLab" style="font-weight:800;font-size:14px"></div>
+    <div id="lbRoomCode">-----</div>
+    <button class="play alt sm" id="lbCopy" style="min-width:0;padding:5px 16px;font-size:15px">📋 COPY CODE</button>
+    <div id="lbPlayers" style="width:100%;display:flex;flex-direction:column;gap:6px"></div>
+    <div id="lbMode"><button class="play sm" id="lbRush">⭐ STAR RUSH</button><button class="play alt sm" id="lbRace">🏁 DASH RACE</button></div>
+    <div id="lbWait"></div>
+    <div class="row"><button class="play grn sm" id="lbStart">START</button><button class="play alt sm" id="lbLeave" style="min-width:100px">LEAVE</button></div>
+    <div style="font-size:11px;opacity:.85;line-height:1.3">No chat – only friendly emotes. Names are made up automatically. 💛</div>
+  </div>
+</div>
+
+<div id="mpEnd" class="overlay">
+  <h2 id="mpTitle">Results</h2>
+  <div id="mpList"></div>
+  <div id="mpPrize" style="font-weight:900;font-size:19px;color:#ffe45c"></div>
+  <button class="play grn" id="mpBack">PLAY AGAIN</button>
+  <button class="play alt sm" id="mpLeaveEnd">MAIN MENU</button>
+</div>
+
+<div id="win" class="overlay">
+  <h2 id="winTitle">Level Complete!</h2>
+  <div class="big" id="winStars">⭐⭐⭐</div>
+  <p id="winMsg"></p>
+  <button class="play" id="next">NEXT LEVEL</button>
+  <div class="row"><button class="play alt sm" id="winReplay">REPLAY</button><button class="play alt sm" id="winLevels">LEVELS</button></div>
+</div>
+
+<div id="fail" class="overlay">
+  <h2>Oh no!</h2>
+  <p id="failMsg"></p>
+  <button class="play yel" id="retryStage" style="display:none">RETRY STAGE</button>
+  <button class="play" id="retry">TRY AGAIN</button>
+  <button class="play alt sm" id="failLevels">LEVELS</button>
+</div>
+
+<div id="pauseMenu" class="overlay">
+  <h2>Paused</h2>
+  <button class="play" id="resume">RESUME</button>
+  <button class="play alt sm" id="restart">RESTART</button>
+  <button class="play alt sm" id="pauseLevels">LEVELS</button>
+  <button class="play alt sm" id="leaveOnline" style="display:none">LEAVE GAME</button>
+</div>
+
+<script>
+  /* Online play uses the free public PeerJS matchmaking server by default.
+     To use your own (see README): window.PIGGY_PEER = { host: 'your-server.example', port: 443, path: '/', secure: true }; */
+  window.PIGGY_PEER = null;
+</script>
+<script src="three.min.js"></script>
+<script src="ch_core.js"></script>
+<script src="ch_pig.js"></script>
+<script src="ch_critters.js"></script>
+<script src="ch_enemies.js"></script>
+<script src="ch_bosses.js"></script>
+<script src="peerjs.min.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
