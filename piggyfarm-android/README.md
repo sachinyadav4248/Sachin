@@ -6,7 +6,7 @@ Why this exists: the prebuilt v5.1 APK targets API 28, and Google Play only acce
 
 ## Status (read this first)
 
-* **Never compiled by the author.** The sandbox it was written in could not reach Maven/Google/Gradle repositories, so the first CI run is the first real build. Version numbers are in `gradle/libs.versions.toml`; if CI rejects one, change it there.
+* **Builds green on GitHub Actions** (unit tests, lint, debug APK, release AAB + APK). It has **not been run on a phone yet**; see the device checklist below. Library versions are in `gradle/libs.versions.toml`.
 * The **native Kotlin rewrite** (`:game-core`, `:net`, native renderer) from the v6 package is not part of this project. This app ships the web game that the store listing and promo kit describe.
 * **No keystore exists.** You create it (below). Without it, release outputs are unsigned.
 
@@ -23,7 +23,6 @@ Needs JDK 17 and the Android SDK (platform 36). Android Studio does both.
 
 `.github/workflows/piggyfarm-android.yml` runs on every push to `main` or `piggyfarm-android`:
 unit tests, lint, debug APK, release bundle (AAB) and release APK. Download them from the run's **Artifacts**.
-A temporary last step copies the log tail to a `ci-logs` branch so failures are readable quickly; delete that step when the build is green.
 
 ## Signing for Google Play
 

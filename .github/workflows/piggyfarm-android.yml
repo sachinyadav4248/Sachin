@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # only used by the temporary "ci-logs" step below; remove that step (and set `read`) once the build is stable
+  contents: read
 
 concurrency:
   group: piggyfarm-android-${{ github.ref }}
@@ -82,24 +82,3 @@ jobs:
             piggyfarm-android/app/build/reports
             piggyfarm-android/app/build/outputs/mapping
           if-no-files-found: ignore
-
-      # TEMPORARY: copy the tail of the build logs to an orphan branch so a failed build can be read without opening the Actions UI.
-      # Logs are public on a public repository. Delete this step when the build is green.
-      - name: Publish build log tail to the ci-logs branch
-        if: always() && github.event_name == 'push'
-        continue-on-error: true
-        working-directory: ${{ github.workspace }}
-        run: |
-          mkdir -p "$RUNNER_TEMP/cilog"
-          for f in build-debug build-release; do
-            [ -f "$RUNNER_TEMP/$f.log" ] && tail -n 250 "$RUNNER_TEMP/$f.log" > "$RUNNER_TEMP/cilog/$f.tail.log"
-          done
-          echo "sha=$GITHUB_SHA ref=$GITHUB_REF_NAME job_status=${{ job.status }} run=$GITHUB_RUN_ID" > "$RUNNER_TEMP/cilog/status.txt"
-          git config user.name "github-actions"
-          git config user.email "github-actions@users.noreply.github.com"
-          git checkout --orphan ci-logs-tmp
-          git rm -rf . > /dev/null 2>&1 || true
-          mkdir -p logs && cp "$RUNNER_TEMP"/cilog/* logs/
-          git add logs
-          git commit -m "ci log for $GITHUB_SHA" > /dev/null
-          git push --force origin HEAD:ci-logs
