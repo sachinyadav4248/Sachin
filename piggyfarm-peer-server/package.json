@@ -1,0 +1,23 @@
+{
+  "name": "piggyfarm-peer-server",
+  "version": "1.0.0",
+  "description": "Self-hosted PeerJS signaling server for Piggy Farm online play (Star Rush / Dash Race).",
+  "private": true,
+  "license": "UNLICENSED",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20.14"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test --test-force-exit test/smoke.test.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "peer": "^1.0.2"
+  },
+  "devDependencies": {
+    "ws": "^8.18.0"
+  }
+}

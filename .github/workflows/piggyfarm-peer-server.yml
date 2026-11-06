@@ -1,0 +1,44 @@
+name: Piggy Farm peer server
+
+on:
+  push:
+    branches: [main, piggyfarm-android]
+    paths: ['piggyfarm-peer-server/**', '.github/workflows/piggyfarm-peer-server.yml']
+  pull_request:
+    paths: ['piggyfarm-peer-server/**', '.github/workflows/piggyfarm-peer-server.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: piggyfarm-peer-server-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: piggyfarm-peer-server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: piggyfarm-peer-server/package-lock.json
+      - run: npm ci
+      - run: npm test
+
+      # The Dockerfile is what Fly/Render/your VPS actually run, so build it and hit the health check for real.
+      - name: Build image and probe /healthz
+        run: |
+          docker build -t piggyfarm-peer .
+          docker run -d --name peer -p 8080:8080 piggyfarm-peer
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:8080/healthz && break || sleep 1; done
+          curl -fsS http://127.0.0.1:8080/healthz
+          curl -fsS -i http://127.0.0.1:8080/peerjs/id -H 'Origin: https://appassets.androidplatform.net' | grep -i '^access-control-allow-origin: https://appassets.androidplatform.net'
+          docker logs peer
+          docker rm -f peer

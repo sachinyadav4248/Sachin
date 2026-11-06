@@ -47,7 +47,7 @@ Never commit `*.jks`; `.gitignore` already blocks it.
 
 - [ ] Install the debug APK on a real phone and play levels 1, 5 (dash) and a boss level; check touch, audio, vibration and rotation.
 - [ ] Check the save survives closing the app (`localStorage`).
-- [ ] Try Star Rush and Dash Race between two phones. The public PeerJS server is best effort; consider hosting your own (`window.PIGGY_PEER` in `index.html`) before a wide launch.
+- [ ] Try Star Rush and Dash Race between two phones. The public PeerJS server is best effort; for a wide launch deploy your own from [`../piggyfarm-peer-server`](../piggyfarm-peer-server/README.md) (Fly.io, Render or a VPS) and set `window.PIGGY_PEER` in `index.html`.
 - [ ] Play Console: Data safety form (network use), content rating, and the Families Policy decision if the game targets children.
 - [ ] Confirm the target-API deadline shown in Play Console and bump `targetSdk` if it moved.
 

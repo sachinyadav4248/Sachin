@@ -1,0 +1,14 @@
+# Render blueprint (alternative to Fly). The FREE plan sleeps after 15 min idle and a cold start takes ~1 min,
+# which makes room creation look broken, so use at least the `starter` plan for a real launch.
+services:
+  - type: web
+    name: piggyfarm-peer
+    runtime: docker
+    plan: starter
+    numInstances: 1          # PeerJS keeps rooms in memory: never run more than one instance
+    healthCheckPath: /healthz
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: https://appassets.androidplatform.net
+      - key: PORT
+        value: "10000"

@@ -1,0 +1,35 @@
+# Fly.io config. Change `app` to a free name, then:  fly launch --copy-config --no-deploy && fly deploy
+app = "piggyfarm-peer"
+primary_region = "bom"   # Mumbai; pick the region closest to your players (fly platform regions)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  ALLOWED_ORIGINS = "https://appassets.androidplatform.net"
+  MAX_PEERS = "2000"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  # Signaling must stay up: players connect at any time, and open WebSockets keep a machine alive.
+  auto_stop_machines = "off"
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [http_service.concurrency]
+    type = "connections"
+    soft_limit = 1500
+    hard_limit = 2000
+
+  [[http_service.checks]]
+    method = "GET"
+    path = "/healthz"
+    interval = "15s"
+    timeout = "3s"
+    grace_period = "10s"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"

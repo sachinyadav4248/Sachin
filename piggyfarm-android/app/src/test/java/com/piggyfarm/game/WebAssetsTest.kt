@@ -27,6 +27,14 @@ class WebAssetsTest {
     }
 
     @Test
+    fun customPeerServerMustBeSecure() {
+        // The manifest forbids cleartext traffic, so a self-hosted signaling server set in index.html must use TLS.
+        val code = html.replace(Regex("""/\*[\s\S]*?\*/"""), "") // the example in index.html's comment must not count
+        val cfg = Regex("""PIGGY_PEER\s*=\s*\{[\s\S]*?\};""").find(code)?.value ?: return // null = public PeerJS server
+        assertTrue("window.PIGGY_PEER needs secure: true (https/wss): $cfg", Regex("""secure\s*:\s*true""").containsMatchIn(cfg))
+    }
+
+    @Test
     fun gameDoesNotNeedFileUrls() {
         // The app serves assets over https://appassets.androidplatform.net, with file access disabled.
         assertFalse(File(www, "game.js").readText().contains("file://"))
