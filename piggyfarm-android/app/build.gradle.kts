@@ -17,11 +17,20 @@ android {
         applicationId = "com.piggyfarm.game"
         minSdk = 24
         targetSdk = 36          // Google Play requires a recent target API for new apps and updates; re-check the deadline in Play Console.
-        versionCode = 6         // the old prebuilt APK was versionCode 5
-        versionName = "5.1.0"
+        versionCode = 7         // 5.1.0 was versionCode 6
+        versionName = "5.2.0"
     }
 
     signingConfigs {
+        // Throw-away debug key with the public Android debug credentials (see app/debug-signing/README.md): it keeps every
+        // CI-built debug APK installable over the previous one. The release key below is separate and never in git.
+        create("piggyDebug") {
+            storeFile = file("debug-signing/piggyfarm-debug.p12")
+            storeType = "pkcs12"
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
         if (keystorePath != null) {
             create("release") {
                 storeFile = file(keystorePath)
@@ -35,6 +44,7 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"      // installs next to the release app
+            signingConfig = signingConfigs.getByName("piggyDebug")
             versionNameSuffix = "-debug"
         }
         release {

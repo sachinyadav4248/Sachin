@@ -136,6 +136,8 @@
     .overlay.hero{flex-direction:row;justify-content:space-between;align-items:center;padding-left:5vw;padding-right:6vw}.menu-bot{width:auto;min-width:240px}#title{align-self:flex-start;margin-top:calc(var(--top) + 8px);text-align:left}#title .sub{margin-top:6px;font-size:12px;letter-spacing:2px}
     #emotes{top:calc(var(--top) + 52px)}#mpScore{top:calc(var(--top) + 52px)}
   }
+#winStars span{display:inline-block;animation:starpop .55s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes starpop{from{transform:scale(0) rotate(-200deg);opacity:0}60%{opacity:1}to{transform:none;opacity:1}}
 </style>
 </head>
 <body>
@@ -260,6 +262,7 @@
 <script src="ch_critters.js"></script>
 <script src="ch_enemies.js"></script>
 <script src="ch_bosses.js"></script>
+<script src="ch_extra.js"></script>
 <script src="peerjs.min.js"></script>
 <script src="game.js"></script>
 </body>

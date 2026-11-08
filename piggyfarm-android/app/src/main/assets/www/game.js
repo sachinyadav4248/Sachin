@@ -2,7 +2,7 @@
 'use strict';
 
 /* ======== 01_base.js ======== */
-/* PIGGY FARM v5 – 1000 levels, multi-stage missions, online play */
+/* PIGGY FARM v5.2 – 1000 levels, 20 worlds, multi-stage missions, online play */
 const $ = id => document.getElementById(id);
 const rand = (a, b) => a + Math.random() * (b - a);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -72,36 +72,49 @@ function adaptRes(dt) {
 }
 
 /* ======== 02_world.js ======== */
-/* ============================================================ themes (14, repeating through 100 worlds) */
+/* ============================================================ themes (20, repeating through 100 worlds) */
 const THEMES = [
   { name: 'Sunny Meadow', emoji: '🌞', sky: 0x8ed1ff, fog: 0xcdeaff, hemi: 2.1, sun: 2.2, ground: '#5fbf3a', patch: () => `hsla(${88 + srand() * 30},62%,${38 + srand() * 20}%,.28)`, path: ['#a8693c', '#cf9560'],
     fol: [.31, .55, .22, .06, .1], grass: [.27, .6, .22, .08, .1], flow: [0xffd93a, 0xffffff, 0xff9ac8], haz: 'mower', hazCol: 0xd82a22, amb: { fall: .7, sway: 1.2, cols: [0xffffff, 0xffc0dc], size: .4 } },
   { name: 'Autumn Acres', emoji: '🍂', sky: 0xffc98a, fog: 0xffe3c0, hemi: 2.0, sun: 2.1, ground: '#b5b83c', patch: () => `hsla(${25 + srand() * 40},70%,${42 + srand() * 14}%,.3)`, path: ['#8a5a30', '#b5804a'],
     fol: [.07, .78, .42, .05, .08], grass: [.12, .6, .38, .06, .08], flow: [0xff8a1a, 0xffd23a, 0xe83a2a], haz: 'ball', hazCol: 0x8a5a2a, amb: { fall: 1.6, sway: 2, cols: [0xe8742a, 0xd8442a, 0xf2b03a], size: .55 } },
+  { name: 'Coral Reef', emoji: '🐠', sky: 0x4fc8e8, fog: 0x9ae8f4, hemi: 2.2, sun: 2.2, ground: '#ffd9a8', patch: () => `hsla(${330 + srand() * 40},80%,${68 + srand() * 12}%,.32)`, path: ['#ff9a8a', '#ffd0a0'],
+    fol: [.92, .7, .62, .08, .08], grass: [.45, .6, .5, .1, .08], flow: [0xff6ab0, 0xffa03a, 0xffffff, 0x7af0ff], haz: 'crab', hazCol: 0xff5a7a, mod: 'bouncy', amb: { fall: -1.3, sway: 1.4, cols: [0xffffff, 0xbff4ff, 0x9ae8ff], size: .5 } },
   { name: 'Candy Land', emoji: '🍭', sky: 0xffc4ec, fog: 0xffe6f7, hemi: 2.2, sun: 2.0, ground: '#ff9fd6', patch: () => `hsla(${290 + srand() * 60},80%,${70 + srand() * 12}%,.35)`, path: ['#e8c43a', '#fff2a8'],
     fol: [.85, .65, .62, .1, .08], grass: [.52, .6, .65, .08, .06], flow: [0xffffff, 0x7af0ff, 0xffe45c], haz: 'ball', hazCol: 0xff4fa0, amb: { fall: 1.2, sway: 1, cols: [0xff4fa0, 0x4fd0ff, 0xffe45c, 0xa0ff6a], size: .5 } },
   { name: 'Snowy Hills', emoji: '⛄', sky: 0xbfe3ff, fog: 0xeaf6ff, hemi: 2.3, sun: 2.0, ground: '#eef6ff', patch: () => `hsla(205,60%,${82 + srand() * 14}%,.4)`, path: ['#9ab8d0', '#c4dcee'],
     fol: [.42, .35, .32, .04, .06], grass: [.5, .25, .82, .04, .06], flow: [0x7ad0ff, 0xffffff], haz: 'ball', hazCol: 0xffffff, mod: 'ice', amb: { fall: 2.2, sway: 1.5, cols: [0xffffff], size: .5 } },
+  { name: 'Dino Valley', emoji: '🦕', sky: 0xffd9a0, fog: 0xffecc8, hemi: 2.1, sun: 2.3, ground: '#8fc04a', patch: () => `hsla(${70 + srand() * 40},55%,${36 + srand() * 18}%,.32)`, path: ['#b58a50', '#d8b078'],
+    fol: [.27, .6, .3, .08, .1], grass: [.2, .6, .36, .08, .08], flow: [0xff8a3a, 0xffe04a, 0xff5a5a], haz: 'ball', hazCol: 0x9a7a52, mod: 'wind', amb: { fall: .4, sway: 3.2, cols: [0xe8c070, 0x9ad06a], size: .45 } },
   { name: 'Sandy Desert', emoji: '🌵', sky: 0xffe0a0, fog: 0xfff0cc, hemi: 2.2, sun: 2.4, ground: '#e8c36a', patch: () => `hsla(${35 + srand() * 12},60%,${50 + srand() * 14}%,.3)`, path: ['#b88a3a', '#d4a85a'],
     fol: [.25, .45, .33, .04, .05], grass: [.14, .5, .42, .04, .05], flow: [0xff6a9a, 0xffd23a], haz: 'ball', hazCol: 0x9a7a3a, amb: { fall: .3, sway: 4, cols: [0xe8c070], size: .35 } },
   { name: 'Tropical Beach', emoji: '🏝️', sky: 0x7fe0ff, fog: 0xc8f4ff, hemi: 2.2, sun: 2.3, ground: '#f3e0a0', patch: () => `hsla(${180 + srand() * 25},70%,${65 + srand() * 12}%,.28)`, path: ['#c9a85a', '#e8d08a'],
     fol: [.36, .7, .34, .04, .06], grass: [.33, .6, .38, .05, .06], flow: [0xff5a8a, 0xffa01a, 0xffffff], haz: 'crab', hazCol: 0xe8402a, amb: { fall: -1.0, sway: 1.5, cols: [0xffffff, 0xaee8ff], size: .45 } },
+  { name: 'Fairy Garden', emoji: '🧚', sky: 0xe6c8ff, fog: 0xf6e6ff, hemi: 2.2, sun: 1.9, ground: '#b6f0a0', patch: () => `hsla(${280 + srand() * 70},75%,${75 + srand() * 12}%,.35)`, path: ['#d8a0f0', '#f4d0ff'],
+    fol: [.78, .55, .66, .1, .08], grass: [.35, .6, .6, .08, .08], flow: [0xff8ad8, 0xc08aff, 0xfff08a, 0x8af0ff], haz: 'ghost', hazCol: 0xffd0f0, mod: 'lowgrav', amb: { fall: 0, sway: 2.4, cols: [0xfff08a, 0xff9ae8, 0x9ae8ff], size: .55, fly: true } },
   { name: 'Starry Night', emoji: '🌙', sky: 0x14123a, fog: 0x24205a, hemi: 1.1, sun: .7, ground: '#2a6a50', patch: () => `hsla(${160 + srand() * 30},40%,${18 + srand() * 10}%,.35)`, path: ['#3a2a5a', '#5a4a7a'],
     fol: [.5, .5, .25, .05, .06], grass: [.4, .5, .28, .05, .05], flow: [0xfff58a, 0x9ad0ff], haz: 'ghost', hazCol: 0xf0f4ff, mod: 'dark', stars: true, cloud: 0x3a3a6a, amb: { fall: 0, sway: 3, cols: [0xfff58a], size: .5, fly: true } },
   { name: 'Pumpkin Patch', emoji: '🎃', sky: 0xa070c8, fog: 0xd0a8e8, hemi: 1.8, sun: 1.6, ground: '#7f8f3a', patch: () => `hsla(${20 + srand() * 20},80%,${40 + srand() * 10}%,.3)`, path: ['#4a3228', '#6a4a3a'],
     fol: [.08, .8, .3, .04, .06], grass: [.2, .5, .3, .05, .05], flow: [0xff7a1a, 0xa04aff], haz: 'ball', hazCol: 0xff7a1a, amb: { fall: 1.1, sway: 2, cols: [0xff7a1a, 0x9a4aff], size: .5 } },
+  { name: 'Carnival Fun', emoji: '🎪', sky: 0xffe4ec, fog: 0xfff0f4, hemi: 2.3, sun: 2.0, ground: '#ff9aa8', patch: () => `hsla(${srand() * 360},90%,${70 + srand() * 10}%,.4)`, path: ['#ffffff', '#ff5a6a'],
+    fol: [.0, .8, .6, .5, .08], grass: [.12, .7, .6, .5, .06], flow: [0xff4a6a, 0xffe04a, 0x4ab8ff, 0xffffff], haz: 'ball', hazCol: 0xff4a6a, mod: 'party', amb: { fall: 1.3, sway: 1.1, cols: [0xff4f9a, 0x4fd0ff, 0xffe45c, 0xa0ff6a, 0xc07aff], size: .6 } },
   { name: 'Moon Base', emoji: '🚀', sky: 0x05061a, fog: 0x15183a, hemi: 1.5, sun: 2.0, ground: '#9aa0b0', patch: () => `hsla(225,10%,${40 + srand() * 25}%,.38)`, path: ['#5a6070', '#7a8090'], craters: true,
     fol: [.52, .5, .5, .05, .08], grass: [.6, .4, .55, .05, .06], flow: [0x7af0ff, 0xffffff], haz: 'ufo', hazCol: 0x7ad0ff, mod: 'lowgrav', stars: true, cloud: -1, amb: { fall: .25, sway: .5, cols: [0xffffff, 0x9ad0ff], size: .4 } },
   { name: 'Rainbow Sky', emoji: '🌈', sky: 0xa8e8ff, fog: 0xe8f8ff, hemi: 2.3, sun: 2.0, ground: '#bff0ff', patch: () => `hsla(${srand() * 360},90%,75%,.42)`, path: ['#ff9ac8', '#ffe45c'], rainbow: true,
     fol: [.5, .7, .6, 1, .08], grass: [.5, .7, .6, 1, .08], flow: [0xff5a8a, 0xffd23a, 0x5ae0ff, 0xa0ff6a], haz: 'ball', hazCol: 0xff6ad0, amb: { fall: .9, sway: 1.4, cols: [0xff4f9a, 0x4fd0ff, 0xffe45c, 0xa0ff6a, 0xc07aff], size: .55 } },
+  { name: 'Rainy Day', emoji: '🌧️', sky: 0x9fb4d0, fog: 0xc8d4e4, hemi: 1.9, sun: 1.5, ground: '#6fae66', patch: () => `hsla(${200 + srand() * 20},50%,${50 + srand() * 14}%,.35)`, path: ['#5a6a80', '#8a9ab0'],
+    fol: [.33, .5, .34, .05, .08], grass: [.3, .55, .36, .05, .06], flow: [0xffe04a, 0xff8ab0, 0xffffff], haz: 'ball', hazCol: 0x4a8ac8, mod: 'ice', cloud: 0x8a96aa, amb: { fall: 7, sway: .3, cols: [0xbfe0ff, 0xdff0ff], size: .3 } },
   { name: 'Jungle Jam', emoji: '🌴', sky: 0xa8f0b8, fog: 0xd8ffd8, hemi: 2.0, sun: 2.0, ground: '#2f9a44', patch: () => `hsla(${120 + srand() * 40},60%,${28 + srand() * 18}%,.35)`, path: ['#7a5a30', '#a8844a'],
     fol: [.34, .72, .3, .06, .1], grass: [.3, .7, .3, .06, .1], flow: [0xff4a8a, 0xffe04a, 0xff8a1a], haz: 'ball', hazCol: 0x2a7a3a, amb: { fall: .5, sway: 1.8, cols: [0xffe04a, 0xff7ad0, 0xffffff], size: .45, fly: true } },
   { name: 'Lava Land', emoji: '🌋', sky: 0x7a2a3a, fog: 0xa0505a, hemi: 1.5, sun: 1.8, ground: '#5a3a42', patch: () => `hsla(${5 + srand() * 25},80%,${20 + srand() * 16}%,.4)`, path: ['#ff7a1a', '#ffc23a'],
     fol: [.02, .6, .3, .05, .08], grass: [.05, .7, .35, .05, .08], flow: [0xffe04a, 0xff7a1a], haz: 'ball', hazCol: 0xff5a1a, stars: true, cloud: 0x7a3a4a, amb: { fall: -1.6, sway: 1.6, cols: [0xff8a1a, 0xffd23a, 0xff4a1a], size: .5 } },
+  { name: 'Crystal Cave', emoji: '💎', sky: 0x241046, fog: 0x3a2068, hemi: 1.3, sun: .9, ground: '#4a3a86', patch: () => `hsla(${260 + srand() * 60},50%,${30 + srand() * 16}%,.4)`, path: ['#6a4ab8', '#9a7ae8'],
+    fol: [.52, .7, .5, .12, .1], grass: [.8, .6, .5, .1, .08], flow: [0x7af0ff, 0xff8ae8, 0xffffff], haz: 'ghost', hazCol: 0xc8a8ff, mod: 'speedy', stars: true, cloud: -1, amb: { fall: -.2, sway: 1, cols: [0x7af0ff, 0xff8ae8, 0xffffff], size: .5, fly: true } },
   { name: 'Toy Town', emoji: '🧸', sky: 0xbfe0ff, fog: 0xeaf4ff, hemi: 2.3, sun: 2.0, ground: '#ffd860', patch: () => `hsla(${srand() * 360},85%,${60 + srand() * 14}%,.4)`, path: ['#4a8aff', '#8ab8ff'],
     fol: [.6, .7, .6, .35, .08], grass: [.15, .7, .55, .4, .08], flow: [0xff4a6a, 0x4a8aff, 0xffe04a, 0x6aff8a], haz: 'ball', hazCol: 0x4a8aff, amb: { fall: 1.0, sway: 1.2, cols: [0xff4a6a, 0x4a8aff, 0xffe04a, 0x6aff8a], size: .5 } },
   { name: 'Pirate Bay', emoji: '🏴‍☠️', sky: 0x8ad8e8, fog: 0xd0f4f8, hemi: 2.1, sun: 2.3, ground: '#e8d49a', patch: () => `hsla(${40 + srand() * 20},50%,${58 + srand() * 14}%,.3)`, path: ['#8a5a30', '#b5804a'],
     fol: [.3, .6, .32, .05, .08], grass: [.28, .5, .4, .05, .08], flow: [0xff5a4a, 0xffd23a, 0xffffff], haz: 'crab', hazCol: 0xc83a2a, amb: { fall: -.6, sway: 1.5, cols: [0xffffff, 0xbfeeff], size: .4 } }
+  
 ];
 const NWORLDS = TOTAL_LEVELS / 10;
 
@@ -365,7 +378,11 @@ const sfx = {
   flag() { [660, 880, 1320].forEach((f, i) => tone('triangle', f, f, .1, .1, i * .06)); },
   stage() { [523, 659, 784, 1046].forEach((f, i) => tone('triangle', f, f, .13, .13, i * .08)); noise(.15, .06); },
   splash() { noise(.3, .18); tone('sine', 500, 120, .3, .1); },
-  ring() { tone('sine', 1200, 1200, .4, .06); tone('sine', 1800, 1800, .5, .04, .02); }
+  ring() { tone('sine', 1200, 1200, .4, .06); tone('sine', 1800, 1800, .5, .04, .02); },
+  peep() { tone('sine', 1900, 2500, .07, .07); tone('sine', 2100, 2700, .07, .06, .09); },
+  clank() { tone('square', 520, 260, .09, .1); noise(.05, .08); tone('triangle', 1100, 700, .08, .05, .03); },
+  bzz() { tone('sawtooth', 210, 250, .22, .05); tone('sawtooth', 215, 255, .22, .04, .02); },
+  sparkle() { [1568, 2093, 2637].forEach((f, i) => tone('sine', f, f, .1, .06, i * .05)); }
 };
 const buzz = ms => { try { if (!muted && navigator.vibrate) navigator.vibrate(ms); } catch (e) { } };
 
@@ -487,22 +504,28 @@ const OBJ_INFO = {
   stars: { e: '⭐', verb: 'Grab', noun: 'stars', per: 3.8, range: [10, 30], from: 6 },
   foxes: { e: '🦊', verb: 'Stop', noun: 'foxes', per: 5.2, range: [8, 26], from: 7 },
   targets: { e: '🎯', verb: 'Hit', noun: 'targets', per: 4.4, range: [9, 28], from: 9 },
+  gifts: { e: '🎁', verb: 'Find', noun: 'gift boxes', per: 3.6, range: [7, 22], from: 11 },
+  chicks: { e: '🐥', verb: 'Bring home', noun: 'lost chicks', per: 7.5, range: [3, 8], from: 15 },
   flags: { e: '🚩', verb: 'Reach', noun: 'flags', per: 12, range: [3, 9], from: 12 },
   simon: { e: '🎵', verb: 'Copy', noun: 'melodies', per: 15, range: [2, 6], from: 16 },
   dash: { e: '🏁', verb: 'Reach', noun: 'the finish', per: 0, range: [1, 1] },
   boss: { e: '👑', verb: 'Defeat', noun: 'the boss', per: 0, range: [1, 1] },
   rush: { e: '⭐', verb: 'Collect', noun: 'stars before your friends', per: 0, range: [1, 1] }
 };
-const KINDS = ['sheep', 'balloons', 'pins', 'baddies', 'stars', 'foxes', 'targets', 'flags', 'simon'];
+const KINDS = ['sheep', 'balloons', 'pins', 'baddies', 'stars', 'foxes', 'targets', 'flags', 'simon', 'gifts', 'chicks'];
 const ANIM_SETS = [['sheep', 'cow', 'chicken', 'bunny'], ['duck', 'frog', 'chicken', 'sheep'], ['penguin', 'bunny', 'duck', 'panda'], ['cow', 'frog', 'cat', 'duck'], ['chicken', 'sheep', 'penguin', 'puppy'], ['frog', 'duck', 'bunny', 'cat'], ['penguin', 'panda', 'cow', 'frog'], ['bunny', 'chicken', 'puppy', 'cow'], ['sheep', 'penguin', 'frog', 'panda'], ['cow', 'cat', 'penguin', 'duck'], ['puppy', 'bunny', 'sheep', 'chicken'], ['panda', 'cat', 'puppy', 'frog'], ['duck', 'penguin', 'cow', 'bunny'], ['cat', 'sheep', 'panda', 'chicken']];
 const objE = (t, w) => t === 'sheep' ? SPECIES[ANIM_SETS[(w || 0) % ANIM_SETS.length][0]].e : OBJ_INFO[t].e;
+const BOSS_ORDER = [0, 1, 2, 10, 3, 4, 11, 5, 6, 7, 8, 9];   // world -> boss type: Cupcake Queen is boss #4 (level 40), Big Jack boss #7 (level 70)
+const bossType = w => BOSS_ORDER[w % BOSS_ORDER.length];
 const BOSSES = [
   { name: 'King Woolly', e: '👑' }, { name: 'Captain Fox', e: '🦊' }, { name: 'Mega Mower', e: '🚜' }, { name: 'Grumpy Cloud', e: '⛈️' }, { name: 'Jelly Giant', e: '🟢' },
-  { name: 'Robo Sheep', e: '🤖' }, { name: 'Pumpkin King', e: '🎃' }, { name: 'Ice Golem', e: '🧊' }, { name: 'Space Blob', e: '👾' }, { name: 'Rainbow Dragon', e: '🐲' }
+  { name: 'Robo Sheep', e: '🤖' }, { name: 'Pumpkin King', e: '🎃' }, { name: 'Ice Golem', e: '🧊' }, { name: 'Space Blob', e: '👾' }, { name: 'Rainbow Dragon', e: '🐲' },
+  { name: 'Cupcake Queen', e: '🧁' }, { name: 'Big Jack', e: '🤡' }
 ];
 const MODS = {
   lowgrav: { e: '🌙', name: 'Low gravity – super jumps!' }, ice: { e: '🧊', name: 'Slippery ice – you slide!' },
-  speedy: { e: '⚡', name: 'Speedy mode – everything is faster!' }, dark: { e: '🌑', name: 'Dark night – look carefully!' }
+  speedy: { e: '⚡', name: 'Speedy mode – everything is faster!' }, dark: { e: '🌑', name: 'Dark night – look carefully!' },
+  wind: { e: '💨', name: 'Windy day – the breeze pushes you!' }, bouncy: { e: '🦘', name: 'Bouncy ground – boing boing! (hold JET to bounce higher)' }, party: { e: '🎉', name: 'Party time – extra goodies!' }
 };
 /* the first ten levels teach one new trick each */
 const EARLY = { 1: [['sheep'], ['sheep'], ['sheep']], 2: [['sheep'], ['balloons'], ['sheep']], 3: [['balloons'], ['pins'], ['sheep']], 4: [['pins'], ['sheep'], ['balloons']], 6: [['baddies'], ['stars']], 7: [['stars'], ['foxes']], 8: [['foxes'], ['baddies']], 9: [['targets'], ['sheep', 'balloons']] };
@@ -513,7 +536,8 @@ const HINTS = {
 };
 const KIND_HINT = {
   flags: 'Follow the arrow to the 🚩 flag – dodge the spinning bars and rolling hazards!', simon: 'Watch the pads light up, then copy the tune! Step on the pads or shoot them. 🎵',
-  baddies: 'Waves of baddies are coming! 👾', foxes: 'Foxes run to the barn – stop them!'
+  baddies: 'Waves of baddies are coming! 👾', foxes: 'Foxes run to the barn – stop them!',
+  gifts: 'Find the 🎁 gift boxes hiding around – bump into them or shoot them!', chicks: 'Touch the lost chicks 🐥 so they follow you, then lead them to the red ring (their barn)!'
 };
 const isDashLevel = n => n % 10 !== 0 && ((n >= 5 && n % 10 === 5) || (n >= 130 && n % 10 === 2));
 function genLevel(n) {
@@ -538,7 +562,7 @@ function genLevel(n) {
       if (early && early[s]) types = early[s].slice();
       else {
         const pool = allowed.filter(k => k !== prev); types = [pool[Math.floor(R() * pool.length)]];
-        if (R() < dbl && types[0] !== 'simon' && types[0] !== 'flags') { const p2 = allowed.filter(k => k !== types[0] && k !== 'simon' && k !== 'flags'); if (p2.length) types.push(p2[Math.floor(R() * p2.length)]); }
+        if (R() < dbl && types[0] !== 'simon' && types[0] !== 'flags' && types[0] !== 'chicks') { const p2 = allowed.filter(k => k !== types[0] && k !== 'simon' && k !== 'flags' && k !== 'chicks' && k !== 'foxes'); if (p2.length) types.push(p2[Math.floor(R() * p2.length)]); }
       }
       prev = types[0];
       L.stages.push({ objs: types.map(t => mkObj(t, types.length > 1 ? .66 : 1)), time: 0 });
@@ -564,22 +588,22 @@ function genLevel(n) {
   L.hazSpeed = lerp(4.8, 9, d); if (L.dash) { L.hazCount = 0; L.harass = 0; }
   L.pickupEvery = lerp(14, 22, d);
   L.waveSize = Math.round(lerp(2, 5, d)); L.waveGap = lerp(20, 15, d);
-  if (n >= 12) { if (theme.mod && R() < .75) L.mod = theme.mod; else if (R() < .35 && !boss && !dash) L.mod = pick2(R, ['lowgrav', 'ice', 'speedy', 'dark']); }
+  if (n >= 12) { if (theme.mod && R() < .75) L.mod = theme.mod; else if (R() < .35 && !boss && !dash) L.mod = pick2(R, ['lowgrav', 'ice', 'speedy', 'dark', 'wind', 'bouncy', 'party']); }
   if (boss && theme.mod && n >= 12) L.mod = theme.mod;
-  if (dash && (L.mod === 'dark' || L.mod === 'lowgrav')) L.mod = null;
+  if (dash && (L.mod === 'dark' || L.mod === 'lowgrav' || L.mod === 'wind' || L.mod === 'bouncy')) L.mod = null;
   if (L.mod === 'speedy') L.em *= 1.3;
   if (boss) {
     const tier = Math.floor(world / 10), hp = Math.round(lerp(110, 320, d));
-    L.bossCfg = { type: world % 10, tier, hp, speed: lerp(2.8, 5, d), fireEvery: lerp(3.0, 1.3, d), shots: 1 + Math.floor(d * 2.6), projSpeed: lerp(11, 16, d), scale: 1 + Math.min(tier, 6) * .1, ring: Math.round(lerp(8, 14, d)) };
+    L.bossCfg = { type: bossType(world), tier, hp, speed: lerp(2.8, 5, d), fireEvery: lerp(3.0, 1.3, d), shots: 1 + Math.floor(d * 2.6), projSpeed: lerp(11, 16, d), scale: 1 + Math.min(tier, 6) * .1, ring: Math.round(lerp(8, 14, d)) };
   }
   if (L.dash && !L.hint) L.hint = 'Steer with the stick. JET = jump (hold to hover over gaps), stomp critters – and outrun the angry boulder! 🪨';
   if (!L.hint) { const k = L.stages[0].objs[0].type; L.hint = KIND_HINT[k] || ''; }
-  L.title = boss ? `Boss: ${BOSSES[world % 10].name}` : dash ? `Dash ${n}` : `Level ${n}`;
+  L.title = boss ? `Boss: ${BOSSES[bossType(world)].name}` : dash ? `Dash ${n}` : `Level ${n}`;
   return L;
 }
 function pick2(R, a) { return a[Math.floor(R() * a.length)]; }
 function missionOf(st, world) {
-  return st.objs.map(o => o.type === 'dash' ? '🏁 Dash to the finish line! Jump logs, leap the gaps, grab coins!' : o.type === 'boss' ? `${OBJ_INFO.boss.e} Defeat ${BOSSES[world % 10].name}!` : `${objE(o.type, world)} ${OBJ_INFO[o.type].verb} ${o.need} ${OBJ_INFO[o.type].noun}`).join('  +  ');
+  return st.objs.map(o => o.type === 'dash' ? '🏁 Dash to the finish line! Jump logs, leap the gaps, grab coins!' : o.type === 'boss' ? `${OBJ_INFO.boss.e} Defeat ${BOSSES[bossType(world)].name}!` : `${objE(o.type, world)} ${OBJ_INFO[o.type].verb} ${o.need} ${OBJ_INFO[o.type].noun}`).join('  +  ');
 }
 
 /* ======== 06_state.js ======== */
@@ -605,7 +629,7 @@ const totalStars = () => { let t = 0; for (let i = 0; i < TOTAL_LEVELS; i++) t +
 
 let level = Math.min(save.max, TOTAL_LEVELS), L = null, objs = [], hearts = 3, invuln = 0, timeLeft = 60, timeLimit = 60, tripleT = 0, shootCd = 0;
 let stageIdx = 0, stageT = 0, usedCkpt = false, ckptStage = 0;
-let combo = 0, comboT = 0, clock = 0, shake = 0, introT = 0, ballColorI = 0, foxQueue = 0, foxTimer = 0, pickupTimer = 8, GRAV = 26, iceMode = false, speedMode = false, bossRef = null;
+let combo = 0, comboT = 0, clock = 0, shake = 0, introT = 0, ballColorI = 0, foxQueue = 0, foxTimer = 0, pickupTimer = 8, GRAV = 26, iceMode = false, speedMode = false, windMode = false, bounceMode = false, partyMode = false, windA = 0, windT = 0, bossRef = null;
 const ents = [];
 const balls = [], bprojs = [];
 const el = { time: $('time'), lvl: $('lvl'), hearts: $('hearts'), objs: $('objs'), combo: $('combo'), fuel: $('fuel'), flash: $('flash'), banner: $('banner'), bossbar: $('bossbar'), bossfill: $('bossfill'), bossname: $('bossname'), stage: $('stage'), arrow: $('arrow') };
@@ -747,6 +771,7 @@ function spawnSheep(gold, atPos) {
       Chars.blinkAll(rg, dt, 1);
       if ((e.y <= 0 && e.vy < 0) || e.t <= 0) { burst(e.x, .4, e.z, gold ? 0xffd23a : 0xffffff, 8, 3, .7); confetti(e.x, .6, e.z, 8); e.dead = true; } return;
     }
+    if (state === 'win') { e.cheer = (e.cheer || rand(0, 1)) + dt * 2.4; const j = Math.abs(Math.sin(e.cheer * Math.PI)); g.position.set(e.x, j * 1.6, e.z); g.rotation.y += dt * 4; Chars.tickCritter(rg, dt, clock, 0, null); return; }
     const dx = e.x - pig.x, dz = e.z - pig.z, d = Math.hypot(dx, dz); let sp = 0, scared = false;
     if (d < 12 && state === 'play') { e.ang += angDiff(e.ang, Math.atan2(dx, dz)) * Math.min(1, 6 * dt); sp = (gold ? L.sheepFlee * 1.2 : L.sheepFlee) * SP.flee * clamp(1.4 - d / 15, .5, 1) * (speedMode ? 1.25 : 1); e.moving = false; e.wait = rand(.5, 1.5); scared = true; }
     else { e.wait -= dt; if (e.wait <= 0) { e.moving = !e.moving; e.wait = e.moving ? rand(1.5, 3.5) : rand(1, 3); if (e.moving) e.ang = rand(0, TAU); } if (e.moving) sp = 1.5; }
@@ -1004,6 +1029,50 @@ function spawnPickup(px, pz, force) {
   };
   return e;
 }
+
+/* ============================================================ v5.2 new missions: gift boxes + lost chicks */
+const GIFT_COLS = [0xff6ab0, 0x4ab8ff, 0x7ad84a, 0xffa03a, 0xb08aff];
+function spawnGift() {
+  const rg = Chars.makeGift(pick(GIFT_COLS)), g = new THREE.Group(); g.add(rg.g); g.userData.hasOl = true;
+  const c = spot(8, 12), e = addEnt({ kind: 'gift', g, rig: rg, x: c.x, z: c.z, y: 0, cy: 1.2, r: 1.7, hittable: true, ph: rand(0, TAU), hopT: rand(.6, 3), hop: 0 });
+  e.update = dt => {
+    e.ph += dt; e.hopT -= dt; if (e.hopT <= 0) { e.hopT = rand(2.4, 5); e.hop = 1; sfx.squeak(); } if (e.hop > 0) e.hop = Math.max(0, e.hop - dt * 1.5);
+    const hs = Math.sin(e.hop * Math.PI), sq = 1 - hs * .1;
+    g.position.set(e.x, hs * 1.5, e.z); rg.body.scale.set(1 + (1 - sq) * .8, sq + (e.hop > 0 ? 0 : Math.sin(e.ph * 3) * .015), 1 + (1 - sq) * .8); g.rotation.y = Math.sin(e.ph * 1.7) * .3 + e.hop * 1.6;
+    Chars.blinkAll(rg, dt); for (const ey of rg.eyes) ey.look(Math.sin(e.ph) * .6, 0);
+    if (state === 'play' && Math.hypot(pig.x - e.x, pig.z - e.z) < 2.9 && pig.y < 2.6) take();
+  };
+  function take() {
+    if (e.dead) return; e.dead = true; burst(e.x, 1.5, e.z, pick(GIFT_COLS), 14, 6, .9); confetti(e.x, 2, e.z, 22); sfx.sparkle(); buzz(15); popText('Surprise! 🎁', e.x, 3.4, e.z, 'gold');
+    for (let i = 0; i < 2; i++) spawnCoin(e.x + rand(-2, 2), e.z + rand(-2, 2), 1.6);
+    progress('gifts');
+  }
+  e.onBall = () => { take(); };
+  return e;
+}
+const chickGrp = { followers: [] };
+function spawnChicks(n) { chickGrp.followers.length = 0; for (let k = 0; k < n; k++) spawnChick(); }
+function spawnChick() {
+  const rg = Chars.makeChick(), g = new THREE.Group(); g.add(rg.g); g.userData.hasOl = true; rg.g.scale.setScalar(1.15);
+  const c = spot(12, 14), e = addEnt({ kind: 'chick', g, rig: rg, x: c.x, z: c.z, y: 0, cy: .8, r: 1.4, hittable: false, st: 'lost', ang: rand(0, TAU), wait: rand(0, 2), moving: false, ph: rand(0, TAU), peep: rand(1.5, 4), t: 0 });
+  e.update = dt => {
+    e.ph += dt; const F = chickGrp.followers; let sp = 0;
+    if (e.st === 'home') { e.t += dt; const k = Math.min(1, e.t / .8); g.position.set(e.x, Math.sin(k * Math.PI) * 3.2, e.z); g.scale.setScalar(1 - k * .7); g.rotation.y += dt * 12; if (e.t > .8) e.dead = true; return; }
+    if (e.st === 'lost') {
+      e.wait -= dt; if (e.wait <= 0) { e.moving = !e.moving; e.wait = e.moving ? rand(.8, 1.8) : rand(.8, 2); if (e.moving) e.ang = rand(0, TAU); } if (e.moving) sp = 2.2;
+      e.peep -= dt; if (e.peep <= 0) { e.peep = rand(2.5, 5); popText('Peep!', e.x, 2.9, e.z, ''); sfx.peep(); }
+      if (state === 'play' && Math.hypot(pig.x - e.x, pig.z - e.z) < 3.3 && pig.y < 2.6) { e.st = 'follow'; F.push(e); sfx.sparkle(); burst(e.x, 1.2, e.z, 0xffe45c, 8, 3, .6); popText('Peep peep! 💕', e.x, 3, e.z, 'gold'); }
+    } else {
+      const i = F.indexOf(e), lead = i <= 0 ? pig : F[i - 1], dx = lead.x - e.x, dz = lead.z - e.z, d = Math.hypot(dx, dz) || 1, want = i <= 0 ? 2.6 : 1.7;
+      if (d > want) { sp = clamp((d - want) * 6, 0, 16); e.ang = Math.atan2(dx, dz); }
+      if (Math.hypot(e.x - GOAL.x, e.z - GOAL.z) < 5.4) { F.splice(F.indexOf(e), 1); e.st = 'home'; e.t = 0; sfx.star(); confetti(e.x, 2, e.z, 14); popText('Home sweet home! 🏠', e.x, 3.6, e.z, 'good'); progress('chicks'); return; }
+    }
+    e.x += Math.sin(e.ang) * sp * dt; e.z += Math.cos(e.ang) * sp * dt; pushOut(e, .6); keepInWorld(e, WORLD);
+    g.position.set(e.x, sp > 0 ? Math.abs(Math.sin(clock * 14 + e.ph)) * .5 : Math.sin(clock * 3 + e.ph) * .04, e.z); g.rotation.y += angDiff(g.rotation.y, e.ang) * Math.min(1, 12 * dt);
+    rg.wings.forEach((w, k) => { w.rotation.z = (k ? 1 : -1) * (sp > 0 ? .5 + Math.sin(clock * 32) * .45 : .08); }); Chars.blinkAll(rg, dt);
+  };
+  return e;
+}
 /* ---- wacky baddies */
 const waves = { queue: 0, size: 3, num: 0, total: 1, timer: 0, cool: 0 };
 function enemyDown(e, col, txt) {
@@ -1094,11 +1163,174 @@ function spawnHedgehog(at, mission) {
   e.onBall = () => { e.hp--; if (e.hp > 0) { sfx.thunk(); burst(e.x, 1.4, e.z, 0xffffff, 5, 3, .5); popText('Ow!', e.x, 3.2, e.z, ''); e.st = 'dizzy'; e.t = 1.2; return true; } enemyDown(e, 0x9a6a4a, 'Pricked!'); };
   return e;
 }
+
+/* ============================================================ v5.2 new villains: grumpy-cute, never scary */
+const popK = a => { const t = Math.min(1, a / .38); return t >= 1 ? 1 : 1 + Math.sin(t * Math.PI) * .22 - (1 - t) * (1 - t) * .9; };   // little bouncy "boop!" when they appear
+const lobGeo = new THREE.SphereGeometry(.9, 12, 9), lobRing = new THREE.RingGeometry(2.0, 2.5, 32);
+/* a snowball / sprinkle lobbed in an arc: a red ring on the ground shows where it will land */
+function spawnLob(sx, sy, sz, tx, tz, T, col, dmg) {
+  const g = new THREE.Group(), m = new THREE.Mesh(lobGeo, M(col, { emissive: new THREE.Color(col).multiplyScalar(.25).getHex() })); g.add(m); Chars.outline(g, .08);
+  const ring = new THREE.Mesh(lobRing, new THREE.MeshBasicMaterial({ color: 0xff4f4f, transparent: true, opacity: .55, side: THREE.DoubleSide, depthWrite: false })); ring.rotation.x = -Math.PI / 2; ring.position.set(tx, .12, tz); scene.add(ring);
+  const e = addEnt({ kind: 'lob', g, x: sx, z: sz, y: sy, cy: 0, r: 1, t: 0 });
+  e.cleanup = () => { scene.remove(ring); ring.material.dispose(); };
+  e.update = dt => {
+    e.t += dt; const k = Math.min(1, e.t / T);
+    e.x = lerp(sx, tx, k); e.z = lerp(sz, tz, k); e.y = lerp(sy, .8, k) + Math.sin(k * Math.PI) * 6.5; g.position.set(e.x, e.y, e.z); m.rotation.x += dt * 6;
+    ring.material.opacity = .3 + .25 * Math.sin(clock * 16); ring.scale.setScalar(.85 + .15 * Math.sin(clock * 16 + 1));
+    if (k >= 1) {
+      e.dead = true; burst(tx, .6, tz, col, 14, 6, .9); sfx.thunk();
+      if (state === 'play' && Math.hypot(pig.x - tx, pig.z - tz) < 2.7 && pig.y < 1.6) hurtPig(tx, tz, dmg || 16);
+    }
+  };
+  return e;
+}
+
+/* Grumpy Cupcake: waddles in, squats, squirts three sprinkle shots. In dash levels it just patrols (stomp it!). */
+function spawnCupcake(at, mission, patrol) {
+  const rg = Chars.makeCupcake(), g = wrapEnemy(rg), p = at || ringSpawn(24, 38);
+  const e = addEnt({ kind: 'enemy', sub: 'cupcake', g, rig: rg, x: p.x, z: p.z, y: 0, cy: 1.5, r: 1.5, hittable: true, mission, st: 'walk', t: rand(1.6, 3), ang: 0, cool: 0, ph: rand(0, TAU), x0: p.x, amp: patrol || 0, age: 0 });
+  e.update = dt => {
+    e.age += dt; e.ph += dt; e.t -= dt; const bk = popK(e.age);
+    if (e.st === 'squash') { e.t -= 0; g.scale.set(1.3 * bk, .22, 1.3 * bk); if (e.t <= -.45) { burst(e.x, .5, e.z, 0xff8ec9, 8, 3, .6); e.dead = true; } return; }
+    const dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, want = Math.atan2(dx, dz); let sq = 0, moving = false;
+    if (e.amp) { e.x = e.x0 + Math.sin(e.ph * 1.4) * e.amp; g.rotation.y = Math.cos(e.ph * 1.4) > 0 ? Math.PI / 2 : -Math.PI / 2; moving = true; }
+    else if (e.st === 'walk') {
+      e.ang += angDiff(e.ang, want) * Math.min(1, 5 * dt); const sp = d > 11 ? (2.6 + L.d * 2.2) * L.em : -1.4 * L.em; moving = true;
+      e.x += Math.sin(e.ang) * sp * dt; e.z += Math.cos(e.ang) * sp * dt; pushOut(e, .9); keepInWorld(e, WORLD + 8);
+      if (e.t <= 0 && d < 28) { e.st = 'aim'; e.t = .85; sfx.thunk(); popText('!', e.x, 4.6, e.z, 'bad'); }
+    } else if (e.st === 'aim') {                    // squat and wobble: the warning
+      e.ang += angDiff(e.ang, want) * Math.min(1, 8 * dt); const k = 1 - e.t / .85; sq = Math.sin(Math.min(1, k) * Math.PI * .85) * .3;
+      if (e.t <= 0) {
+        const spd = 9 + L.d * 3.5; sfx.zap(); for (let i = -1; i <= 1; i++) { const a = e.ang + i * .32; addProj(e.x + Math.sin(a) * 1.5, 1.9, e.z + Math.cos(a) * 1.5, Math.sin(a) * spd, 0, Math.cos(a) * spd, i === 0 ? 0xff4f9a : (i < 0 ? 0x4fd0ff : 0xffe45c), 4.2); }
+        e.st = 'walk'; e.t = rand(2.4, 3.8) / (1 + L.d * .4);
+      }
+    }
+    if (!e.amp) g.rotation.y += angDiff(g.rotation.y, e.ang) * Math.min(1, 10 * dt);
+    g.position.set(e.x, moving ? Math.abs(Math.sin(clock * 9 + e.ph)) * .14 : 0, e.z); g.scale.set((1 + sq * .7) * bk, (1 - sq) * bk, (1 + sq * .7) * bk);
+    rg.top.rotation.z = Math.sin(clock * 6 + e.ph) * .06; rg.feet.forEach((f, i) => f.position.z = .22 + (moving ? Math.sin(clock * 11 + i * Math.PI) * .22 : 0)); Chars.blinkAll(rg, dt);
+    e.cool -= dt;
+    if (state === 'play') { const dd = Math.hypot(pig.x - e.x, pig.z - e.z); if (dd < e.r + .9) { if (pig.y > .35 && pig.y < 3.6 && pig.vy < 2) { pig.vy = 15; pig.grounded = false; down(true); } else if (pig.y < 1.6 && e.cool <= 0) { e.cool = .9; hurtPig(e.x, e.z, 16); } } }
+  };
+  function down(stomp) { if (e.st === 'squash') return; e.st = 'squash'; e.t = 0; e.hittable = false; sfx.stomp(); confetti(e.x, 1.8, e.z, 16); popText(stomp ? 'Stomp!' : 'Sweet!', e.x, 3.2, e.z, 'good'); for (let i = 0; i < 2; i++) spawnCoin(e.x + rand(-1.5, 1.5), e.z + rand(-1.5, 1.5), 1.6); if (e.mission && objs.some(o => o.type === 'baddies')) progress('baddies'); }
+  e.onBall = () => { if (e.st !== 'squash') down(false); };
+  return e;
+}
+
+/* Snowball Sam: keeps his distance and lobs snowballs (watch the red ring!). Two bonks: first knocks his hat off. */
+function spawnSnowman(at, mission) {
+  const rg = Chars.makeSnowman(), g = wrapEnemy(rg), p = at || ringSpawn(28, 42);
+  const e = addEnt({ kind: 'enemy', sub: 'snowman', g, rig: rg, x: p.x, z: p.z, y: 0, cy: 1.7, r: 1.7, hittable: true, mission, hp: 2, st: 'walk', t: rand(1.4, 2.6), ang: 0, ph: rand(0, TAU), cool: 0, tx: 0, tz: 0, age: 0 });
+  e.update = dt => {
+    e.age += dt; e.ph += dt; e.t -= dt; const bk = popK(e.age), dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, want = Math.atan2(dx, dz); let sp = 0, lean = 0;
+    e.ang += angDiff(e.ang, want) * Math.min(1, 4 * dt);
+    if (e.st === 'walk') {
+      sp = d > 15 ? (2.4 + L.d * 1.6) * L.em : d < 8 ? -2 * L.em : 0; rg.armL.rotation.z = Math.sin(clock * 5) * .25; rg.armR.rotation.z = -Math.sin(clock * 5) * .25;
+      if (e.t <= 0 && d < 34) { e.st = 'wind'; e.t = .95; e.tx = pig.x + pig.vx * .55; e.tz = pig.z + pig.vz * .55; popText('Snowball!', e.x, 5, e.z, 'bad'); sfx.whoosh(); }
+    } else if (e.st === 'wind') { const k = 1 - e.t / .95; rg.armR.rotation.z = -k * 2.5; rg.armL.rotation.z = k * .6; lean = -k * .3; if (e.t <= 0) { spawnLob(e.x + Math.sin(e.ang) * 1.2, 3.4, e.z + Math.cos(e.ang) * 1.2, e.tx, e.tz, 1.15, 0xffffff, 16); e.st = 'throw'; e.t = .35; sfx.zap(); } }
+    else if (e.st === 'throw') { const k = e.t / .35; rg.armR.rotation.z = -2.5 * k + .8 * (1 - k); lean = .35 * (1 - k); if (e.t <= 0) { e.st = 'walk'; e.t = rand(2.6, 4.2) / (1 + L.d * .5); } }
+    else if (e.st === 'dizzy') { rg.body.rotation.z = Math.sin(clock * 14) * .15; rg.armL.rotation.z = Math.sin(clock * 9) * .8; rg.armR.rotation.z = -Math.sin(clock * 9) * .8; if (e.t <= 0) { e.st = 'walk'; e.t = rand(1.2, 2.4); rg.body.rotation.z = 0; } }
+    if (e.st !== 'dizzy') rg.body.rotation.z = Math.sin(clock * 6) * (sp ? .05 : 0);
+    rg.body.rotation.x += (lean - rg.body.rotation.x) * Math.min(1, 12 * dt);
+    e.x += Math.sin(e.ang) * sp * dt; e.z += Math.cos(e.ang) * sp * dt; pushOut(e, 1.1); keepInWorld(e, WORLD + 8);
+    g.position.set(e.x, sp ? Math.abs(Math.sin(clock * 6 + e.ph)) * .1 : 0, e.z); g.rotation.y = e.ang; g.scale.setScalar(bk); Chars.blinkAll(rg, dt, e.st === 'dizzy' ? .6 : 0);
+    e.cool -= dt; if (e.cool <= 0 && pigNear(e, e.r + .9, 2.8)) { e.cool = 1; hurtPig(e.x, e.z, 16); }
+  };
+  e.onBall = () => {
+    e.hp--; if (e.hp > 0) { sfx.thunk(); burst(e.x, 3.2, e.z, 0xffffff, 10, 5, .7); rg.hat.visible = false; const h = spawnHatFly(e.x, e.z); e.st = 'dizzy'; e.t = 1.3; popText('Brrr!', e.x, 4.4, e.z, ''); return true; }
+    burst(e.x, 1.6, e.z, 0xbfe0ff, 18, 7, 1); enemyDown(e, 0xffffff, 'Snow-tastic!');
+  };
+  return e;
+}
+function spawnHatFly(x, z) {
+  const g = new THREE.Group(), hm = Chars.toon(0x2a2440, { rim: 0x8a80c0 }); const c = new THREE.Mesh(Chars.G.cyl, hm); c.scale.set(.5, .8, .5); g.add(c); const b = new THREE.Mesh(Chars.G.cyl, hm); b.scale.set(.8, .09, .8); b.position.y = -.4; g.add(b); Chars.outline(g, .05);
+  const e = addEnt({ kind: 'fx', g, x, z, y: 3.2, cy: 0, r: .5, vx: rand(-3, 3), vz: rand(-3, 3), vy: 9, t: 0 });
+  e.update = dt => { e.vy -= 24 * dt; e.x += e.vx * dt; e.z += e.vz * dt; e.y += e.vy * dt; g.rotation.x += dt * 7; g.rotation.z += dt * 5; g.position.set(e.x, Math.max(.2, e.y), e.z); if (e.y <= .2 && e.vy < 0) { e.vy = 0; e.vx = e.vz = 0; e.t += dt; if (e.t > 3) e.dead = true; g.rotation.set(.2, g.rotation.y, 0); } };
+  return e;
+}
+
+/* Jack-in-the-Box: hops about like a closed box (shots just go "clunk"), then pops its grinning head out on a spring. */
+function spawnJack(at, mission, fixed) {
+  const rg = Chars.makeJack(), g = wrapEnemy(rg), p = at || ringSpawn(22, 36);
+  const e = addEnt({ kind: 'enemy', sub: 'jack', g, rig: rg, x: p.x, z: p.z, y: 0, cy: 1.2, r: 1.6, hittable: true, mission, hp: 2, st: 'hop', t: rand(.8, 1.8), hopT: rand(0, 1), ang: 0, cool: 0, popT: 0, age: 0, fixed: !!fixed });
+  e.update = dt => {
+    e.age += dt; e.t -= dt; const bk = popK(e.age), dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1; let jy = 0, sxz = 1, sy = 1;
+    if (e.st === 'hop') {
+      if (!e.fixed) { e.hopT += dt * 1.5; if (e.hopT > 1) { e.hopT -= 1; e.ang = Math.atan2(dx, dz) + rand(-.4, .4); } const j = Math.sin(e.hopT * Math.PI), sp = (4.6 + L.d * 3) * L.em; e.x += Math.sin(e.ang) * sp * j * dt; e.z += Math.cos(e.ang) * sp * j * dt; pushOut(e, 1); keepInWorld(e, WORLD + 8); jy = j * 1.3; sy = 1 + j * .1 - (1 - j) * .12; sxz = 1 - j * .05 + (1 - j) * .06; }
+      rg.crank.rotation.x += dt * 7; const trig = e.fixed ? (dz > 0 && dz < 17 && Math.abs(dx) < 5) : d < 10;
+      if (trig && e.t <= 0) { e.st = 'wind'; e.t = .8; popText('!', e.x, 4.5, e.z, 'bad'); sfx.thunk(); }
+    } else if (e.st === 'wind') { rg.setExt(0); rg.lid.rotation.x = -(1 - e.t / .8) * .55; g.rotation.z = Math.sin(clock * 45) * .07 * (1 - e.t / .8); rg.crank.rotation.x += dt * 16; if (e.t <= 0) { e.st = 'pop'; e.t = e.fixed ? 2.4 : 1.7 - L.d * .5; e.popT = 0; sfx.boing(); g.rotation.z = 0; } }
+    else if (e.st === 'pop') { e.popT += dt; rg.setExt(1 - Math.exp(-e.popT * 9) * Math.cos(e.popT * 17)); rg.head.rotation.z = Math.sin(clock * 7) * .12; rg.head.rotation.y = Math.atan2(dx, dz) - g.rotation.y; if (e.t <= 0) { e.st = 'retract'; e.t = .45; } }
+    else if (e.st === 'retract') { rg.setExt(Math.max(0, e.t / .45)); if (e.t <= 0) { rg.setExt(0); e.st = 'hop'; e.t = rand(1.6, 3); } }
+    if (!e.fixed && e.st === 'hop') g.rotation.y += angDiff(g.rotation.y, e.ang) * Math.min(1, 8 * dt);
+    g.position.set(e.x, jy, e.z); g.scale.set(sxz * bk, sy * bk, sxz * bk); rg.eyes.forEach(ey => ey.look(Math.sin(clock * 2) * .3, 0)); Chars.blinkAll(rg, dt);
+    e.cool -= dt; const ext = rg.ext || 0;
+    if (state === 'play' && e.cool <= 0 && pig.y < 6 && Math.hypot(pig.x - e.x, pig.z - e.z) < (ext > .6 ? 3 : 2.1)) { e.cool = 1; hurtPig(e.x, e.z, 18); }
+  };
+  e.onBall = b => {
+    if ((rg.ext || 0) < .6) { sfx.clank(); popText('Clunk!', e.x, 3.6, e.z, ''); burst(b.x, b.y, b.z, 0xffd93a, 4, 3, .5); return; }
+    e.hp--; if (e.hp > 0) { sfx.boing(); popText('Boing!', e.x, 6, e.z, ''); e.st = 'retract'; e.t = .45; return true; }
+    burst(e.x, 4, e.z, 0xffd93a, 18, 7, 1); confetti(e.x, 4, e.z, 22); enemyDown(e, 0x7a4ad8, 'Surprise!');
+  };
+  return e;
+}
+
+/* Buzzy Bee: lazy figure-eights around Piggy, then a quick swoop. One bonk and it's gone. */
+function spawnBee(at, mission) {
+  const rg = Chars.makeBee(), g = wrapEnemy(rg), p = at || ringSpawn(26, 40);
+  const e = addEnt({ kind: 'enemy', sub: 'bee', g, rig: rg, x: p.x, z: p.z, y: 4, cy: 0, r: 1.4, hittable: true, mission, ang: 0, ph: rand(0, TAU), st: 'loop', t: rand(2.2, 4), cool: 0, age: 0 });
+  e.update = dt => {
+    e.age += dt; e.ph += dt; e.t -= dt; const bk = popK(e.age), dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, sp = (7 + L.d * 5) * L.em;
+    rg.wingL.rotation.z = .25 + Math.sin(clock * 62 + e.ph) * .6; rg.wingR.rotation.z = -.25 - Math.sin(clock * 62 + e.ph) * .6;
+    if (e.st === 'loop') {
+      const a = e.ph * .95, tx = pig.x + Math.sin(a) * 10, tz = pig.z + Math.sin(a * 2) * 6, tdx = tx - e.x, tdz = tz - e.z, td = Math.hypot(tdx, tdz) || 1;
+      e.ang += angDiff(e.ang, Math.atan2(tdx, tdz)) * Math.min(1, 6 * dt); const v = Math.min(sp, td * 3 + 2); e.x += Math.sin(e.ang) * v * dt; e.z += Math.cos(e.ang) * v * dt; e.y += (4.2 + Math.sin(e.ph * 2) * .8 - e.y) * Math.min(1, 3 * dt); rg.body.rotation.x += (0 - rg.body.rotation.x) * Math.min(1, 8 * dt);
+      if (e.t <= 0 && d < 24) { e.st = 'dive'; e.t = 1.05; e.ang = Math.atan2(dx, dz); popText('Bzzz!', e.x, e.y + 2, e.z, 'bad'); sfx.bzz(); }
+    } else {
+      e.x += Math.sin(e.ang) * sp * 2.1 * dt; e.z += Math.cos(e.ang) * sp * 2.1 * dt; e.y += (1.7 - e.y) * Math.min(1, 5 * dt); rg.body.rotation.x += (.55 - rg.body.rotation.x) * Math.min(1, 10 * dt);
+      if (e.t <= 0) { e.st = 'loop'; e.t = rand(3, 5); }
+    }
+    keepInWorld(e, WORLD + 12); g.position.set(e.x, e.y + Math.sin(clock * 9 + e.ph) * .12, e.z); g.rotation.y = e.ang; g.scale.setScalar(bk); Chars.blinkAll(rg, dt);
+    e.cool -= dt; if (e.cool <= 0 && state === 'play' && Math.hypot(e.x - pig.x, e.z - pig.z) < 2.2 && Math.abs(e.y - (pig.y + 1.4)) < 2.2) { e.cool = 1; hurtPig(e.x, e.z, 14); }
+  };
+  e.onBall = () => { enemyDown(e, 0xffd93a, 'Buzz off!'); };
+  return e;
+}
+
+/* Wind-up Robot: marches in square turns; its key spins faster as it winds up, then the arm springs out in a punch. */
+function spawnRobot(at, mission) {
+  const rg = Chars.makeRobot(), g = wrapEnemy(rg), p = at || ringSpawn(26, 40);
+  const e = addEnt({ kind: 'enemy', sub: 'robot', g, rig: rg, x: p.x, z: p.z, y: 0, cy: 1.9, r: 1.8, hittable: true, mission, hp: 2, st: 'march', t: rand(1.6, 3), turnT: 0, ang: rand(0, 4) * Math.PI / 2, cool: 0, ph: 0, hit: false, age: 0 });
+  const lamp = (c, em) => { rg.lampMat.color.setHex(c); rg.lampMat.emissive.setHex(em); };
+  e.update = dt => {
+    e.age += dt; e.ph += dt; e.t -= dt; const bk = popK(e.age), dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, want = Math.atan2(dx, dz);
+    rg.key.rotation.z += dt * (e.st === 'wind' ? 16 : 4);
+    if (e.st === 'march') {
+      const sp = (3 + L.d * 2.4) * L.em; e.x += Math.sin(e.ang) * sp * dt; e.z += Math.cos(e.ang) * sp * dt; pushOut(e, 1.2); keepInWorld(e, WORLD + 5);
+      rg.armL.rotation.x = Math.sin(e.ph * 7) * .6; rg.armR.rotation.x = -Math.sin(e.ph * 7) * .6; rg.body.rotation.z = Math.sin(e.ph * 7) * .05;
+      e.turnT -= dt; if (e.turnT <= 0) { e.ang = Math.round(want / (Math.PI / 2)) * (Math.PI / 2); e.turnT = rand(1.5, 2.6); }
+      if (e.t <= 0 && d < 13 && Math.abs(angDiff(e.ang, want)) < .9) { e.st = 'wind'; e.t = .85; lamp(0xff3a2a, 0xaa1010); popText('Wind up!', e.x, 5, e.z, 'bad'); sfx.clank(); }
+    } else if (e.st === 'wind') { e.ang += angDiff(e.ang, want) * Math.min(1, 8 * dt); const k = 1 - e.t / .85; rg.armR.rotation.x = k * 1.5; rg.armL.rotation.x = 0; rg.body.rotation.z = Math.sin(clock * 40) * .05 * k; if (e.t <= 0) { e.st = 'punch'; e.t = .55; e.hit = false; sfx.zap(); } }
+    else if (e.st === 'punch') {
+      const k = Math.min(1, (.55 - e.t) / .12), back = e.t < .2 ? e.t / .2 : 1; rg.armR.rotation.x = lerp(1.5, -Math.PI / 2, k); rg.armR.scale.y = 1 + 1.5 * k * back; rg.armR.fist.scale.setScalar(1 + .3 * k);
+      const fz = dx * Math.sin(e.ang) + dz * Math.cos(e.ang), side = dx * Math.cos(e.ang) - dz * Math.sin(e.ang);
+      if (!e.hit && state === 'play' && k > .5 && fz > .5 && fz < 7.5 && Math.abs(side) < 1.7 && pig.y < 2.6) { e.hit = true; hurtPig(e.x, e.z, 22); }
+      if (e.t <= 0) { e.st = 'rest'; e.t = 1.2; rg.armR.scale.y = 1; rg.armR.fist.scale.setScalar(1); lamp(0x4aff7a, 0x1a8a3a); }
+    } else if (e.st === 'rest') { rg.armR.rotation.x += (0 - rg.armR.rotation.x) * Math.min(1, 6 * dt); rg.body.rotation.z = Math.sin(clock * 12) * .08; if (e.t <= 0) { e.st = 'march'; e.t = rand(2.2, 3.6); } }
+    g.position.set(e.x, e.st === 'march' ? Math.abs(Math.sin(e.ph * 7)) * .12 : 0, e.z); g.rotation.y += angDiff(g.rotation.y, e.ang) * Math.min(1, 10 * dt); g.scale.setScalar(bk); Chars.blinkAll(rg, dt);
+    e.cool -= dt; if (e.cool <= 0 && pigNear(e, e.r + .8, 2.8)) { e.cool = 1; hurtPig(e.x, e.z, 16); }
+  };
+  e.onBall = () => { e.hp--; if (e.hp > 0) { sfx.clank(); burst(e.x, 2.4, e.z, 0xffd23a, 10, 5, .6); popText('Clank!', e.x, 4.6, e.z, ''); e.st = 'rest'; e.t = 1.0; lamp(0xffa02a, 0x8a4a10); return true; } burst(e.x, 2, e.z, 0x3ab8c8, 16, 7, 1); enemyDown(e, 0x3ab8c8, 'Powered down!'); };
+  return e;
+}
 function spawnEnemy(mission) {
   const n = L.n, pool = ['shroom', 'shroom'];
   if (n >= 5) pool.push('slime'); if (n >= 12) pool.push('bomber', 'slime'); if (n >= 18) pool.push('hedgehog'); if (n >= 22) pool.push('mole'); if (n >= 28) pool.push('bat', 'bat'); if (n >= 90) pool.push('hedgehog', 'bomber');
+  if (n >= 14) pool.push('cupcake'); if (n >= 16) pool.push('bee'); if (n >= 20) pool.push('jack'); if (n >= 24) pool.push('snowman'); if (n >= 32) pool.push('robot');
+  const tnm = L.theme && L.theme.name;   // each world gets a favourite villain
+  if (n >= 14) { if (tnm === 'Candy Land' || tnm === 'Carnival Fun') pool.push('cupcake', 'cupcake'); else if (tnm === 'Snowy Hills' || tnm === 'Rainy Day') pool.push('snowman', 'snowman'); else if (tnm === 'Toy Town' || tnm === 'Carnival Fun') pool.push('jack', 'robot'); else if (tnm === 'Fairy Garden' || tnm === 'Jungle Jam' || tnm === 'Coral Reef') pool.push('bee', 'bee'); else if (tnm === 'Crystal Cave' || tnm === 'Moon Base') pool.push('robot', 'robot'); }
   const kind = pick(pool);
-  return kind === 'shroom' ? spawnShroom(null, mission) : kind === 'slime' ? spawnSlime(2, null, mission) : kind === 'bat' ? spawnBat(null, mission) : kind === 'mole' ? spawnMole(null, mission) : kind === 'hedgehog' ? spawnHedgehog(null, mission) : spawnBomber(null, mission);
+  const F = { shroom: spawnShroom, slime: (a, m) => spawnSlime(2, a, m), bat: spawnBat, mole: spawnMole, hedgehog: spawnHedgehog, bomber: spawnBomber, cupcake: spawnCupcake, snowman: spawnSnowman, jack: spawnJack, bee: spawnBee, robot: spawnRobot };
+  return F[kind](null, mission);
 }
 function wavesTick(dt) {
   if (waves.queue <= 0) return;
@@ -1114,7 +1346,7 @@ function wavesTick(dt) {
 function spawnBoss(cfg) {
   const rg = Chars.makeBoss(cfg.type, cfg.tier), g = new THREE.Group(); g.add(rg.g); g.userData.hasOl = true; const mats = rg.mats; mats.forEach(m => m.userData.em = m.emissive.getHex());
   const sc = cfg.scale, floatY = rg.floatY;
-  const e = addEnt({ kind: 'boss', g, rig: rg, x: pig.x + 22, z: pig.z - 14, y: floatY, base: floatY, cy: 2.6 * sc, r: 3.4 * sc + .6, hittable: true, hp: cfg.hp, max: cfg.hp, flash: 0, fireT: 3, dying: 0, orb: 1, ph: 0, cfg, sc, phase: 1, nFire: 0, sumT: 8, intro: 1.2 });
+  const e = addEnt({ kind: 'boss', g, rig: rg, x: pig.x + 22, z: pig.z - 14, y: floatY, base: floatY, cy: (rg.cy || 2.6) * sc, r: 3.4 * sc + .6, hittable: true, hp: cfg.hp, max: cfg.hp, flash: 0, fireT: 3, dying: 0, orb: 1, ph: 0, cfg, sc, phase: 1, nFire: 0, sumT: 8, intro: 1.2 });
   g.scale.setScalar(sc);
   e.update = dt => {
     if (e.dying > 0) { e.dying += dt; g.rotation.y += dt * 10; g.scale.setScalar(Math.max(.01, (1 - e.dying / 1.4)) * e.sc); if (Math.random() < .6) confetti(e.x, e.y + 3, e.z, 2); if (e.dying > 1.4) { e.dead = true; sfx.boom(); confetti(e.x, 3, e.z, 40); burst(e.x, 3, e.z, 0xffffff, 16, 8, 1.2); progress('boss'); } return; }
@@ -1123,7 +1355,7 @@ function spawnBoss(cfg) {
     const ml = Math.hypot(mvx, mvz) || 1, cap = Math.min(sp, ml); e.vx = mvx / ml * cap; e.vz = mvz / ml * cap; e.x += e.vx * dt; e.z += e.vz * dt; keepInWorld(e, WORLD);
     e.y = e.base + (e.base > 0 ? Math.sin(e.ph * 2) * .8 : Math.abs(Math.sin(e.ph * 2.2)) * .5); g.position.set(e.x, e.y, e.z); g.rotation.y += angDiff(g.rotation.y, Math.atan2(dx, dz)) * Math.min(1, 5 * dt); if (rg.blade) rg.blade.rotation.y += 20 * dt;
     if (e.flash > 0) { e.flash -= dt; for (const m of mats) m.emissive.setHex(e.flash > 0 ? 0xaaaaaa : m.userData.em); }
-    const sq = 1 + Math.sin(e.ph * 4) * .015 + Math.max(0, e.flash) * .6; g.scale.set(e.sc * sq, e.sc * (2 - sq), e.sc * sq); Chars.blinkAll(rg, dt, e.flash > 0 ? .8 : 0);
+    const sq = 1 + Math.sin(e.ph * 4) * .015 + Math.max(0, e.flash) * .6; g.scale.set(e.sc * sq, e.sc * (2 - sq), e.sc * sq); Chars.blinkAll(rg, dt, e.flash > 0 ? .8 : 0); if (rg.tick) rg.tick(dt, e.ph, e.phase);
     e.intro -= dt; e.fireT -= dt; if (e.fireT <= 0 && state === 'play') { e.fireT = cfg.fireEvery / rage; bossFire(e); }
     if (e.phase >= 3) { e.sumT -= dt; if (e.sumT <= 0) { e.sumT = 11 - cfg.shots; if (ents.filter(q => q.kind === 'enemy').length < 4) { for (let i = 0; i < 2; i++) { const m = spawnEnemy(false); if (m) burst(m.x, 1, m.z, 0xffffff, 8, 4, .8); } popText('Help!', e.x, e.y + 6 * sc, e.z, 'bad'); } } }
     if (state === 'play' && Math.hypot(pig.x - e.x, pig.z - e.z) < e.r * .75 && pig.y < e.cy + e.r * .6) hurtPig(e.x, e.z, 24);
@@ -1138,11 +1370,11 @@ function spawnBoss(cfg) {
 }
 const projGeo = new THREE.SphereGeometry(.8, 12, 9);
 function projMat(col) { return M(col, { emissive: new THREE.Color(col).multiplyScalar(.35).getHex() }); }
-function addProj(x, y, z, vx, vy, vz, col, life, rain) { const m = new THREE.Mesh(projGeo, projMat(col)); m.position.set(x, y, z); scene.add(m); Chars.outline(m, .08); bprojs.push({ m, x, y, z, vx, vy, vz, life, rain }); }
+function addProj(x, y, z, vx, vy, vz, col, life, rain) { const m = new THREE.Mesh(projGeo, projMat(col)); m.position.set(x, y, z); scene.add(m); Chars.outline(m, .08); bprojs.push({ m, x, y, z, vx, vy, vz, life, rain, col }); }
 function bossFire(b) {
   const cfg = b.cfg; b.nFire++;
-  if (cfg.type === 3) { const n = 2 + cfg.shots * 2 + b.phase; for (let i = 0; i < n; i++) { const x = pig.x + rand(-9, 9), z = pig.z + rand(-9, 9); addProj(x, 16 + i * 3, z, 0, -11, 0, 0x5ab8ff, 4, true); } return; }
-  const col = [0xffffff, 0xff5a2a, 0xff3030, 0, 0x5aff7a, 0xff3d3d, 0xff9a1a, 0x9ad8ff, 0xc07aff, 0xff7ad0][cfg.type] || 0xff5a5a;
+  if (cfg.type === 3 || (cfg.type === 10 && b.nFire % 2 === 0)) { const n = 2 + cfg.shots * 2 + b.phase, rc = cfg.type === 10 ? [0xff7ad0, 0x4fd0ff, 0xffe45c][b.nFire % 3] : 0x5ab8ff; for (let i = 0; i < n; i++) { const x = pig.x + rand(-9, 9), z = pig.z + rand(-9, 9); addProj(x, 16 + i * 3, z, 0, -11, 0, rc, 4, true); } if (cfg.type === 10) sfx.sparkle(); return; }
+  const col = [0xffffff, 0xff5a2a, 0xff3030, 0, 0x5aff7a, 0xff3d3d, 0xff9a1a, 0x9ad8ff, 0xc07aff, 0xff7ad0, 0xff7ad0, 0xffd93a][cfg.type] || 0xff5a5a;
   const dx = pig.x - b.x, dz = pig.z - b.z, base = Math.atan2(dx, dz), sp = cfg.projSpeed;
   if (b.phase >= 2 && b.nFire % 3 === 0) {           // ring burst: jump over it!
     const n = cfg.ring + b.phase * 2, off = rand(0, TAU); for (let i = 0; i < n; i++) { const a = off + i / n * TAU; addProj(b.x + Math.sin(a) * 3, 1.0, b.z + Math.cos(a) * 3, Math.sin(a) * sp * .7, 0, Math.cos(a) * sp * .7, col, 5); }
@@ -1156,7 +1388,7 @@ function updateBossProj(dt) {
   for (let i = bprojs.length - 1; i >= 0; i--) {
     const p = bprojs[i]; p.x += p.vx * dt; p.y += p.vy * dt; p.z += p.vz * dt; p.life -= dt; p.m.position.set(p.x, p.y, p.z); p.m.rotation.x += dt * 5; p.m.rotation.y += dt * 4;
     let rm = p.life <= 0;
-    if (p.rain && p.y < .8) { burst(p.x, .5, p.z, 0x5ab8ff, 6, 3, .6); rm = true; if (state === 'play' && Math.hypot(p.x - pig.x, p.z - pig.z) < 1.9 && pig.y < 1.5) hurtPig(p.x, p.z, 14); }
+    if (p.rain && p.y < .8) { burst(p.x, .5, p.z, p.col || 0x5ab8ff, 6, 3, .6); rm = true; if (state === 'play' && Math.hypot(p.x - pig.x, p.z - pig.z) < 1.9 && pig.y < 1.5) hurtPig(p.x, p.z, 14); }
     if (state === 'play' && !rm && !p.rain && Math.hypot(p.x - pig.x, p.y - (pig.y + 1.2), p.z - pig.z) < 1.9) { hurtPig(p.x - p.vx, p.z - p.vz, 18); burst(p.x, p.y, p.z, 0xffffff, 6, 4, .6); rm = true; }
     if (Math.hypot(p.x, p.z) > 150) rm = true;
     if (rm) { scene.remove(p.m); bprojs.splice(i, 1); }
@@ -1347,7 +1579,7 @@ function setupDash() {
       S(zz, () => { lineCoins(l1, zz + 6, 9); arcCoins(others(l1)[k % 2], zz - 4, 7, 3.4); const pk = spawnPickup(l1, zz - 8, hearts < 3 ? 'heart' : (k % 2 ? 'magnet' : 'triple')); pk.life = 40; });
       z -= adv; continue;
     }
-    const W = [['logs', 30], ['hay', hard > .08 ? 14 : 0], ['mud', 9], ['shrooms', 15], ['pad', 7], ['block', 6], ['sweeper', hard > .12 ? 8 + hard * 10 : 0], ['slalom', hard > .18 ? 9 : 0], ['rollers', hard > .22 ? 8 + hard * 8 : 0], ['slime', hard > .35 ? 7 : 0], ['pit', hard > .04 && rows - lastPit >= 3 ? 14 + hard * 10 : 0]];
+    const W = [['logs', 30], ['hay', hard > .08 ? 14 : 0], ['mud', 9], ['shrooms', 15], ['pad', 7], ['block', 6], ['sweeper', hard > .12 ? 8 + hard * 10 : 0], ['slalom', hard > .18 ? 9 : 0], ['rollers', hard > .22 ? 8 + hard * 8 : 0], ['slime', hard > .35 ? 7 : 0], ['cupcakes', hard > .1 ? 10 : 0], ['jacks', hard > .25 ? 8 : 0], ['pit', hard > .04 && rows - lastPit >= 3 ? 14 + hard * 10 : 0]];
     let tot = 0; for (const w of W) tot += w[1]; let rr = R() * tot, type = 'logs'; for (const w of W) { rr -= w[1]; if (rr <= 0) { type = w[0]; break; } }
     const zz = z;
     if (type === 'logs') {
@@ -1362,6 +1594,12 @@ function setupDash() {
     } else if (type === 'shrooms') {
       const c = 2 + Math.floor(hard * 2.5 + R());
       S(zz, () => { for (let k = 0; k < c; k++) { const gg = spawnShroom({ x: (k % 2 ? 3 : -3), z: zz - k * 5 }, false, 7 + k); gg.ph = k * 2.4; gg.x0 = k % 2 ? 2 : -2; } lineCoins(0, zz + 4, 4); });
+    } else if (type === 'cupcakes') {
+      const c = 2 + Math.floor(hard * 1.5 + R());
+      S(zz, () => { for (let k = 0; k < c; k++) { const q = spawnCupcake({ x: (k % 2 ? 3 : -3), z: zz - k * 6 }, false, 6 + k); q.ph = k * 2.2; q.x0 = k % 2 ? 2 : -2; } lineCoins(0, zz + 4, 4); });
+    } else if (type === 'jacks') {
+      const l1 = lane();
+      S(zz, () => { spawnJack({ x: l1, z: zz }, false, true); lineCoins(others(l1)[0], zz + 3, 5); lineCoins(others(l1)[1], zz - 2, 4); });
     } else if (type === 'pad') {
       const l1 = lane();
       S(zz, () => { spawnPad({ x: l1, z: zz }); for (let i = 0; i < 6; i++) spawnCoin(l1, zz - 5 - i * 2, 5 + Math.sin(i / 5 * Math.PI) * 4.5); });
@@ -1468,8 +1706,10 @@ function spawnFun() {
 
 /* ======== 10_cosmetics_flow.js ======== */
 /* ============================================================ cosmetics: hats and skins */
-const HATS = [{ id: 'hat0', n: 'No hat', e: '🐷', p: 0 }, { id: 'party', n: 'Party', e: '🥳', p: 30 }, { id: 'cap', n: 'Cap', e: '🧢', p: 60 }, { id: 'shades', n: 'Cool', e: '😎', p: 80 }, { id: 'cowboy', n: 'Cowboy', e: '🤠', p: 90 }, { id: 'chef', n: 'Chef', e: '👨‍🍳', p: 100 }, { id: 'crown', n: 'Royal', e: '👑', p: 140 }, { id: 'prop', n: 'Copter', e: '🚁', p: 170 }, { id: 'wizard', n: 'Wizard', e: '🧙', p: 220 }];
-const SKINS = [{ id: 'skin0', n: 'Classic', e: '🌸', p: 0, c: [0xff80b6, 0xffb3d0] }, { id: 'sky', n: 'Blueberry', e: '🫐', p: 120, c: [0x6ab8ff, 0x9bd2ff] }, { id: 'mint', n: 'Mint', e: '🍃', p: 120, c: [0x5fd89a, 0x9af0c4] }, { id: 'grape', n: 'Grape', e: '🍇', p: 160, c: [0xa874ff, 0xc9a6ff] }, { id: 'sun', n: 'Sunny', e: '🍊', p: 160, c: [0xffa24a, 0xffc88a] }, { id: 'candy', n: 'Candy', e: '🍬', p: 200, c: [0xff6ad0, 0xffa8ea] }, { id: 'gold', n: 'Golden', e: '✨', p: 250, c: [0xffcf3a, 0xffe27a] }];
+const HATS = [{ id: 'hat0', n: 'No hat', e: '🐷', p: 0 }, { id: 'party', n: 'Party', e: '🥳', p: 30 }, { id: 'cap', n: 'Cap', e: '🧢', p: 60 }, { id: 'shades', n: 'Cool', e: '😎', p: 80 }, { id: 'cowboy', n: 'Cowboy', e: '🤠', p: 90 }, { id: 'chef', n: 'Chef', e: '👨‍🍳', p: 100 }, { id: 'crown', n: 'Royal', e: '👑', p: 140 }, { id: 'prop', n: 'Copter', e: '🚁', p: 170 }, { id: 'wizard', n: 'Wizard', e: '🧙', p: 220 },
+  { id: 'pirate', n: 'Pirate', e: '🏴‍☠️', p: 110 }, { id: 'bunny', n: 'Bunny', e: '🐰', p: 120 }, { id: 'flower', n: 'Flowers', e: '🌼', p: 130 }, { id: 'duck', n: 'Ducky', e: '🦆', p: 150 }, { id: 'cupcake', n: 'Cupcake', e: '🧁', p: 190 }, { id: 'unicorn', n: 'Unicorn', e: '🦄', p: 260 }];
+const SKINS = [{ id: 'skin0', n: 'Classic', e: '🌸', p: 0, c: [0xff80b6, 0xffb3d0] }, { id: 'sky', n: 'Blueberry', e: '🫐', p: 120, c: [0x6ab8ff, 0x9bd2ff] }, { id: 'mint', n: 'Mint', e: '🍃', p: 120, c: [0x5fd89a, 0x9af0c4] }, { id: 'grape', n: 'Grape', e: '🍇', p: 160, c: [0xa874ff, 0xc9a6ff] }, { id: 'sun', n: 'Sunny', e: '🍊', p: 160, c: [0xffa24a, 0xffc88a] }, { id: 'candy', n: 'Candy', e: '🍬', p: 200, c: [0xff6ad0, 0xffa8ea] }, { id: 'gold', n: 'Golden', e: '✨', p: 250, c: [0xffcf3a, 0xffe27a] },
+  { id: 'lemon', n: 'Lemon', e: '🍋', p: 140, c: [0xffe45c, 0xfff0a0] }, { id: 'berry', n: 'Berry', e: '🍓', p: 170, c: [0xff4a5a, 0xff8a96] }, { id: 'ocean', n: 'Ocean', e: '🌊', p: 190, c: [0x2ac8d8, 0x8af0f0] }, { id: 'cocoa', n: 'Cocoa', e: '🍫', p: 210, c: [0x9a6a4a, 0xc89a7a] }];
 /* dress any pig rig (mine or another player's) */
 function dressRig(r, hatId, skinId) {
   const sk = SKINS.find(k => k.id === skinId) || SKINS[0]; r.setSkin(sk.c[0], sk.c[1]);
@@ -1505,7 +1745,7 @@ function setHud(v) {
   else { $('emotes').style.display = MP.active ? '' : 'none'; $('mpScore').style.display = MP.active ? '' : 'none'; }
 }
 function resetRun() {
-  speedMode = L.mod === 'speedy'; iceMode = L.mod === 'ice'; GRAV = L.mod === 'lowgrav' ? 12 : 26; curMod = L.mod;
+  speedMode = L.mod === 'speedy'; iceMode = L.mod === 'ice'; GRAV = L.mod === 'lowgrav' ? 12 : 26; curMod = L.mod; windMode = L.mod === 'wind'; bounceMode = L.mod === 'bouncy'; partyMode = L.mod === 'party'; windA = Math.random() * TAU; chickGrp.followers.length = 0;
   pig.x = 0; pig.z = L.dash ? dash.startZ : 24; pig.y = 0; pig.vx = pig.vz = pig.vy = 0; pig.heading = Math.PI; pig.fuel = 1; pig.grounded = true; pig.falling = false; pig.coy = 0; pig.stun = 0; pig.mood = 'normal'; pig.moodT = 0;
   camYaw = Math.PI; camPitch = .5; camManT = 0; runCoins = 0; magnetT = 0; dashSlowT = 0;
   hearts = 3; invuln = 0; tripleT = 0; shootCd = 0; combo = 0; comboT = 0; foxQueue = 0; foxTimer = 2; pickupTimer = 7; harassTimer = 6; levelT = 0; stageIdx = 0; usedCkpt = false;
@@ -1536,6 +1776,8 @@ function beginStage(i, first) {
     else if (o.type === 'pins') { let left = o.need; while (left > 0) { const s = Math.min(left, pick([3, 6, 6, 10])); spawnPinCluster(s); left -= s; } }
     else if (o.type === 'targets') for (let k = 0; k < o.need; k++) spawnTarget();
     else if (o.type === 'stars') for (let k = 0; k < o.need; k++) spawnStar();
+    else if (o.type === 'gifts') for (let k = 0; k < o.need; k++) spawnGift();
+    else if (o.type === 'chicks') spawnChicks(o.need);
     else if (o.type === 'foxes') foxQueue = o.need;
     else if (o.type === 'baddies') { waves.queue = o.need; waves.size = L.waveSize; waves.total = Math.ceil(o.need / L.waveSize); waves.num = 0; waves.timer = 2.2; waves.cool = 1.2; }
     else if (o.type === 'flags') flagState.left = o.need;
@@ -1544,7 +1786,7 @@ function beginStage(i, first) {
     else if (o.type === 'dash') setupDash();
     else if (o.type === 'rush') { /* online arena: stars are sent by the host */ }
   }
-  goalRing.visible = st.objs.some(o => o.type === 'foxes');
+  goalRing.visible = st.objs.some(o => o.type === 'foxes' || o.type === 'chicks');
   if (!L.mp) for (let k = 0; k < L.hazCount; k++) spawnHazard(k);
   if (!L.dash && !L.mp) spawnFun();
   el.time.textContent = timeLeft; el.time.classList.remove('low'); updateHearts(); renderObjs();
@@ -1578,12 +1820,12 @@ function winLevel() {
   const frac = levelT / L.totalTime, stars = frac <= .4 && hearts >= 2 ? 3 : frac <= .65 ? 2 : 1;
   const prev = +save.stars[level - 1]; if (stars > prev) save.stars = save.stars.slice(0, level - 1) + stars + save.stars.slice(level);
   if (level >= save.max && level < TOTAL_LEVELS) save.max = level + 1;
-  const bonus = stars * 5 + Math.round(level / 40); save.coins += bonus; runCoins += bonus; updCoins(); writeSave();
+  const bonus = Math.round((stars * 5 + Math.round(level / 40)) * (partyMode ? 1.5 : 1)); save.coins += bonus; runCoins += bonus; updCoins(); writeSave();
   confetti(pig.x, 2, pig.z, 70); popText('🎉', pig.x, pig.y + 4, pig.z, 'gold'); pig.mood = 'cheer'; pig.moodT = 3;
   setTimeout(() => {
     if (state !== 'win') return; el.banner.classList.remove('show');
-    $('winTitle').textContent = L.boss ? `${BOSSES[L.world % 10].name} defeated!` : L.dash ? 'You made it to the finish!' : 'Level Complete!'; $('winStars').textContent = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
-    $('winMsg').textContent = pick(['Super piggy! 🐷', 'Oink-credible!', 'Ham-azing job!', 'The farm is saved!', 'Snout-standing!', 'You rock, piggy! 🎸', 'Pig-tastic! 🌟']) + `  +${runCoins} 🪙` + (level >= TOTAL_LEVELS ? '  🏆 You finished all 1000 levels!' : ''); $('next').style.display = level >= TOTAL_LEVELS ? 'none' : '';
+    $('winTitle').textContent = L.boss ? `${BOSSES[bossType(L.world)].name} defeated!` : L.dash ? 'You made it to the finish!' : 'Level Complete!'; $('winStars').innerHTML = [0, 1, 2].map(i => `<span style="animation-delay:${(.12 + i * .28).toFixed(2)}s">${i < stars ? '⭐' : '☆'}</span>`).join(''); if (stars === 3) setTimeout(() => { if (state === 'win') sfx.sparkle(); }, 800);
+    $('winMsg').textContent = pick(['Super piggy! 🐷', 'Oink-credible!', 'Ham-azing job!', 'The farm is saved!', 'Snout-standing!', 'You rock, piggy! 🎸', 'Pig-tastic! 🌟']) + `  +${runCoins} 🪙` + (partyMode ? '  🎉 Party bonus x1.5!' : '') + (level >= TOTAL_LEVELS ? '  🏆 You finished all 1000 levels!' : ''); $('next').style.display = level >= TOTAL_LEVELS ? 'none' : '';
     $('win').classList.add('show');
   }, 1300);
 }
@@ -1660,6 +1902,11 @@ function updatePig(dt) {
   if (dashOn) { dashSlowT -= dt; tvx = playing ? mx * 11 : 0; tvz = state === 'play' || state === 'stageclear' ? -dashRun * (dashSlowT > 0 ? .45 : 1) * (pig.falling ? .5 : 1) : 0; if (state === 'win') tvz = 0; }
   const k = Math.min(1, (pig.grounded ? (iceMode ? 1.5 : 9) : 4) * dt);
   pig.vx += (tvx - pig.vx) * k; pig.vz += (tvz - pig.vz) * k; pig.x += pig.vx * dt; pig.z += pig.vz * dt;
+  if (windMode && live && !dashOn) {   // Dino Valley breeze: slowly turning direction, a little stronger now and then
+    windA += dt * .22; const wf = 2.8 + Math.sin(clock * .6) * 1.1; pig.x += Math.sin(windA) * wf * dt; pig.z += Math.cos(windA) * wf * dt;
+    if (Math.random() < dt * 14) emit(pig.x + rand(-16, 16), rand(.6, 7), pig.z + rand(-16, 16), Math.sin(windA) * 9, rand(-.4, .9), Math.cos(windA) * 9, rand(1, 1.7), pick([0x7ad84a, 0xffa03a, 0xffd93a, 0xff7a5a]), rand(.35, .6), 0);
+  }
+  if (partyMode && live && Math.random() < dt * 5) emit(pig.x + rand(-18, 18), rand(9, 13), pig.z + rand(-18, 18), rand(-1.5, 1.5), rand(-3, -1), rand(-1.5, 1.5), rand(1.8, 2.6), pick(CONF), rand(.45, .8), 0);
   if (dashOn) pig.x = clamp(pig.x, -11, 11); else { pushOut(pig, .95); keepInWorld(pig, WORLD + 4); }
   const hs = Math.hypot(pig.vx, pig.vz);
   if (pig.aimT > 0) { pig.aimT -= dt; pig.heading += angDiff(pig.heading, pig.aimH) * Math.min(1, 18 * dt); }
@@ -1673,11 +1920,20 @@ function updatePig(dt) {
   if (playing && input.jumpHeld && !pig.grounded && !pig.falling && pig.fuel > 0 && pig.vy < 8) { pig.vy += (GRAV < 20 ? 32 : 46) * dt; pig.fuel = Math.max(0, pig.fuel - .38 * dt); pig.thrusting = true; }
   pig.vy -= GRAV * dt; pig.y += pig.vy * dt; if (pig.y > 16) { pig.y = 16; pig.vy = Math.min(pig.vy, 0); }
   if (pig.y <= 0) {
+    if (bounceMode && live && onRoad && !pig.falling && pig.vy < -5) {
+      pig.vy = input.jumpHeld ? 13.5 : Math.min(9.5, -pig.vy * .72); pig.y = .02; pig.grounded = false; pig.coy = .1; pig.squash = .22; sfx.boing();
+      for (let i = 0; i < 6; i++) emit(pig.x, .3, pig.z, rand(-3, 3), rand(.5, 2), rand(-3, 3), .5, 0x7ad8ff, .6, 1.5);
+    } else
     if (onRoad && !pig.falling) { if (!pig.grounded && pig.vy < -6) { pig.squash = .25; for (let i = 0; i < 6; i++) emit(pig.x, .3, pig.z, rand(-3, 3), rand(.5, 2), rand(-3, 3), .5, 0xd8c08a, .6, 1.5); } pig.y = 0; pig.vy = 0; pig.grounded = true; }
     else if (dashOn) pig.falling = true;
   }
   if (pig.falling && pig.y < -11 && live) dashFall(); else if (pig.falling && pig.y < -30) dashFall();
   if (pig.grounded) pig.fuel = Math.min(1, pig.fuel + .7 * dt);
+  if (state === 'win' && onRoad && !pig.falling) { pig.heading += dt * 5.2; if (pig.grounded) { pig.vy = 7.5; pig.grounded = false; sfx.squeak(); } }    // victory dance: spin + hop!
+  if (live && !dashOn && !botMode && pig.grounded && !(pig.stun > 0) && !input.shootHeld && !input.mx && !input.my) {
+    pig.idleT = (pig.idleT || 0) + dt;
+    if (pig.idleT > 6) { pig.idleT = 0; pig.vy = 8.5; pig.grounded = false; sfx.oink(); popText(pick(['Oink?', 'Hello?', 'Snort snort', 'Bored...']), pig.x, pig.y + 4.5, pig.z, ''); }   // tiny "are you there?" hop
+  } else pig.idleT = 0;
   if (pig.stun > 0) pig.stun -= dt;
   if (pig.thrusting) emit(pig.x - Math.sin(pig.heading) * .9 + rand(-.2, .2), pig.y + 1.0, pig.z - Math.cos(pig.heading) * .9 + rand(-.2, .2), rand(-.6, .6), rand(-5, -3), rand(-.6, .6), rand(.25, .4), Math.random() < .5 ? 0xffa21a : 0xffe45c, rand(.5, .9), -1.2);
   // mood
@@ -1725,7 +1981,8 @@ function objTarget() {
   if (open.includes('flags') && flagState.active) return { t: flagState.active, e: '🚩' };
   if (open.includes('boss') && bossRef) return { t: bossRef, e: '👑' };
   if (open.includes('simon') && simon.pads.length) { const p = simon.pads[0]; return { t: { x: p.x - 3.5 * Math.SQRT1_2 * 1.0, z: p.z - 3.5 * Math.SQRT1_2 }, e: '🎵' }; }
-  const want = { sheep: e => e.kind === 'sheep' && e.st !== 'fly', balloons: e => e.kind === 'balloon', pins: e => e.kind === 'pin' && e.st === 'stand', stars: e => e.kind === 'star', targets: e => e.kind === 'target' && !e.hit, foxes: e => e.kind === 'fox' && e.st === 'run', baddies: e => e.kind === 'enemy' && e.mission };
+  if (open.includes('chicks')) { const F = chickGrp.followers, lost = ents.filter(e => e.kind === 'chick' && e.st === 'lost' && !e.dead); if (F.length && (!lost.length || F.length >= 3)) return { t: { x: GOAL.x, z: GOAL.z, y: 0 }, e: '🏠' }; eat(e => e.kind === 'chick' && e.st === 'lost'); if (best) return { t: best, e: '🐥' }; }
+  const want = { gifts: e => e.kind === 'gift', sheep: e => e.kind === 'sheep' && e.st !== 'fly', balloons: e => e.kind === 'balloon', pins: e => e.kind === 'pin' && e.st === 'stand', stars: e => e.kind === 'star', targets: e => e.kind === 'target' && !e.hit, foxes: e => e.kind === 'fox' && e.st === 'run', baddies: e => e.kind === 'enemy' && e.mission };
   for (const ty of open) if (want[ty]) eat(want[ty]);
   return best ? { t: best, e: '' } : null;
 }
@@ -1758,7 +2015,7 @@ function tick(dt) {
     if (foxQueue > 0) { foxTimer -= dt; const active = ents.filter(e => e.kind === 'fox' && e.st === 'run').length; if (foxTimer <= 0 && active < 3 + Math.floor(L.d * 6)) { foxTimer = L.foxInterval * rand(.8, 1.2); foxQueue--; spawnFox(); } }
     wavesTick(dt); flagsTick(); simonTick(dt);
     if (L.harass > 0 && !L.boss && !L.dash && !L.mp && !simon.pads.length) { harassTimer -= dt; if (harassTimer <= 0) { harassTimer = L.harassEvery * rand(.8, 1.3); if (ents.filter(e => e.kind === 'enemy' && !e.mission).length < L.harass) spawnEnemy(false); } }
-    pickupTimer -= dt; if (pickupTimer <= 0) { pickupTimer = L.pickupEvery * rand(.8, 1.3); if (!L.dash && !L.mp && ents.filter(e => e.kind === 'pickup').length < 2) spawnPickup(); }
+    pickupTimer -= dt; if (pickupTimer <= 0) { pickupTimer = L.pickupEvery * rand(.8, 1.3) * (partyMode ? .5 : 1); if (!L.dash && !L.mp && ents.filter(e => e.kind === 'pickup').length < 2) spawnPickup(); }
     dashTick(dt);
     if (timeLeft <= 0) { if (L.mp && MP.mode === 'rush') timeLeft = 0; else failLevel("Time's up! ⏰"); }
   }
@@ -2135,6 +2392,7 @@ openMenu();
 requestAnimationFrame(frame);
 window.__game = {
   cols, ents, pig, input, MP, dash, THEMES, TOTAL_LEVELS, genLevel, loadLevel, startLevel, tick, rig, save: () => save,
+  spawn: { cupcake: spawnCupcake, snowman: spawnSnowman, jack: spawnJack, bee: spawnBee, robot: spawnRobot, gift: spawnGift, chick: spawnChick, chicks: spawnChicks }, chickGrp, hurt: () => hearts, hasFlag: () => ({ wind: windMode, bounce: bounceMode, party: partyMode }),
   setBot: v => { botMode = v; }, setYaw: v => { camYaw = v; }, camYawGet: () => camYaw, camPitchGet: () => camPitch, applyCosmetic, dressRig, winNow: () => { if (state === 'play') { state = 'play'; winLevel(); } },
   forceHearts: () => { hearts = 3; invuln = 0; }, setTime: v => { timeLeft = v; }, ballsFire: shoot, openMenu, openLevels, openShop, beginStage, stageClear, dashResume, hostStart,
   get state() { return state; }, set state(v) { state = v; }, get L() { return L; }, get objs() { return objs; }, get hearts() { return hearts; }, get timeLeft() { return timeLeft; }, get boss() { return bossRef; },

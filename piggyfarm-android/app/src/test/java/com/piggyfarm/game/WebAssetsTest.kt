@@ -27,6 +27,15 @@ class WebAssetsTest {
     }
 
     @Test
+    fun characterScriptsLoadInDependencyOrder() {
+        // ch_extra.js wraps makeBoss/makeHat from ch_bosses.js/ch_core.js and must run before game.js uses them; a wrong order only fails at runtime.
+        val scripts = Regex("""<script[^>]+src=["']([^"']+)["']""").findAll(html).map { it.groupValues[1] }.toList()
+        val order = listOf("ch_core.js", "ch_bosses.js", "ch_extra.js", "game.js").map { scripts.indexOf(it) }
+        assertTrue("ch_core.js, ch_bosses.js, ch_extra.js and game.js must all be loaded: $scripts", order.all { it >= 0 })
+        assertTrue("scripts must load in the order ch_core, ch_bosses, ch_extra, game: $scripts", order == order.sorted())
+    }
+
+    @Test
     fun customPeerServerMustBeSecure() {
         // The manifest forbids cleartext traffic, so a self-hosted signaling server set in index.html must use TLS.
         val code = html.replace(Regex("""/\*[\s\S]*?\*/"""), "") // the example in index.html's comment must not count

@@ -1,6 +1,17 @@
 # Piggy Farm: Android app (Gradle project)
 
-A real Gradle/Kotlin Android project that wraps the v5.1 web game (`app/src/main/assets/www`) in a full-screen WebView and builds a **Play-ready AAB** in CI. The game files are the ones from the prebuilt `PiggyFarm-v5_1.apk`, unchanged.
+A real Gradle/Kotlin Android project that wraps the v5.2 web game (`app/src/main/assets/www`) in a full-screen WebView and builds a **Play-ready AAB** in CI. v5.1 was the prebuilt `PiggyFarm-v5_1.apk`; v5.2 adds the kid-friendly content below.
+
+## What's new in v5.2 (versionCode 7)
+
+* **6 new worlds** (20 in total, one every 10 levels): Coral Reef (bouncy floor), Dino Valley (breezy wind), Fairy Garden (low gravity), Carnival Fun (party mode), Rainy Day (slippery), Crystal Cave (speedy).
+* **5 new grumpy-cute villains** that never look scary: Grumpy Cupcake (sprinkle shots, stompable), Snowball Sam (lobs snowballs with a red landing ring), Jack-in-the-Box (hides until it pops out), Buzzy Bee (figure-eights and swoops), Wind-up Robot (marches, winds up, punches).
+* **2 new bosses**: Cupcake Queen (level 40) and Big Jack (level 70).
+* **2 new missions**: *Surprise Gifts* (hopping gift boxes) and *Lost Chicks* (lead the chicks home to the red ring).
+* **New world rules**: wind drift, trampoline floor, party mode (confetti, x1.5 win coins).
+* **Animation polish**: pop-in "boop" for enemies, victory dance, cheering sheep, popping win stars, idle "Oink?" hop.
+* **Shop**: 6 new hats (pirate, bunny, flower crown, ducky, cupcake, unicorn) and 4 new skins.
+* Source files: `ch_extra.js` (new characters, bosses 10/11, hats) and `game.js` (AI, worlds, missions).
 
 Why this exists: the prebuilt v5.1 APK targets API 28, and Google Play only accepts new apps and updates that target a recent API level. This project targets API 36 and is built from source, so it can be uploaded.
 
