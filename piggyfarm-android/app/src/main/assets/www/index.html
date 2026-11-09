@@ -119,6 +119,11 @@
   .item b{display:block;font-size:26px;line-height:1.1}
   .item.on{border-color:#ffe45c;background:rgba(90,140,40,.75)}
   .item.lock{opacity:.92}
+  .shopsec.sm{font-size:13px;margin-top:4px;opacity:.95}.shopsec small{font-size:12px;font-weight:700;opacity:.9;margin-left:4px}
+  .shopgrid.five{grid-template-columns:repeat(5,1fr);gap:5px}.shopgrid.five .item{font-size:10px;padding:4px 0;border-radius:12px}.shopgrid.five .item b{font-size:22px}
+  .wardnav{display:flex;align-items:center;gap:5px;width:100%}.wardnav .item{padding:6px 9px;font-size:15px;min-width:38px}#wardTitle{flex:1;font-weight:900;font-size:13px;text-align:center;line-height:1.15}
+  .wardmid{display:flex;align-items:center;gap:8px;width:100%}.wardmid .item{padding:5px 10px;font-size:12px;white-space:nowrap}#wardWear{flex:1;font-size:11px;font-weight:800;opacity:.95;line-height:1.15}
+  #winCheer{font-weight:800;font-size:14px;opacity:.95;margin-top:-4px}#winGift{display:flex;flex-direction:column;align-items:center;gap:6px;background:rgba(255,230,120,.22);border:2px dashed rgba(255,230,120,.8);border-radius:16px;padding:8px 12px;max-width:340px}#winGiftTxt{font-weight:900;font-size:14px;line-height:1.25}
   #shop .sheet{width:100%;max-width:420px;max-height:50vh;overflow:auto;background:rgba(20,30,80,.6);border:3px solid rgba(255,255,255,.55);border-radius:24px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;pointer-events:auto}
   .lbp{width:100%;border:3px solid #fff;border-radius:16px;padding:6px 12px;font-weight:900;font-size:17px;background:rgba(255,255,255,.12);text-align:left}
   #lbRoomCode{font-size:clamp(34px,11vw,52px);letter-spacing:6px;font-weight:900;color:#ffe45c;text-shadow:0 4px 0 #8a3a00;-webkit-text-stroke:3px #8a3a00;paint-order:stroke fill}
@@ -193,6 +198,11 @@
   <div class="sheet">
     <div class="shopsec">🎩 Hats</div><div class="shopgrid" id="shopHats"></div>
     <div class="shopsec">🎨 Skins</div><div class="shopgrid" id="shopSkins"></div>
+    <div class="shopsec">🎁 Level Rewards <small id="wardCount"></small></div>
+    <div class="wardnav"><button class="item" id="wardPrev10">⏪</button><button class="item" id="wardPrev">◀</button><div id="wardTitle"></div><button class="item" id="wardNext">▶</button><button class="item" id="wardNext10">⏩</button></div>
+    <div class="wardmid"><button class="item" id="wardNow">📍 My level</button><span id="wardWear"></span></div>
+    <div class="shopsec sm">🎩 Hats – beat a level to unlock its hat</div><div class="shopgrid five" id="wardHats"></div>
+    <div class="shopsec sm">🎨 Skins – beat a level to unlock its skin</div><div class="shopgrid five" id="wardSkins"></div>
     <button class="play alt sm" id="shopBack" style="align-self:center;margin-top:6px">BACK</button>
   </div>
 </div>
@@ -231,6 +241,8 @@
   <h2 id="winTitle">Level Complete!</h2>
   <div class="big" id="winStars">⭐⭐⭐</div>
   <p id="winMsg"></p>
+  <div id="winCheer"></div>
+  <div id="winGift" style="display:none"><div id="winGiftTxt"></div><button class="play grn sm" id="winWear">👕 WEAR THEM</button></div>
   <button class="play" id="next">NEXT LEVEL</button>
   <div class="row"><button class="play alt sm" id="winReplay">REPLAY</button><button class="play alt sm" id="winLevels">LEVELS</button></div>
 </div>
@@ -263,6 +275,8 @@
 <script src="ch_enemies.js"></script>
 <script src="ch_bosses.js"></script>
 <script src="ch_extra.js"></script>
+<script src="ch_extra2.js"></script>
+<script src="ch_world.js"></script>
 <script src="peerjs.min.js"></script>
 <script src="game.js"></script>
 </body>

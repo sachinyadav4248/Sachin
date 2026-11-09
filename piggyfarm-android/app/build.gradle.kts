@@ -17,8 +17,8 @@ android {
         applicationId = "com.piggyfarm.game"
         minSdk = 24
         targetSdk = 36          // Google Play requires a recent target API for new apps and updates; re-check the deadline in Play Console.
-        versionCode = 7         // 5.1.0 was versionCode 6
-        versionName = "5.2.0"
+        versionCode = 8         // 5.2.0 was versionCode 7
+        versionName = "5.3.0"
     }
 
     signingConfigs {

@@ -113,9 +113,46 @@ const THEMES = [
   { name: 'Toy Town', emoji: '🧸', sky: 0xbfe0ff, fog: 0xeaf4ff, hemi: 2.3, sun: 2.0, ground: '#ffd860', patch: () => `hsla(${srand() * 360},85%,${60 + srand() * 14}%,.4)`, path: ['#4a8aff', '#8ab8ff'],
     fol: [.6, .7, .6, .35, .08], grass: [.15, .7, .55, .4, .08], flow: [0xff4a6a, 0x4a8aff, 0xffe04a, 0x6aff8a], haz: 'ball', hazCol: 0x4a8aff, amb: { fall: 1.0, sway: 1.2, cols: [0xff4a6a, 0x4a8aff, 0xffe04a, 0x6aff8a], size: .5 } },
   { name: 'Pirate Bay', emoji: '🏴‍☠️', sky: 0x8ad8e8, fog: 0xd0f4f8, hemi: 2.1, sun: 2.3, ground: '#e8d49a', patch: () => `hsla(${40 + srand() * 20},50%,${58 + srand() * 14}%,.3)`, path: ['#8a5a30', '#b5804a'],
-    fol: [.3, .6, .32, .05, .08], grass: [.28, .5, .4, .05, .08], flow: [0xff5a4a, 0xffd23a, 0xffffff], haz: 'crab', hazCol: 0xc83a2a, amb: { fall: -.6, sway: 1.5, cols: [0xffffff, 0xbfeeff], size: .4 } }
-  
+    fol: [.3, .6, .32, .05, .08], grass: [.28, .5, .4, .05, .08], flow: [0xff5a4a, 0xffd23a, 0xffffff], haz: 'crab', hazCol: 0xc83a2a, amb: { fall: -.6, sway: 1.5, cols: [0xffffff, 0xbfeeff], size: .4 } },
+  { name: 'Robot Factory', emoji: '🤖', sky: 0xb8c8dc, fog: 0xdde6f0, hemi: 2.0, sun: 2.0, ground: '#8a98a8', patch: () => `hsla(${205 + srand() * 20},18%,${38 + srand() * 22}%,.35)`, path: ['#33414f', '#ffd23a'],
+    fol: [.52, .3, .5, .05, .08], grass: [.5, .35, .5, .05, .06], flow: [0xffd23a, 0x4af0ff, 0xff5a5a], haz: 'mower', hazCol: 0x3a7ad8, mod: 'speedy', amb: { fall: -.3, sway: .6, cols: [0xffd23a, 0xffffff, 0x9ad0ff], size: .35 } },
+  { name: 'Neon City', emoji: '🌃', sky: 0x1a0f3a, fog: 0x2e1a5a, hemi: 1.3, sun: .8, ground: '#2a2050', patch: () => `hsla(${280 + srand() * 50},80%,${30 + srand() * 15}%,.4)`, path: ['#ff3ad8', '#3af0ff'],
+    fol: [.88, .9, .45, .1, .08], grass: [.5, .9, .45, .1, .08], flow: [0xff3ad8, 0x3af0ff, 0xffe45c], haz: 'ufo', hazCol: 0xff3ad8, mod: 'dark', stars: true, cloud: 0x4a2a7a, amb: { fall: .2, sway: 1.2, cols: [0xff3ad8, 0x3af0ff, 0xffe45c], size: .5, fly: true } },
+  { name: 'Pixel Park', emoji: '🎮', sky: 0x6ad0ff, fog: 0xcff0ff, hemi: 2.2, sun: 2.1, ground: '#5ad84a', patch: () => `hsla(${100 + srand() * 30},70%,${40 + srand() * 20}%,.35)`, path: ['#a87a4a', '#d8b07a'],
+    fol: [.33, .8, .4, .04, .1], grass: [.3, .85, .45, .04, .06], flow: [0xff3a3a, 0xffe83a, 0x3a8aff], haz: 'ball', hazCol: 0xff3a3a, mod: 'bouncy', amb: { fall: 1.0, sway: .6, cols: [0xff3a3a, 0xffe83a, 0x3a8aff, 0x3aff6a], size: .5 } },
+  { name: 'Hologram Hills', emoji: '🔮', sky: 0x0a2a4a, fog: 0x174a6a, hemi: 1.5, sun: 1.2, ground: '#1a6a7a', patch: () => `hsla(${180 + srand() * 25},80%,${35 + srand() * 20}%,.4)`, path: ['#3af0ff', '#a0ffff'],
+    fol: [.5, .9, .5, .06, .1], grass: [.47, .85, .5, .05, .08], flow: [0x7affff, 0xffffff, 0xff7aff], haz: 'ghost', hazCol: 0x7affff, mod: 'lowgrav', stars: true, cloud: -1, amb: { fall: -.2, sway: 1.4, cols: [0x7affff, 0xffffff, 0xff7aff], size: .5, fly: true } },
+  { name: 'Cloud Kingdom', emoji: '☁️', sky: 0xcfe8ff, fog: 0xf4faff, hemi: 2.4, sun: 1.9, ground: '#f4f8ff', patch: () => `hsla(${210 + srand() * 20},70%,${85 + srand() * 10}%,.4)`, path: ['#ffd9f0', '#ffffff'],
+    fol: [.58, .4, .8, .05, .06], grass: [.55, .35, .85, .05, .04], flow: [0xffb0e0, 0xffffff, 0xffe45c], haz: 'ball', hazCol: 0xffffff, mod: 'lowgrav', amb: { fall: .3, sway: 1.8, cols: [0xffffff, 0xcfe8ff], size: .55 } },
+  { name: 'Bubble Lagoon', emoji: '🐟', sky: 0x5ad8f0, fog: 0xa8f0f8, hemi: 2.2, sun: 2.1, ground: '#7ad8e8', patch: () => `hsla(${170 + srand() * 30},80%,${60 + srand() * 15}%,.35)`, path: ['#fff0a0', '#ffffff'],
+    fol: [.5, .7, .6, .08, .08], grass: [.45, .65, .55, .08, .06], flow: [0xff9ae8, 0xffffff, 0xa0ffe8], haz: 'crab', hazCol: 0xff8a7a, mod: 'bouncy', amb: { fall: -1.5, sway: 1.2, cols: [0xffffff, 0xbff4ff, 0xffd0f8], size: .65 } },
+  { name: 'Ice Cream Parlor', emoji: '🍦', sky: 0xfff0f8, fog: 0xfff8fc, hemi: 2.4, sun: 1.9, ground: '#ffe4f0', patch: () => `hsla(${320 + srand() * 60},80%,${80 + srand() * 10}%,.4)`, path: ['#8a5a3a', '#c89a6a'],
+    fol: [.95, .6, .78, .1, .08], grass: [.4, .5, .75, .1, .06], flow: [0xff6ab0, 0xffe45c, 0x7affd0], haz: 'ball', hazCol: 0xff8ab8, mod: 'party', amb: { fall: 1.2, sway: 1.0, cols: [0xff4f9a, 0x4fd0ff, 0xffe45c, 0xa0ff6a, 0xc07aff], size: .5 } },
+  { name: 'Haunted Hollow', emoji: '👻', sky: 0x2a1a3a, fog: 0x4a3a5a, hemi: 1.3, sun: .9, ground: '#3a5a3a', patch: () => `hsla(${90 + srand() * 50},30%,${15 + srand() * 13}%,.4)`, path: ['#3a2a4a', '#5a4a6a'],
+    fol: [.75, .4, .28, .05, .06], grass: [.3, .4, .25, .05, .05], flow: [0xffa01a, 0xa04aff, 0x7aff5a], haz: 'ghost', hazCol: 0xdff0ff, mod: 'dark', stars: true, cloud: 0x4a3a5a, amb: { fall: 0, sway: 2.2, cols: [0xffa01a, 0xa04aff, 0x7aff5a], size: .5, fly: true } },
+  { name: 'Enchanted Forest', emoji: '🍄', sky: 0xb8f0c8, fog: 0xe0ffe8, hemi: 1.9, sun: 1.8, ground: '#3aa860', patch: () => `hsla(${130 + srand() * 40},60%,${25 + srand() * 15}%,.35)`, path: ['#8a5a3a', '#c8a070'],
+    fol: [.38, .7, .28, .08, .1], grass: [.35, .7, .32, .08, .1], flow: [0xff4a6a, 0xffffff, 0xc07aff], haz: 'ball', hazCol: 0xc8402a, amb: { fall: 0, sway: 2.4, cols: [0xfff58a, 0xffffff, 0xc8ffa0], size: .5, fly: true } },
+  { name: 'Dragon Mountain', emoji: '🐉', sky: 0xffb87a, fog: 0xffd8b0, hemi: 2.0, sun: 2.2, ground: '#b87a50', patch: () => `hsla(${15 + srand() * 20},50%,${35 + srand() * 15}%,.35)`, path: ['#8a4a2a', '#d8a060'],
+    fol: [.02, .7, .4, .05, .08], grass: [.08, .55, .4, .05, .06], flow: [0xff5a3a, 0xffd23a], haz: 'ball', hazCol: 0xe8402a, mod: 'wind', amb: { fall: -.8, sway: 2.2, cols: [0xff8a1a, 0xffd23a, 0xff4a1a], size: .45 } }
 ];
+/* 30 base themes. The 10 new ones are woven in between the old ones so they show up early.
+   From world 30 on, every theme comes back as a hue-rotated "Dream" / "Twilight" / "Neon" variant (procedural AI-style worlds). */
+const THEME_ORDER = [0, 1, 2, 3, 20, 4, 5, 21, 6, 7, 22, 8, 9, 23, 10, 11, 24, 12, 13, 25, 14, 15, 26, 16, 17, 27, 18, 19, 28, 29];
+const DREAMS = [null, { pre: 'Dream', e: '✨', h: .34, s: 1.0, l: 0 }, { pre: 'Twilight', e: '🌌', h: .66, s: .9, l: -.03 }, { pre: 'Neon', e: '⚡', h: .12, s: 1.15, l: 0 }];
+const dreamCache = {};
+function dreamTheme(b, k) {
+  const key = b.name + '|' + k; if (dreamCache[key]) return dreamCache[key];
+  const D = DREAMS[k], hx = c => { const o = new THREE.Color(c), h = {}; o.getHSL(h); o.setHSL((h.h + D.h) % 1, Math.min(1, h.s * D.s), Math.max(0, Math.min(1, h.l + D.l))); return o.getHex(); };
+  const css = c => '#' + new THREE.Color(hx(new THREE.Color(c).getHex())).getHexString();
+  const t = Object.assign({}, b, {
+    name: D.pre + ' ' + b.name, emoji: D.e + b.emoji, base: b.name, dream: k, sky: hx(b.sky), fog: hx(b.fog), ground: css(b.ground), path: b.path.map(css), flow: b.flow.map(hx), hazCol: hx(b.hazCol),
+    patch: () => b.patch().replace(/hsla\((-?[\d.]+)/, (m, h) => 'hsla(' + ((((+h + D.h * 360) % 360) + 360) % 360)),
+    fol: [(b.fol[0] + D.h) % 1].concat(b.fol.slice(1)), grass: [(b.grass[0] + D.h) % 1].concat(b.grass.slice(1)), amb: Object.assign({}, b.amb, { cols: b.amb.cols.map(hx) })
+  });
+  if (b.cloud > 0) t.cloud = hx(b.cloud);
+  return dreamCache[key] = t;
+}
+function themeFor(w) { const base = THEMES[THEME_ORDER[w % THEME_ORDER.length]], k = Math.floor(w / THEME_ORDER.length) % DREAMS.length; return k ? dreamTheme(base, k) : base; }
 const NWORLDS = TOTAL_LEVELS / 10;
 
 /* ============================================================ world: ground, landmarks, scenery */
@@ -371,6 +408,9 @@ const sfx = {
   zap() { tone('sawtooth', 900, 120, .18, .1); noise(.1, .12); },
   meow() { tone('sine', 700, 520, .3, .1); tone('sine', 520, 800, .14, .06, .2); },
   woof() { tone('sawtooth', 300, 140, .12, .14); noise(.05, .08); },
+  toot() { tone('sawtooth', 280, 540, .3, .1); tone('square', 300, 500, .26, .05, .02); },
+  hoot() { tone('sine', 520, 380, .22, .12); tone('sine', 520, 360, .22, .1, .26); },
+  roar() { tone('sawtooth', 130, 70, .45, .15); noise(.3, .1); },
   squeak() { tone('sine', 1500, 2200, .08, .08); tone('sine', 1900, 2600, .08, .07, .09); },
   note(i) { tone('triangle', SIMON_F[i % 4], SIMON_F[i % 4], .34, .16); tone('sine', SIMON_F[i % 4] * 2, SIMON_F[i % 4] * 2, .2, .05); },
   wrong() { tone('sawtooth', 200, 90, .35, .14); },
@@ -506,21 +546,26 @@ const OBJ_INFO = {
   targets: { e: '🎯', verb: 'Hit', noun: 'targets', per: 4.4, range: [9, 28], from: 9 },
   gifts: { e: '🎁', verb: 'Find', noun: 'gift boxes', per: 3.6, range: [7, 22], from: 11 },
   chicks: { e: '🐥', verb: 'Bring home', noun: 'lost chicks', per: 7.5, range: [3, 8], from: 15 },
+  coins: { e: '🪙', verb: 'Collect', noun: 'shiny coins', per: 2.4, range: [14, 40], from: 8 },
+  fireflies: { e: '✨', verb: 'Catch', noun: 'fireflies', per: 4.6, range: [6, 18], from: 18 },
+  seeds: { e: '🌱', verb: 'Plant', noun: 'magic seeds', per: 6.5, range: [3, 9], from: 21 },
+  cages: { e: '🔓', verb: 'Free', noun: 'caged pals', per: 8.5, range: [3, 8], from: 25 },
   flags: { e: '🚩', verb: 'Reach', noun: 'flags', per: 12, range: [3, 9], from: 12 },
   simon: { e: '🎵', verb: 'Copy', noun: 'melodies', per: 15, range: [2, 6], from: 16 },
   dash: { e: '🏁', verb: 'Reach', noun: 'the finish', per: 0, range: [1, 1] },
   boss: { e: '👑', verb: 'Defeat', noun: 'the boss', per: 0, range: [1, 1] },
   rush: { e: '⭐', verb: 'Collect', noun: 'stars before your friends', per: 0, range: [1, 1] }
 };
-const KINDS = ['sheep', 'balloons', 'pins', 'baddies', 'stars', 'foxes', 'targets', 'flags', 'simon', 'gifts', 'chicks'];
-const ANIM_SETS = [['sheep', 'cow', 'chicken', 'bunny'], ['duck', 'frog', 'chicken', 'sheep'], ['penguin', 'bunny', 'duck', 'panda'], ['cow', 'frog', 'cat', 'duck'], ['chicken', 'sheep', 'penguin', 'puppy'], ['frog', 'duck', 'bunny', 'cat'], ['penguin', 'panda', 'cow', 'frog'], ['bunny', 'chicken', 'puppy', 'cow'], ['sheep', 'penguin', 'frog', 'panda'], ['cow', 'cat', 'penguin', 'duck'], ['puppy', 'bunny', 'sheep', 'chicken'], ['panda', 'cat', 'puppy', 'frog'], ['duck', 'penguin', 'cow', 'bunny'], ['cat', 'sheep', 'panda', 'chicken']];
+const KINDS = ['sheep', 'balloons', 'pins', 'baddies', 'stars', 'foxes', 'targets', 'flags', 'simon', 'gifts', 'chicks', 'coins', 'fireflies', 'seeds', 'cages'];
+const ANIM_SETS = [['sheep', 'cow', 'chicken', 'bunny'], ['duck', 'frog', 'chicken', 'sheep'], ['penguin', 'bunny', 'duck', 'panda'], ['cow', 'frog', 'cat', 'duck'], ['chicken', 'sheep', 'penguin', 'puppy'], ['frog', 'duck', 'bunny', 'cat'], ['penguin', 'panda', 'cow', 'frog'], ['bunny', 'chicken', 'puppy', 'cow'], ['sheep', 'penguin', 'frog', 'panda'], ['cow', 'cat', 'penguin', 'duck'], ['puppy', 'bunny', 'sheep', 'chicken'], ['panda', 'cat', 'puppy', 'frog'], ['duck', 'penguin', 'cow', 'bunny'], ['cat', 'sheep', 'panda', 'chicken'], ['elephant', 'owl', 'turtle', 'lion'], ['koala', 'dino', 'duck', 'bunny'], ['turtle', 'frog', 'duck', 'koala'], ['lion', 'cow', 'elephant', 'sheep'], ['owl', 'cat', 'panda', 'koala'], ['dino', 'turtle', 'frog', 'chicken'], ['elephant', 'penguin', 'koala', 'puppy'], ['lion', 'dino', 'cat', 'owl'], ['turtle', 'sheep', 'bunny', 'elephant'], ['koala', 'panda', 'owl', 'dino']];
 const objE = (t, w) => t === 'sheep' ? SPECIES[ANIM_SETS[(w || 0) % ANIM_SETS.length][0]].e : OBJ_INFO[t].e;
-const BOSS_ORDER = [0, 1, 2, 10, 3, 4, 11, 5, 6, 7, 8, 9];   // world -> boss type: Cupcake Queen is boss #4 (level 40), Big Jack boss #7 (level 70)
+const BOSS_ORDER = [0, 1, 2, 10, 3, 4, 11, 5, 6, 7, 8, 9, 12, 13, 14, 15, 16, 17];   // world -> boss type: Cupcake Queen is boss #4 (level 40), Big Jack boss #7 (level 70)
 const bossType = w => BOSS_ORDER[w % BOSS_ORDER.length];
 const BOSSES = [
   { name: 'King Woolly', e: '👑' }, { name: 'Captain Fox', e: '🦊' }, { name: 'Mega Mower', e: '🚜' }, { name: 'Grumpy Cloud', e: '⛈️' }, { name: 'Jelly Giant', e: '🟢' },
   { name: 'Robo Sheep', e: '🤖' }, { name: 'Pumpkin King', e: '🎃' }, { name: 'Ice Golem', e: '🧊' }, { name: 'Space Blob', e: '👾' }, { name: 'Rainbow Dragon', e: '🐲' },
-  { name: 'Cupcake Queen', e: '🧁' }, { name: 'Big Jack', e: '🤡' }
+  { name: 'Cupcake Queen', e: '🧁' }, { name: 'Big Jack', e: '🤡' },
+  { name: 'Captain Crabby', e: '🦀' }, { name: 'Boo King', e: '👻' }, { name: 'Rex the Roar', e: '🦖' }, { name: 'Sundae Sam', e: '🍨' }, { name: 'Teddy Titan', e: '🧸' }, { name: 'Professor Hoot', e: '🦉' }
 ];
 const MODS = {
   lowgrav: { e: '🌙', name: 'Low gravity – super jumps!' }, ice: { e: '🧊', name: 'Slippery ice – you slide!' },
@@ -537,13 +582,14 @@ const HINTS = {
 const KIND_HINT = {
   flags: 'Follow the arrow to the 🚩 flag – dodge the spinning bars and rolling hazards!', simon: 'Watch the pads light up, then copy the tune! Step on the pads or shoot them. 🎵',
   baddies: 'Waves of baddies are coming! 👾', foxes: 'Foxes run to the barn – stop them!',
+  coins: 'Grab the shiny 🪙 coins scattered around the farm!', fireflies: 'Fireflies flit away when you get close – sneak up, or shoot them! ✨', seeds: 'Stand on each 🌱 soil patch until the seed grows into a flower!', cages: 'Bonk the cages (or jump on top!) to free the pals inside! 🔓',
   gifts: 'Find the 🎁 gift boxes hiding around – bump into them or shoot them!', chicks: 'Touch the lost chicks 🐥 so they follow you, then lead them to the red ring (their barn)!'
 };
 const isDashLevel = n => n % 10 !== 0 && ((n >= 5 && n % 10 === 5) || (n >= 130 && n % 10 === 2));
 function genLevel(n) {
   const R = mulberry32(n * 7919 + 13), world = Math.floor((n - 1) / 10), idx = (n - 1) % 10, d = Math.min(1, (n - 1) / 799), dd = (n - 1) / (TOTAL_LEVELS - 1);
-  const theme = THEMES[world % THEMES.length], boss = idx === 9, dash = !boss && isDashLevel(n);
-  const L = { n, world, idx, d, dd, theme, boss, dash, stages: [], hint: HINTS[n] || '', mod: null };
+  const theme = themeFor(world), boss = idx === 9, dash = !boss && isDashLevel(n);
+  const L = { n, world, idx, d, dd, theme, boss, dash, stages: [], hint: HINTS[n] || '', mod: null, star: (n >= 3 && !boss && !dash) ? starFor(n, world) : null, cheer: cheerIdx(n) };
   const mkObj = (type, mult) => {
     const info = OBJ_INFO[type]; let need = Math.round(lerp(info.range[0], info.range[1], d) * (mult || 1) * (.9 + R() * .2)); need = Math.max(type === 'simon' ? 2 : 3, need);
     if (n === 1) need = 7; if (n === 2) need = type === 'sheep' ? 9 : 8; return { type, need, got: 0 };
@@ -596,7 +642,7 @@ function genLevel(n) {
     const tier = Math.floor(world / 10), hp = Math.round(lerp(110, 320, d));
     L.bossCfg = { type: bossType(world), tier, hp, speed: lerp(2.8, 5, d), fireEvery: lerp(3.0, 1.3, d), shots: 1 + Math.floor(d * 2.6), projSpeed: lerp(11, 16, d), scale: 1 + Math.min(tier, 6) * .1, ring: Math.round(lerp(8, 14, d)) };
   }
-  if (L.dash && !L.hint) L.hint = 'Steer with the stick. JET = jump (hold to hover over gaps), stomp critters – and outrun the angry boulder! 🪨';
+  if (L.dash && !L.hint) L.hint = 'Steer with the stick. JET = jump (hold to hover over gaps), stomp critters – and outrun the angry boulder! ⚫';
   if (!L.hint) { const k = L.stages[0].objs[0].type; L.hint = KIND_HINT[k] || ''; }
   L.title = boss ? `Boss: ${BOSSES[bossType(world)].name}` : dash ? `Dash ${n}` : `Level ${n}`;
   return L;
@@ -758,7 +804,13 @@ const SPECIES = {
   frog: { e: '🐸', say: 'Ribbit!', snd: 'boing', flee: 1.1, hop: 1.1, sc: 1.3 },
   panda: { e: '🐼', say: 'Pan-da!', snd: 'squeak', flee: .8, hop: .15, sc: 1.2 },
   cat: { e: '🐱', say: 'Meow!', snd: 'meow', flee: 1.2, hop: .25, sc: 1.25 },
-  puppy: { e: '🐶', say: 'Woof!', snd: 'woof', flee: 1.15, hop: .3, sc: 1.2 }
+  puppy: { e: '🐶', say: 'Woof!', snd: 'woof', flee: 1.15, hop: .3, sc: 1.2 },
+  elephant: { e: '🐘', say: 'Toot!', snd: 'toot', flee: .7, hop: .1, sc: 1.2 },
+  owl: { e: '🦉', say: 'Hoot!', snd: 'hoot', flee: 1, hop: .2, sc: 1.25 },
+  turtle: { e: '🐢', say: 'Yay!', snd: 'squeak', flee: .55, hop: .08, sc: 1.3 },
+  lion: { e: '🦁', say: 'Rawr!', snd: 'roar', flee: 1, hop: .2, sc: 1.2 },
+  koala: { e: '🐨', say: 'Aww!', snd: 'squeak', flee: .8, hop: .12, sc: 1.25 },
+  dino: { e: '🦖', say: 'Rawr!', snd: 'roar', flee: 1.1, hop: .25, sc: 1.2 }
 };
 function spawnSheep(gold, atPos) {
   const set = ANIM_SETS[L.world % ANIM_SETS.length], spn = set[(Math.random() * set.length) | 0], SP = SPECIES[spn], rg = Chars.makeCritter(spn, gold), g = new THREE.Group(); g.add(rg.g);
@@ -771,7 +823,12 @@ function spawnSheep(gold, atPos) {
       Chars.blinkAll(rg, dt, 1);
       if ((e.y <= 0 && e.vy < 0) || e.t <= 0) { burst(e.x, .4, e.z, gold ? 0xffd23a : 0xffffff, 8, 3, .7); confetti(e.x, .6, e.z, 8); e.dead = true; } return;
     }
-    if (state === 'win') { e.cheer = (e.cheer || rand(0, 1)) + dt * 2.4; const j = Math.abs(Math.sin(e.cheer * Math.PI)); g.position.set(e.x, j * 1.6, e.z); g.rotation.y += dt * 4; Chars.tickCritter(rg, dt, clock, 0, null); return; }
+    if (state === 'win') {
+      e.cheer = (e.cheer || rand(0, 1)) + dt * 2.4; const j = Math.abs(Math.sin(e.cheer * Math.PI)), cv = (((L && L.cheer) | 0) + (e.ang * 3 | 0)) & 3;
+      g.position.set(e.x, j * (cv === 1 ? 2.3 : cv === 2 ? .7 : 1.6), e.z);
+      if (cv === 0) g.rotation.y += dt * 4; else if (cv === 1) g.rotation.z = Math.sin(e.cheer * 9) * .35; else if (cv === 2) g.rotation.y += dt * 9; else g.rotation.x = -(e.cheer % 1) * TAU;
+      Chars.tickCritter(rg, dt, clock, 0, null); return;
+    }
     const dx = e.x - pig.x, dz = e.z - pig.z, d = Math.hypot(dx, dz); let sp = 0, scared = false;
     if (d < 12 && state === 'play') { e.ang += angDiff(e.ang, Math.atan2(dx, dz)) * Math.min(1, 6 * dt); sp = (gold ? L.sheepFlee * 1.2 : L.sheepFlee) * SP.flee * clamp(1.4 - d / 15, .5, 1) * (speedMode ? 1.25 : 1); e.moving = false; e.wait = rand(.5, 1.5); scared = true; }
     else { e.wait -= dt; if (e.wait <= 0) { e.moving = !e.moving; e.wait = e.moving ? rand(1.5, 3.5) : rand(1, 3); if (e.moving) e.ang = rand(0, TAU); } if (e.moving) sp = 1.5; }
@@ -1322,15 +1379,227 @@ function spawnRobot(at, mission) {
   e.onBall = () => { e.hp--; if (e.hp > 0) { sfx.clank(); burst(e.x, 2.4, e.z, 0xffd23a, 10, 5, .6); popText('Clank!', e.x, 4.6, e.z, ''); e.st = 'rest'; e.t = 1.0; lamp(0xffa02a, 0x8a4a10); return true; } burst(e.x, 2, e.z, 0x3ab8c8, 16, 7, 1); enemyDown(e, 0x3ab8c8, 'Powered down!'); };
   return e;
 }
+
+/* ============================================================ v5.3: six more villains + a star villain for every level */
+const VILLAINS = {
+  shroom: { from: 1, e: '🍄', n: 'Grumpy Shroom' }, slime: { from: 5, e: '🟢', n: 'Bouncy Slime' }, bomber: { from: 12, e: '💣', n: 'Bomber' }, cupcake: { from: 14, e: '🧁', n: 'Grumpy Cupcake' }, bee: { from: 16, e: '🐝', n: 'Buzzy Bee' },
+  hedgehog: { from: 18, e: '🦔', n: 'Spiky Hedgehog' }, jack: { from: 20, e: '🤡', n: 'Jack-in-the-Box' }, mole: { from: 22, e: '🐹', n: 'Digger Mole' }, snowman: { from: 24, e: '⛄', n: 'Snowball Sam' }, bat: { from: 28, e: '🦇', n: 'Batty' },
+  robot: { from: 32, e: '🤖', n: 'Wind-up Robot' }, crabby: { from: 36, e: '🦀', n: 'Crabby' }, boo: { from: 40, e: '👻', n: 'Peek-a-boo Ghost' }, spinny: { from: 44, e: '🌀', n: 'Spinny Top' },
+  rexy: { from: 48, e: '🦖', n: 'Baby Rexy' }, drizzle: { from: 52, e: '🌧️', n: 'Drizzle' }, gummy: { from: 56, e: '🧸', n: 'Gummy Bear' }
+};
+/* the villain that stars in level n (always one you have already met) */
+function starFor(n, world) { const ks = Object.keys(VILLAINS).filter(k => VILLAINS[k].from <= n), h = (Math.imul(n, 2654435761) >>> 0) % 997; return ks[(h + world * 3) % ks.length]; }
+const VILL_FAV = {
+  crabby: ['Bubble Lagoon', 'Tropical Beach', 'Pirate Bay', 'Coral Reef'], boo: ['Haunted Hollow', 'Starry Night', 'Pumpkin Patch', 'Hologram Hills'], spinny: ['Toy Town', 'Carnival Fun', 'Pixel Park', 'Robot Factory'],
+  rexy: ['Dino Valley', 'Dragon Mountain', 'Jungle Jam', 'Enchanted Forest'], drizzle: ['Rainy Day', 'Cloud Kingdom', 'Neon City', 'Sunny Meadow'], gummy: ['Candy Land', 'Ice Cream Parlor', 'Fairy Garden', 'Neon City'], robot: ['Robot Factory', 'Neon City']
+};
+function extraPool(n, tnm) {
+  const p = [];
+  for (const k of ['crabby', 'boo', 'spinny', 'rexy', 'drizzle', 'gummy']) if (n >= VILLAINS[k].from) p.push(k);
+  for (const k in VILL_FAV) if (n >= VILLAINS[k].from && VILL_FAV[k].includes(tnm)) p.push(k, k);
+  if (L.star && n >= VILLAINS[L.star].from) p.push(L.star, L.star, L.star);
+  return p;
+}
+function spawnKind(kind, at, mission) {
+  const F = { shroom: spawnShroom, slime: (a, m) => spawnSlime(2, a, m), bat: spawnBat, mole: spawnMole, hedgehog: spawnHedgehog, bomber: spawnBomber, cupcake: spawnCupcake, snowman: spawnSnowman, jack: spawnJack, bee: spawnBee, robot: spawnRobot, crabby: spawnCrabby, boo: spawnBoo, spinny: spawnSpinny, rexy: spawnRexy, drizzle: spawnDrizzle, gummy: spawnGummy };
+  return (F[kind] || spawnShroom)(at, mission);
+}
+
+/* Crabby: scuttles sideways, snaps its claws (warning!), then lunges. Two bonks. */
+function spawnCrabby(at, mission) {
+  const rg = Chars.makeCrabby(), g = wrapEnemy(rg), p = at || ringSpawn(24, 38);
+  const e = addEnt({ kind: 'enemy', sub: 'crabby', g, rig: rg, x: p.x, z: p.z, y: 0, cy: 1.4, r: 2.0, hittable: true, mission, hp: 2, st: 'scuttle', t: rand(1.4, 2.6), ang: 0, dirS: Math.random() < .5 ? 1 : -1, cool: 0, ph: rand(0, TAU), age: 0, lx: 0, lz: 0 });
+  e.update = dt => {
+    e.age += dt; e.ph += dt; e.t -= dt; const bk = popK(e.age), dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, want = Math.atan2(dx, dz); let fw = 0, side = 0, op = .1 + Math.abs(Math.sin(e.ph * 7)) * .22;
+    if (e.st !== 'lunge') e.ang += angDiff(e.ang, want) * Math.min(1, 6 * dt);
+    if (e.st === 'scuttle') {
+      side = e.dirS * (3.2 + L.d * 2.4) * L.em; fw = d > 12 ? 1.8 * L.em : d < 7 ? -1.6 * L.em : 0; if (Math.random() < dt * .35) e.dirS = -e.dirS;
+      if (e.t <= 0 && d < 22) { e.st = 'snap'; e.t = .75; popText('Snip snip!', e.x, 4.2, e.z, 'bad'); sfx.clank(); }
+    } else if (e.st === 'snap') { op = .5 + Math.abs(Math.sin(e.ph * 22)) * .5; rg.body.rotation.x = -.12; if (e.t <= 0) { e.st = 'lunge'; e.t = .5; e.lx = Math.sin(e.ang); e.lz = Math.cos(e.ang); sfx.whoosh(); } }
+    else if (e.st === 'lunge') { op = 1; e.x += e.lx * 15 * L.em * dt; e.z += e.lz * 15 * L.em * dt; rg.body.rotation.x = .1; if (e.t <= 0) { e.st = 'rest'; e.t = 1.2; } }
+    else if (e.st === 'rest') { op = .1; rg.body.rotation.z = Math.sin(clock * 12) * .08; if (e.t <= 0) { e.st = 'scuttle'; e.t = rand(2, 3.4); rg.body.rotation.z = 0; } }
+    if (e.st !== 'snap' && e.st !== 'lunge') rg.body.rotation.x *= .8;
+    const cs = Math.cos(e.ang), sn = Math.sin(e.ang); e.x += (sn * fw + cs * side) * dt; e.z += (cs * fw - sn * side) * dt; pushOut(e, 1.2); keepInWorld(e, WORLD + 5);
+    rg.open(rg.clawL, op); rg.open(rg.clawR, op); rg.legs.forEach((l, i) => { l.rotation.z = Math.sin(clock * 18 + i * 1.3) * (side ? .28 : .04); });
+    g.position.set(e.x, side ? Math.abs(Math.sin(clock * 14 + e.ph)) * .1 : 0, e.z); g.rotation.y = e.ang; g.scale.setScalar(bk); Chars.blinkAll(rg, dt, e.st === 'rest' ? .5 : 0);
+    e.cool -= dt; if (e.cool <= 0 && pigNear(e, e.r + .9, 2.6)) { e.cool = 1; hurtPig(e.x, e.z, e.st === 'lunge' ? 24 : 16); }
+  };
+  e.onBall = () => { e.hp--; if (e.hp > 0) { sfx.clank(); burst(e.x, 1.6, e.z, 0xff9a6a, 10, 5, .7); popText('Ow-claw!', e.x, 3.6, e.z, ''); e.st = 'rest'; e.t = 1.4; return true; } burst(e.x, 1.6, e.z, 0xff6a3a, 16, 7, 1); enemyDown(e, 0xff6a3a, 'Crab-tastic!'); };
+  return e;
+}
+
+/* Peek-a-boo Ghost: floats near, hides its eyes, vanishes with a pop, reappears behind Piggy and swoops. Can't be hit while hidden. */
+function spawnBoo(at, mission) {
+  const rg = Chars.makeBoo(), g = wrapEnemy(rg), p = at || ringSpawn(22, 34);
+  const e = addEnt({ kind: 'enemy', sub: 'boo', g, rig: rg, x: p.x, z: p.z, y: 1.2, cy: 1.8, r: 1.9, hittable: true, mission, st: 'float', t: rand(2, 3.4), ang: 0, ph: rand(0, TAU), cool: 0, age: 0, vis: 1, bx: 0, bz: 0 });
+  e.update = dt => {
+    e.age += dt; e.ph += dt; e.t -= dt; const bk = popK(e.age), dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, want = Math.atan2(dx, dz); let sp = 0, shy = 0;
+    if (e.st !== 'boo') e.ang += angDiff(e.ang, want) * Math.min(1, 5 * dt);
+    if (e.st === 'float') {
+      sp = d > 14 ? (3 + L.d * 2) * L.em : d < 8 ? -2 * L.em : 0; e.vis = Math.min(1, e.vis + dt * 5); rg.mouth.scale.set(.2, .27, .06);
+      if (e.t <= 0 && d < 30) { e.st = 'shy'; e.t = .8; popText('Peek-a-boo!', e.x, 5, e.z, 'bad'); sfx.squeak(); }
+    } else if (e.st === 'shy') { shy = 1; if (e.t <= 0) { e.st = 'vanish'; e.t = .35; sfx.pop(); burst(e.x, 2, e.z, 0xdbe8ff, 10, 4, .7); } }
+    else if (e.st === 'vanish') { shy = 1; e.vis = Math.max(0, e.t / .35); e.hittable = false; if (e.t <= 0) { e.st = 'hide'; e.t = .8; e.vis = 0; const a = Math.atan2(pig.vx, pig.vz) + Math.PI + rand(-.6, .6), r = rand(9, 12); e.x = pig.x + Math.sin(a) * r; e.z = pig.z + Math.cos(a) * r; keepInWorld(e, WORLD); } }
+    else if (e.st === 'hide') { e.vis = 0; if (e.t <= 0) { e.st = 'boo'; e.t = .95; e.vis = 1; e.hittable = true; e.ang = Math.atan2(pig.x - e.x, pig.z - e.z); e.bx = Math.sin(e.ang); e.bz = Math.cos(e.ang); popText('BOO!', e.x, 5, e.z, 'bad'); sfx.whoosh(); burst(e.x, 2, e.z, 0xdbe8ff, 10, 4, .7); } }
+    else if (e.st === 'boo') { rg.mouth.scale.set(.3, .42, .06); e.x += e.bx * (11 + L.d * 4) * dt; e.z += e.bz * (11 + L.d * 4) * dt; keepInWorld(e, WORLD + 5); if (e.t <= 0) { e.st = 'float'; e.t = rand(2.6, 4); } }
+    e.x += Math.sin(e.ang) * sp * dt; e.z += Math.cos(e.ang) * sp * dt; if (e.st === 'float') { pushOut(e, 1.2); keepInWorld(e, WORLD + 5); }
+    for (const [arm, s] of [[rg.armL, -1], [rg.armR, 1]]) arm.rotation.z += ((shy ? s * 2.5 : -s * .5 + Math.sin(e.ph * 3 + s) * .25) - arm.rotation.z) * Math.min(1, 14 * dt);
+    rg.skirt.forEach((b, i) => { b.scale.y = .55 + Math.sin(e.ph * 5 + i) * .1; });
+    g.visible = e.vis > .02; g.position.set(e.x, 1.2 + Math.sin(e.ph * 2) * .35, e.z); g.rotation.y = e.ang; g.scale.setScalar(bk * (.3 + .7 * e.vis)); Chars.blinkAll(rg, dt, shy ? 1 : 0);
+    e.cool -= dt; if (e.vis > .5 && e.cool <= 0 && pigNear(e, e.r + .8, 3)) { e.cool = 1; hurtPig(e.x, e.z, e.st === 'boo' ? 20 : 14); }
+  };
+  e.onBall = () => { if (e.vis < .5) return false; enemyDown(e, 0xdbe8ff, 'Boo-hoo!'); burst(e.x, 2, e.z, 0xffffff, 14, 6, 1); };
+  return e;
+}
+
+/* Spinny Top: wobbles after Piggy, winds up, zig-zags at speed (shots just ping off), then gets dizzy – bonk it then! */
+function spawnSpinny(at, mission) {
+  const rg = Chars.makeSpinny(), g = wrapEnemy(rg), p = at || ringSpawn(24, 38);
+  const e = addEnt({ kind: 'enemy', sub: 'spinny', g, rig: rg, x: p.x, z: p.z, y: 0, cy: 1.7, r: 1.8, hittable: true, mission, hp: 2, st: 'idle', t: rand(1.4, 2.6), ang: 0, ph: rand(0, TAU), cool: 0, age: 0, spin: 8, zt: 0, zdir: 0 });
+  e.update = dt => {
+    e.age += dt; e.ph += dt; e.t -= dt; const bk = popK(e.age), dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, want = Math.atan2(dx, dz); let sp = 0, tilt = 0, tspin = 8;
+    if (e.st === 'idle') { e.ang += angDiff(e.ang, want) * Math.min(1, 4 * dt); sp = d > 10 ? (2.4 + L.d * 1.6) * L.em : 0; tilt = Math.sin(e.ph * 5) * .08; if (e.t <= 0 && d < 28) { e.st = 'wind'; e.t = .85; popText('Wheee!', e.x, 5.2, e.z, 'bad'); sfx.zap(); } }
+    else if (e.st === 'wind') { tspin = 40; tilt = Math.sin(clock * 50) * .05; e.ang += angDiff(e.ang, want) * Math.min(1, 6 * dt); if (e.t <= 0) { e.st = 'zip'; e.t = 1.7; e.zt = 0; e.zdir = want; sfx.whoosh(); } }
+    else if (e.st === 'zip') { tspin = 46; e.zt -= dt; if (e.zt <= 0) { e.zt = .35; e.zdir = want + rand(-.9, .9); } e.ang = e.zdir; sp = (13 + L.d * 4) * L.em; tilt = .12; if (e.t <= 0) { e.st = 'dizzy'; e.t = 1.7; sfx.boing(); popText('Dizzy...', e.x, 5.2, e.z, ''); } }
+    else if (e.st === 'dizzy') { tspin = 1.5; tilt = Math.sin(clock * 9) * .3; rg.head.rotation.y = Math.sin(clock * 5) * .5; if (e.t <= 0) { e.st = 'idle'; e.t = rand(2, 3.2); rg.head.rotation.y = 0; } }
+    e.spin += (tspin - e.spin) * Math.min(1, 6 * dt); rg.spinner.rotation.y += e.spin * dt;
+    e.x += Math.sin(e.ang) * sp * dt; e.z += Math.cos(e.ang) * sp * dt; pushOut(e, 1.2); keepInWorld(e, WORLD + 5);
+    g.position.set(e.x, e.st === 'zip' ? Math.abs(Math.sin(clock * 20)) * .25 : 0, e.z); g.rotation.set(0, e.st === 'zip' ? e.ang : g.rotation.y + angDiff(g.rotation.y, e.ang) * Math.min(1, 6 * dt), tilt); g.scale.setScalar(bk); Chars.blinkAll(rg, dt, e.st === 'dizzy' ? .6 : 0);
+    e.cool -= dt; if (e.st !== 'dizzy' && e.cool <= 0 && pigNear(e, e.r + .9, 2.8)) { e.cool = 1; hurtPig(e.x, e.z, e.st === 'zip' ? 24 : 15); }
+  };
+  e.onBall = () => {
+    if (e.st === 'zip' || e.st === 'wind') { sfx.clank(); popText('Ping!', e.x, 4, e.z, ''); burst(e.x, 2.2, e.z, 0xffffff, 4, 3, .5); return; }
+    e.hp--; if (e.hp > 0) { sfx.clank(); burst(e.x, 2, e.z, 0x4fb8ff, 10, 5, .7); popText('Whoa!', e.x, 4, e.z, ''); e.st = 'dizzy'; e.t = 2.0; return true; }
+    burst(e.x, 2, e.z, 0xffd93a, 16, 7, 1); enemyDown(e, 0x4fb8ff, 'Top-notch!');
+  };
+  return e;
+}
+
+/* Baby Rexy: stomps after Piggy, throws its head back for a ROAR, charges in a straight line, then pants (bonk it!). */
+function spawnRexy(at, mission) {
+  const rg = Chars.makeRexy(), g = wrapEnemy(rg), p = at || ringSpawn(26, 40);
+  const e = addEnt({ kind: 'enemy', sub: 'rexy', g, rig: rg, x: p.x, z: p.z, y: 0, cy: 2.0, r: 2.1, hittable: true, mission, hp: 2, st: 'walk', t: rand(1.6, 3), ang: 0, ph: rand(0, TAU), cool: 0, age: 0, cx: 0, cz: 0 });
+  e.update = dt => {
+    e.age += dt; e.ph += dt; e.t -= dt; const bk = popK(e.age), dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, want = Math.atan2(dx, dz); let sp = 0, hd = 0, mouth = false, tw = 1;
+    if (e.st === 'walk') { e.ang += angDiff(e.ang, want) * Math.min(1, 4 * dt); sp = (3.2 + L.d * 2.2) * L.em; hd = Math.sin(e.ph * 7) * .06; if (e.t <= 0 && d < 20) { e.st = 'roar'; e.t = .85; popText('RAWR!', e.x, 6, e.z, 'bad'); sfx.roar(); } }
+    else if (e.st === 'roar') { e.ang += angDiff(e.ang, want) * Math.min(1, 8 * dt); hd = -.5; mouth = true; tw = 3; g.position.x += 0; shake = Math.max(shake, .12); if (e.t <= 0) { e.st = 'charge'; e.t = .95; e.cx = Math.sin(e.ang); e.cz = Math.cos(e.ang); } }
+    else if (e.st === 'charge') { sp = 0; e.x += e.cx * (12 + L.d * 4) * L.em * dt; e.z += e.cz * (12 + L.d * 4) * L.em * dt; hd = .2; tw = 2; if (e.t <= 0) { e.st = 'tired'; e.t = 1.5; } }
+    else if (e.st === 'tired') { hd = .35 + Math.sin(clock * 10) * .04; if (e.t <= 0) { e.st = 'walk'; e.t = rand(2, 3.4); } }
+    e.x += Math.sin(e.ang) * sp * dt; e.z += Math.cos(e.ang) * sp * dt; pushOut(e, 1.4); keepInWorld(e, WORLD + 5);
+    rg.head.rotation.x += (hd - rg.head.rotation.x) * Math.min(1, 10 * dt); rg.mouth.visible = mouth; rg.tail.rotation.y = Math.sin(e.ph * 5 * tw) * .5; rg.tail.tail2.rotation.y = Math.sin(e.ph * 5 * tw - .8) * .5;
+    rg.legs.forEach((l, i) => { l.rotation.x = (sp || e.st === 'charge') ? Math.sin(e.ph * (e.st === 'charge' ? 16 : 8) + i * Math.PI) * .6 : 0; }); rg.armL.rotation.x = Math.sin(e.ph * 9) * .3; rg.armR.rotation.x = -Math.sin(e.ph * 9) * .3;
+    g.position.set(e.x, (sp || e.st === 'charge') ? Math.abs(Math.sin(e.ph * (e.st === 'charge' ? 8 : 4))) * .25 : 0, e.z); g.rotation.y += angDiff(g.rotation.y, e.ang) * Math.min(1, 10 * dt); g.scale.setScalar(bk); Chars.blinkAll(rg, dt, e.st === 'tired' ? .5 : 0);
+    e.cool -= dt; if (e.cool <= 0 && pigNear(e, e.r + .9, 3)) { e.cool = 1; hurtPig(e.x, e.z, e.st === 'charge' ? 24 : 16); }
+  };
+  e.onBall = () => { e.hp--; if (e.hp > 0) { sfx.thunk(); burst(e.x, 2.6, e.z, 0x6ad46a, 10, 5, .7); popText('Rawr...', e.x, 5.2, e.z, ''); e.st = 'tired'; e.t = 1.6; return true; } burst(e.x, 2, e.z, 0x6ad46a, 16, 7, 1); enemyDown(e, 0x6ad46a, 'Dino-mite!'); };
+  return e;
+}
+
+/* Drizzle: a grumpy little rain cloud that hovers around Piggy and drops raindrops (red rings show where). One shot pops it. */
+function spawnDrizzle(at, mission) {
+  const rg = Chars.makeDrizzle(), g = wrapEnemy(rg), p = at || ringSpawn(22, 34);
+  const e = addEnt({ kind: 'enemy', sub: 'drizzle', g, rig: rg, x: p.x, z: p.z, y: 5.2, cy: 0, r: 2.3, hittable: true, mission, st: 'drift', t: rand(2, 3.2), ang: 0, ph: rand(0, TAU), cool: 0, age: 0, n: 0 });
+  e.update = dt => {
+    e.age += dt; e.ph += dt; e.t -= dt; const bk = popK(e.age), dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, want = Math.atan2(dx, dz); let sp = 0;
+    if (e.st === 'drift') {
+      const a = e.ph * .5, tx = pig.x + Math.sin(a) * 11, tz = pig.z + Math.cos(a) * 11, tdx = tx - e.x, tdz = tz - e.z, td = Math.hypot(tdx, tdz) || 1; sp = Math.min((4.2 + L.d * 2.4) * L.em, td * 2); e.ang = Math.atan2(tdx, tdz); e.x += Math.sin(e.ang) * sp * dt; e.z += Math.cos(e.ang) * sp * dt;
+      if (e.t <= 0 && d < 32) { e.st = 'rain'; e.t = 1.5; e.n = 0; popText('Drip drip!', e.x, 7.5, e.z, 'bad'); sfx.whoosh(); }
+    } else if (e.st === 'rain') {
+      rg.body.rotation.z = Math.sin(clock * 30) * .06; const k = Math.floor((1.5 - e.t) / .38); if (k >= e.n && e.n < 4) { e.n++; const tx = pig.x + pig.vx * .5 + rand(-3, 3), tz = pig.z + pig.vz * .5 + rand(-3, 3); spawnLob(e.x, 4.2, e.z, tx, tz, 1.0, 0x5ab8ff, 14); }
+      if (e.t <= 0) { e.st = 'drift'; e.t = rand(2.6, 4); rg.body.rotation.z = 0; }
+    }
+    keepInWorld(e, WORLD + 8); e.y = 5.2 + Math.sin(e.ph * 1.6) * .5; g.position.set(e.x, e.y, e.z); g.rotation.y = want; g.scale.setScalar(bk);
+    rg.drops.forEach(dr => { const k = (e.ph * 1.5 + dr.userData.ph) % 1.6; dr.position.y = -1.3 - k * 1.2; dr.scale.setScalar(Math.max(.01, 1 - k / 1.6)); }); Chars.blinkAll(rg, dt);
+  };
+  e.onBall = () => { burst(e.x, e.y, e.z, 0x9ac8ff, 18, 7, 1); enemyDown(e, 0x9ac8ff, 'Splash!'); for (let i = 0; i < 8; i++) emit(e.x + rand(-1.5, 1.5), e.y - .5, e.z + rand(-1.5, 1.5), rand(-1, 1), rand(-8, -4), rand(-1, 1), .8, 0x5ab8ff, .5, 0); };
+  return e;
+}
+
+/* Gummy Bear: jiggles, then bounces after Piggy in big arcs. The landing makes a little shockwave. Two bonks. */
+function spawnGummy(at, mission) {
+  const col = Chars.GUMMY_COLS[(Math.random() * Chars.GUMMY_COLS.length) | 0], rg = Chars.makeGummy(col), g = wrapEnemy(rg), p = at || ringSpawn(24, 38);
+  const e = addEnt({ kind: 'enemy', sub: 'gummy', g, rig: rg, x: p.x, z: p.z, y: 0, cy: 1.6, r: 1.8, hittable: true, mission, hp: 2, st: 'sit', t: rand(.6, 1.4), ang: 0, ph: rand(0, TAU), cool: 0, age: 0, hopT: 0, hx: 0, hz: 0, col, lands: 0 });
+  e.update = dt => {
+    e.age += dt; e.ph += dt; e.t -= dt; const bk = popK(e.age), dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, want = Math.atan2(dx, dz); let jy = 0, sq = 1;
+    if (e.st === 'sit') { e.ang += angDiff(e.ang, want) * Math.min(1, 6 * dt); sq = 1 + Math.sin(e.ph * 9) * .05; if (e.t <= 0) { e.st = 'hop'; e.hopT = 0; const dist = Math.min(d, 9 + L.d * 3); e.ang = want + rand(-.3, .3); e.hx = Math.sin(e.ang) * dist; e.hz = Math.cos(e.ang) * dist; e.sx = e.x; e.sz = e.z; sfx.boing(); } }
+    else if (e.st === 'hop') {
+      e.hopT += dt / .9; const k = Math.min(1, e.hopT); e.x = e.sx + e.hx * k; e.z = e.sz + e.hz * k; jy = Math.sin(k * Math.PI) * 3.4; sq = 1 + Math.sin(k * Math.PI) * .12; rg.armL.rotation.z = rg.armR.rotation.z = Math.sin(k * Math.PI) * -1;
+      if (k >= 1) { e.st = 'squish'; e.t = .35; e.lands++; burst(e.x, .4, e.z, e.col, 8, 4, .6); sfx.thunk(); if (state === 'play' && Math.hypot(pig.x - e.x, pig.z - e.z) < 3.2 && pig.y < 1.6) hurtPig(e.x, e.z, 18); }
+    } else if (e.st === 'squish') { sq = .72 + (1 - e.t / .35) * .28; if (e.t <= 0) { e.st = 'sit'; e.t = rand(.5, 1.1) / (1 + L.d * .5); rg.armL.rotation.z = rg.armR.rotation.z = 0; } }
+    pushOut(e, 1.2); keepInWorld(e, WORLD + 5); g.position.set(e.x, jy, e.z); g.rotation.y += angDiff(g.rotation.y, e.ang) * Math.min(1, 8 * dt); g.scale.set(bk / Math.sqrt(sq), bk * sq, bk / Math.sqrt(sq)); Chars.blinkAll(rg, dt);
+    e.cool -= dt; if (e.cool <= 0 && e.st !== 'squish' && pigNear(e, e.r + .8, 2.6 + jy)) { e.cool = 1; hurtPig(e.x, e.z, 16); }
+  };
+  e.onBall = () => { e.hp--; if (e.hp > 0) { sfx.boing(); burst(e.x, 2, e.z, e.col, 10, 5, .7); popText('Boing!', e.x, 4.4, e.z, ''); e.st = 'sit'; e.t = .6; e.sx = e.x; return true; } burst(e.x, 1.8, e.z, e.col, 18, 7, 1); confetti(e.x, 1.8, e.z, 12); enemyDown(e, e.col, 'Squish-tastic!'); };
+  return e;
+}
+
+/* ============================================================ v5.3 objectives: fireflies, magic seeds, caged pals, shiny coins */
+function spawnFirefly() {
+  const g = new THREE.Group(); g.userData.hasOl = true;
+  const bodyM = M(0xffe45c, { emissive: 0xc8a020 }), wingM = C_basic(0xffffff, .6), halo = part(g, GEO.sph, C_basic(0xfff3a0, .28), 0, -.1, 0, 1.25, 1.25, 1.25); halo.userData.noOutline = true;
+  part(g, GEO.sph, bodyM, 0, 0, .1, .34, .38, .5); part(g, GEO.sph, M(0xfffbb0, { emissive: 0xffe040 }), 0, -.05, -.4, .3, .3, .36); part(g, GEO.sph, M(0x3a2a20), 0, .12, .5, .2, .2, .2);
+  const wings = [-1, 1].map(sd => { const w = part(g, GEO.sph, wingM, sd * .32, .3, 0, .38, .05, .22); w.userData.noOutline = true; return w; });
+  const c = spot(8, 12), e = addEnt({ kind: 'firefly', g, x: c.x, z: c.z, y: rand(1.6, 3.4), cy: 0, r: 1.7, hittable: true, tx: c.x, tz: c.z, ty: 2.5, t: 0, ph: rand(0, TAU), ang: 0 });
+  function catchIt() { if (e.dead) return; e.dead = true; burst(e.x, e.y, e.z, 0xffe45c, 14, 5, .8); confetti(e.x, e.y, e.z, 8); sfx.sparkle(); buzz(15); popText('Got it! ✨', e.x, e.y + 1.6, e.z, 'gold'); spawnCoin(e.x, e.z, 1.6); progress('fireflies'); }
+  e.update = dt => {
+    e.ph += dt; e.t -= dt; const dx = pig.x - e.x, dz = pig.z - e.z, d = Math.hypot(dx, dz) || 1, fleeing = d < 7;
+    if (e.t <= 0 || Math.hypot(e.tx - e.x, e.tz - e.z) < 1) { e.t = rand(.8, 1.8); const a = fleeing ? Math.atan2(-dx, -dz) + rand(-.8, .8) : rand(0, TAU), r = fleeing ? rand(9, 15) : rand(4, 10); e.tx = e.x + Math.sin(a) * r; e.tz = e.z + Math.cos(a) * r; e.ty = rand(1.4, 4.2); const q = Math.hypot(e.tx, e.tz); if (q > WORLD - 5) { e.tx *= (WORLD - 5) / q; e.tz *= (WORLD - 5) / q; } }
+    const tdx = e.tx - e.x, tdz = e.tz - e.z, td = Math.hypot(tdx, tdz) || 1, sp = (fleeing ? 10.5 : 5) * (1 + L.d * .3); e.ang = Math.atan2(tdx, tdz); e.x += tdx / td * Math.min(sp, td * 4) * dt; e.z += tdz / td * Math.min(sp, td * 4) * dt; e.y += (e.ty - e.y) * Math.min(1, 3 * dt);
+    g.position.set(e.x, e.y + Math.sin(e.ph * 6) * .15, e.z); g.rotation.y = e.ang; wings.forEach((w, i) => { w.rotation.z = (i ? 1 : -1) * Math.sin(clock * 50) * .6; }); halo.scale.setScalar(1.2 + Math.sin(e.ph * 5) * .2);
+    if (state === 'play' && d < 2.3 && Math.abs(e.y - (pig.y + 1.3)) < 2.6) catchIt();
+  };
+  e.onBall = () => { catchIt(); };
+  return e;
+}
+function spawnSeed() {
+  const g = new THREE.Group(); g.userData.hasOl = true;
+  const soil = part(g, GEO.cyl, M(0x7a5232), 0, .08, 0, 2.0, .16, 2.0), ring = part(g, GEO.cyl, C_basic(0x7aff6a, .5), 0, .2, 0, 2.5, .05, 2.5); ring.userData.noOutline = true;
+  const sprout = new THREE.Group(); g.add(sprout); const stem = part(sprout, GEO.cyl, M(0x4ac84a), 0, .5, 0, .09, 1.0, .09), lf = [-1, 1].map(sd => { const l = part(sprout, GEO.sph, M(0x5ae05a), sd * .35, 1.0, 0, .38, .1, .2); l.rotation.z = sd * -.4; return l; });
+  const bloom = new THREE.Group(); bloom.position.y = 1.15; bloom.scale.setScalar(.01); sprout.add(bloom); const pc = pick([0xff6ab0, 0xffe45c, 0xb08aff, 0xff8a3a]); for (let i = 0; i < 6; i++) { const a = i / 6 * TAU; part(bloom, GEO.sph, M(pc), Math.sin(a) * .5, 0, Math.cos(a) * .5, .34, .12, .34); } part(bloom, GEO.sph, M(0xffe45c, { emissive: 0x806000 }), 0, .05, 0, .28);
+  const arrow = part(g, GEO.cone, M(0xffe45c, { emissive: 0x806000 }), 0, 3.6, 0, .5, .9, .5); arrow.rotation.x = Math.PI; Chars.outline(g, .06);
+  const c = spot(8, 12), e = addEnt({ kind: 'seed', g, x: c.x, z: c.z, y: 0, cy: 0, r: 2.2, hittable: false, prog: 0, done: false, ph: rand(0, TAU) });
+  e.update = dt => {
+    e.ph += dt;
+    if (!e.done) {
+      const near = state === 'play' && Math.hypot(pig.x - e.x, pig.z - e.z) < 2.6 && pig.y < 2.2; e.prog = clamp(e.prog + (near ? dt / .9 : -dt * .7), 0, 1);
+      sprout.scale.setScalar(.25 + e.prog * .9); ring.material.opacity = .3 + e.prog * .5 + Math.sin(e.ph * 6) * .08; arrow.position.y = 3.6 + Math.sin(e.ph * 4) * .25; arrow.rotation.y += dt * 3; if (near && Math.random() < dt * 10) emit(e.x + rand(-1, 1), .4, e.z + rand(-1, 1), 0, rand(2, 4), 0, .6, 0x7aff6a, .4, 0);
+      if (e.prog >= 1) { e.done = true; arrow.visible = false; ring.visible = false; sfx.sparkle(); burst(e.x, 1.2, e.z, 0xffe45c, 14, 5, .8); confetti(e.x, 1.6, e.z, 12); popText('Bloom! 🌸', e.x, 3.4, e.z, 'gold'); spawnCoin(e.x + 2, e.z, 1.6); progress('seeds'); }
+    } else { bloom.scale.setScalar(Math.min(1.6, bloom.scale.x + dt * 4)); sprout.scale.setScalar(1.2); sprout.rotation.z = Math.sin(e.ph * 2) * .06; }
+  };
+  return e;
+}
+function spawnCage() {
+  const set = ANIM_SETS[L.world % ANIM_SETS.length], spn = pick(set), SP = SPECIES[spn], pal = Chars.makeCritter(spn, false), g = new THREE.Group(); g.userData.hasOl = true;
+  const cage = new THREE.Group(); g.add(cage); const barM = M(0x8a93a8), wood = M(0x6a4a30), bars = [];
+  part(cage, GEO.cyl, wood, 0, .25, 0, 2.3, .5, 2.3); part(cage, GEO.cyl, wood, 0, 3.9, 0, 2.3, .35, 2.3); part(cage, GEO.sph, M(0xffd23a, { emissive: 0x4a3a00 }), 0, 4.35, 0, .35);
+  for (let i = 0; i < 8; i++) { const a = i / 8 * TAU, b = part(cage, GEO.cyl, barM, Math.cos(a) * 1.95, 2.1, Math.sin(a) * 1.95, .1, 3.5, .1); b.userData.a = a; bars.push(b); }
+  Chars.outline(cage, .06); pal.g.scale.setScalar(SP.sc * .78); pal.g.position.y = .5; g.add(pal.g);
+  const c = spot(10, 14), e = addEnt({ kind: 'cage', g, rig: pal, x: c.x, z: c.z, y: 0, cy: 2, r: 2.6, hittable: true, hp: 2 + (L.d > .5 ? 1 : 0), shake: 0, st: 'locked', ph: rand(0, TAU), t: 0, cool: 0 });
+  function hit() { if (e.st !== 'locked') return; e.hp--; e.shake = .4; sfx.clank(); burst(e.x, 2.4, e.z, 0xc8d0e0, 8, 4, .6); popText(e.hp > 0 ? 'Clang!' : 'Free!', e.x, 5.2, e.z, e.hp > 0 ? '' : 'good'); if (e.hp <= 0) open(); }
+  function open() { e.st = 'open'; e.hittable = false; e.t = 0; sfx[SP.snd](); sfx.sparkle(); confetti(e.x, 3, e.z, 22); for (let i = 0; i < 3; i++) spawnCoin(e.x + rand(-2, 2), e.z + rand(-2, 2), 1.6); popText(SP.say + ' Thank you! ' + SP.e, e.x, 6, e.z, 'gold'); progress('cages'); }
+  e.update = dt => {
+    e.ph += dt; e.cool -= dt;
+    if (e.st === 'locked') {
+      e.shake = Math.max(0, e.shake - dt); cage.rotation.z = Math.sin(clock * 40) * e.shake * .12; pal.g.position.y = .5 + Math.abs(Math.sin(e.ph * 4)) * .25; Chars.tickCritter(pal, dt, clock, 0, null);
+      if (state === 'play' && e.cool <= 0 && pig.vy < 0 && pig.y > 2.6 && pig.y < 6.4 && Math.hypot(pig.x - e.x, pig.z - e.z) < 2.7) { e.cool = .6; pig.vy = 13; pig.grounded = false; hit(); }
+    } else {
+      e.t += dt; bars.forEach(b => { const a = b.userData.a; b.position.x += Math.cos(a) * dt * 9; b.position.z += Math.sin(a) * dt * 9; b.position.y += (3 - e.t * 14) * dt; b.rotation.z += dt * 6; }); cage.scale.setScalar(Math.max(.01, 1 - Math.max(0, e.t - .6) * 1.6));
+      const k = e.t; pal.g.position.y = .5 + Math.abs(Math.sin(k * 7)) * 1.2; pal.g.rotation.y += dt * 6; Chars.tickCritter(pal, dt, clock, 0, null); if (k > 1.8) { e.dead = true; burst(e.x, 1.5, e.z, 0xffffff, 8, 4, .7); }
+    }
+    g.position.set(e.x, 0, e.z);
+  };
+  e.onBall = () => { hit(); };
+  return e;
+}
+
 function spawnEnemy(mission) {
   const n = L.n, pool = ['shroom', 'shroom'];
   if (n >= 5) pool.push('slime'); if (n >= 12) pool.push('bomber', 'slime'); if (n >= 18) pool.push('hedgehog'); if (n >= 22) pool.push('mole'); if (n >= 28) pool.push('bat', 'bat'); if (n >= 90) pool.push('hedgehog', 'bomber');
   if (n >= 14) pool.push('cupcake'); if (n >= 16) pool.push('bee'); if (n >= 20) pool.push('jack'); if (n >= 24) pool.push('snowman'); if (n >= 32) pool.push('robot');
-  const tnm = L.theme && L.theme.name;   // each world gets a favourite villain
+  const tnm = L.theme && (L.theme.base || L.theme.name);   // each world gets a favourite villain
   if (n >= 14) { if (tnm === 'Candy Land' || tnm === 'Carnival Fun') pool.push('cupcake', 'cupcake'); else if (tnm === 'Snowy Hills' || tnm === 'Rainy Day') pool.push('snowman', 'snowman'); else if (tnm === 'Toy Town' || tnm === 'Carnival Fun') pool.push('jack', 'robot'); else if (tnm === 'Fairy Garden' || tnm === 'Jungle Jam' || tnm === 'Coral Reef') pool.push('bee', 'bee'); else if (tnm === 'Crystal Cave' || tnm === 'Moon Base') pool.push('robot', 'robot'); }
-  const kind = pick(pool);
-  const F = { shroom: spawnShroom, slime: (a, m) => spawnSlime(2, a, m), bat: spawnBat, mole: spawnMole, hedgehog: spawnHedgehog, bomber: spawnBomber, cupcake: spawnCupcake, snowman: spawnSnowman, jack: spawnJack, bee: spawnBee, robot: spawnRobot };
-  return F[kind](null, mission);
+  pool.push(...extraPool(n, tnm));
+  return spawnKind(pick(pool), null, mission);
 }
 function wavesTick(dt) {
   if (waves.queue <= 0) return;
@@ -1371,10 +1640,22 @@ function spawnBoss(cfg) {
 const projGeo = new THREE.SphereGeometry(.8, 12, 9);
 function projMat(col) { return M(col, { emissive: new THREE.Color(col).multiplyScalar(.35).getHex() }); }
 function addProj(x, y, z, vx, vy, vz, col, life, rain) { const m = new THREE.Mesh(projGeo, projMat(col)); m.position.set(x, y, z); scene.add(m); Chars.outline(m, .08); bprojs.push({ m, x, y, z, vx, vy, vz, life, rain, col }); }
+/* v5.3 boss attacks (every other volley): crab claw fan, ghost ambush, T-rex roar ring, cherry rain, teddy wall (find the gap!), owl feathers */
+function bossFire2(b) {
+  const cfg = b.cfg, t = cfg.type, base = Math.atan2(pig.x - b.x, pig.z - b.z), sp = cfg.projSpeed, col = [0xff7a3a, 0xdbe8ff, 0x6ad46a, 0xff8ab8, 0xc88a52, 0xffa02a][t - 12];
+  const shot = (a, v, y) => addProj(b.x + Math.sin(a) * 3, y || 1.3, b.z + Math.cos(a) * 3, Math.sin(a) * v, 0, Math.cos(a) * v, col, 5.5), top = b.y + 9;
+  if (t === 12) { const n = 3 + cfg.shots * 2 + b.phase; for (let i = 0; i < n; i++) shot(base + (i - (n - 1) / 2) * .22, sp * .75); popText('Snap snap!', b.x, top, b.z, 'bad'); sfx.thunk(); }
+  else if (t === 13) { for (let i = 0; i < 3 + b.phase; i++) { const a = base + (Math.random() - .5) * 3.0, px = pig.x + Math.sin(a) * 16, pz = pig.z + Math.cos(a) * 16; addProj(px, 1.4, pz, -Math.sin(a) * sp * .55, 0, -Math.cos(a) * sp * .55, col, 5.5); } popText('Boooo!', b.x, top, b.z, 'bad'); sfx.whoosh(); }
+  else if (t === 14) { const n = cfg.ring + 4 + b.phase * 2, off = rand(0, TAU); for (let i = 0; i < n; i++) { const a = off + i / n * TAU; addProj(b.x + Math.sin(a) * 3, 1.0, b.z + Math.cos(a) * 3, Math.sin(a) * sp * .8, 0, Math.cos(a) * sp * .8, col, 5); } popText('ROAR!', b.x, top, b.z, 'bad'); sfx.boom(); shake = .35; }
+  else if (t === 15) { const n = 4 + cfg.shots * 2 + b.phase; for (let i = 0; i < n; i++) addProj(pig.x + rand(-9, 9), 16 + i * 3, pig.z + rand(-9, 9), 0, -11, 0, [0xff7aa8, 0xffffff, 0x7a4a2a][i % 3], 4, true); sfx.sparkle(); }
+  else if (t === 16) { const n = 7, gap = Math.floor(rand(1, n - 1)), cb = Math.cos(base), sb = Math.sin(base); for (let i = 0; i < n; i++) { if (i === gap) continue; const o = (i - (n - 1) / 2) * 3.2; addProj(b.x + sb * 4 + cb * o, 1.3, b.z + cb * 4 - sb * o, sb * sp * .6, 0, cb * sp * .6, col, 6.5); } popText('Teddy wall!', b.x, top, b.z, 'bad'); sfx.thunk(); }
+  else { for (const k of [-1, 1]) for (let i = 0; i < 2 + Math.ceil(b.phase / 2); i++) shot(base + k * (.3 + i * .22), sp); shot(base, sp * 1.15); popText('Hoot hoot!', b.x, top, b.z, 'bad'); sfx.whoosh(); }
+}
 function bossFire(b) {
   const cfg = b.cfg; b.nFire++;
+  if (cfg.type >= 12 && b.nFire % 2 === 0) { bossFire2(b); return; }
   if (cfg.type === 3 || (cfg.type === 10 && b.nFire % 2 === 0)) { const n = 2 + cfg.shots * 2 + b.phase, rc = cfg.type === 10 ? [0xff7ad0, 0x4fd0ff, 0xffe45c][b.nFire % 3] : 0x5ab8ff; for (let i = 0; i < n; i++) { const x = pig.x + rand(-9, 9), z = pig.z + rand(-9, 9); addProj(x, 16 + i * 3, z, 0, -11, 0, rc, 4, true); } if (cfg.type === 10) sfx.sparkle(); return; }
-  const col = [0xffffff, 0xff5a2a, 0xff3030, 0, 0x5aff7a, 0xff3d3d, 0xff9a1a, 0x9ad8ff, 0xc07aff, 0xff7ad0, 0xff7ad0, 0xffd93a][cfg.type] || 0xff5a5a;
+  const col = [0xffffff, 0xff5a2a, 0xff3030, 0, 0x5aff7a, 0xff3d3d, 0xff9a1a, 0x9ad8ff, 0xc07aff, 0xff7ad0, 0xff7ad0, 0xffd93a, 0xff7a3a, 0xdbe8ff, 0x6ad46a, 0xff8ab8, 0xc88a52, 0xffa02a][cfg.type] || 0xff5a5a;
   const dx = pig.x - b.x, dz = pig.z - b.z, base = Math.atan2(dx, dz), sp = cfg.projSpeed;
   if (b.phase >= 2 && b.nFire % 3 === 0) {           // ring burst: jump over it!
     const n = cfg.ring + b.phase * 2, off = rand(0, TAU); for (let i = 0; i < n; i++) { const a = off + i / n * TAU; addProj(b.x + Math.sin(a) * 3, 1.0, b.z + Math.cos(a) * 3, Math.sin(a) * sp * .7, 0, Math.cos(a) * sp * .7, col, 5); }
@@ -1411,7 +1692,7 @@ function spawnCoin(x, z, y) {
     if (state !== 'play') return;
     const dx = pig.x - e.x, dz = pig.z - e.z, dy = (pig.y + 1.5) - e.by, d = Math.hypot(dx, dy, dz) || 1;
     if (magnetT > 0 && d < 16 && d > 2) { const v = 22 * dt; e.x += dx / d * v; e.z += dz / d * v; e.by += dy / d * v; }
-    if (d < 2.6) { e.dead = true; save.coins++; runCoins++; updCoins(); sfx.coin(); burst(e.x, e.by, e.z, 0xffe45c, 4, 3, .4); }
+    if (d < 2.6) { e.dead = true; save.coins++; runCoins++; updCoins(); sfx.coin(); burst(e.x, e.by, e.z, 0xffe45c, 4, 3, .4); if (e.mission) progress('coins'); }
   };
   return e;
 }
@@ -1708,11 +1989,18 @@ function spawnFun() {
 /* ============================================================ cosmetics: hats and skins */
 const HATS = [{ id: 'hat0', n: 'No hat', e: '🐷', p: 0 }, { id: 'party', n: 'Party', e: '🥳', p: 30 }, { id: 'cap', n: 'Cap', e: '🧢', p: 60 }, { id: 'shades', n: 'Cool', e: '😎', p: 80 }, { id: 'cowboy', n: 'Cowboy', e: '🤠', p: 90 }, { id: 'chef', n: 'Chef', e: '👨‍🍳', p: 100 }, { id: 'crown', n: 'Royal', e: '👑', p: 140 }, { id: 'prop', n: 'Copter', e: '🚁', p: 170 }, { id: 'wizard', n: 'Wizard', e: '🧙', p: 220 },
   { id: 'pirate', n: 'Pirate', e: '🏴‍☠️', p: 110 }, { id: 'bunny', n: 'Bunny', e: '🐰', p: 120 }, { id: 'flower', n: 'Flowers', e: '🌼', p: 130 }, { id: 'duck', n: 'Ducky', e: '🦆', p: 150 }, { id: 'cupcake', n: 'Cupcake', e: '🧁', p: 190 }, { id: 'unicorn', n: 'Unicorn', e: '🦄', p: 260 }];
-const SKINS = [{ id: 'skin0', n: 'Classic', e: '🌸', p: 0, c: [0xff80b6, 0xffb3d0] }, { id: 'sky', n: 'Blueberry', e: '🫐', p: 120, c: [0x6ab8ff, 0x9bd2ff] }, { id: 'mint', n: 'Mint', e: '🍃', p: 120, c: [0x5fd89a, 0x9af0c4] }, { id: 'grape', n: 'Grape', e: '🍇', p: 160, c: [0xa874ff, 0xc9a6ff] }, { id: 'sun', n: 'Sunny', e: '🍊', p: 160, c: [0xffa24a, 0xffc88a] }, { id: 'candy', n: 'Candy', e: '🍬', p: 200, c: [0xff6ad0, 0xffa8ea] }, { id: 'gold', n: 'Golden', e: '✨', p: 250, c: [0xffcf3a, 0xffe27a] },
+const SKINS = [{ id: 'skin0', n: 'Classic', e: '🌸', p: 0, c: [0xff80b6, 0xffb3d0] }, { id: 'sky', n: 'Blueberry', e: '💙', p: 120, c: [0x6ab8ff, 0x9bd2ff] }, { id: 'mint', n: 'Mint', e: '🍃', p: 120, c: [0x5fd89a, 0x9af0c4] }, { id: 'grape', n: 'Grape', e: '🍇', p: 160, c: [0xa874ff, 0xc9a6ff] }, { id: 'sun', n: 'Sunny', e: '🍊', p: 160, c: [0xffa24a, 0xffc88a] }, { id: 'candy', n: 'Candy', e: '🍬', p: 200, c: [0xff6ad0, 0xffa8ea] }, { id: 'gold', n: 'Golden', e: '✨', p: 250, c: [0xffcf3a, 0xffe27a] },
   { id: 'lemon', n: 'Lemon', e: '🍋', p: 140, c: [0xffe45c, 0xfff0a0] }, { id: 'berry', n: 'Berry', e: '🍓', p: 170, c: [0xff4a5a, 0xff8a96] }, { id: 'ocean', n: 'Ocean', e: '🌊', p: 190, c: [0x2ac8d8, 0x8af0f0] }, { id: 'cocoa', n: 'Cocoa', e: '🍫', p: 210, c: [0x9a6a4a, 0xc89a7a] }];
+/* every level n (1..1000) hands out its own hat 'h<n>' and skin 's<n>' (generated by ch_world.js) the first time it is beaten */
+const lvRe = /^([hs])(\d{1,4})$/;
+const levelDone = n => n >= 1 && n <= TOTAL_LEVELS && +save.stars[n - 1] > 0;
+function hatInfo(id) { const m = lvRe.exec(id); if (m && m[1] === 'h' && +m[2] >= 1 && +m[2] <= TOTAL_LEVELS) { const i = Chars.hatInfo(+m[2]); return { id, n: i.n, e: i.e, lv: +m[2] }; } return HATS.find(x => x.id === id) || HATS[0]; }
+function skinInfo(id) { const m = lvRe.exec(id); if (m && m[1] === 's' && +m[2] >= 1 && +m[2] <= TOTAL_LEVELS) { const i = Chars.skinInfo(+m[2]); return { id, n: i.n, e: i.e, c: i.c, pat: i.pat, c3: i.c3, lv: +m[2] }; } return SKINS.find(x => x.id === id) || SKINS[0]; }
+const ownsItem = id => { const m = lvRe.exec(id); return m ? levelDone(+m[2]) : save.own.includes(id); };
+if (!ownsItem(save.hat)) save.hat = 'hat0'; if (!ownsItem(save.skin)) save.skin = 'skin0';
 /* dress any pig rig (mine or another player's) */
 function dressRig(r, hatId, skinId) {
-  const sk = SKINS.find(k => k.id === skinId) || SKINS[0]; r.setSkin(sk.c[0], sk.c[1]);
+  const sk = skinInfo(skinId); r.setSkin(sk.c[0], sk.c[1], sk.pat, sk.c3);
   if (r.hat) { r.hatA.remove(r.hat); r.hat = null; } if (r.shades) { r.inner.remove(r.shades); r.shades = null; }
   if (hatId === 'shades') { const g = Chars.makeShades(); g.position.set(0, 1.84, 1.44); g.scale.setScalar(1.28); Chars.outline(g, .03); r.inner.add(g); r.shades = g; }
   else if (hatId && hatId !== 'hat0') { const g = Chars.makeHat(hatId); Chars.outline(g, .05); r.hatA.add(g); r.hat = g; }
@@ -1733,11 +2021,100 @@ function renderShop() {
       box.appendChild(b);
     }
   };
-  draw($('shopHats'), HATS, 'hat'); draw($('shopSkins'), SKINS, 'skin');
+  draw($('shopHats'), HATS, 'hat'); draw($('shopSkins'), SKINS, 'skin'); renderWard();
 }
+/* ---- wardrobe: one page per world = 10 level hats + 10 level skins */
+let wardW = 0;
+function renderWard() {
+  const t = themeFor(wardW), lo = wardW * 10 + 1;
+  $('wardTitle').textContent = `${t.emoji} ${t.name} · Lv ${lo}-${lo + 9}`;
+  let done = 0; for (let n = 1; n <= TOTAL_LEVELS; n++) if (levelDone(n)) done++;
+  $('wardCount').textContent = `${done} / ${TOTAL_LEVELS} unlocked`;
+  const hi = hatInfo(save.hat), si = skinInfo(save.skin); $('wardWear').textContent = `Wearing: ${hi.e} ${hi.n} · ${si.e} ${si.n}`;
+  for (const [boxId, kind, key] of [['wardHats', 'h', 'hat'], ['wardSkins', 's', 'skin']]) {
+    const box = $(boxId); box.innerHTML = '';
+    for (let i = 0; i < 10; i++) {
+      const n = lo + i, id = kind + n, own = levelDone(n), on = save[key] === id, b = document.createElement('button');
+      const inf = kind === 'h' ? hatInfo(id) : skinInfo(id);
+      b.className = 'item' + (on ? ' on' : '') + (own ? '' : ' lock'); b.title = inf.n;
+      b.innerHTML = own ? `<b>${inf.e}</b>Lv ${n}<br>${on ? '✔' : 'Wear'}` : `<b>🔒</b>Lv ${n}`;
+      if (own && kind === 's') { b.style.background = `linear-gradient(135deg,#${inf.c[0].toString(16).padStart(6, '0')},#${inf.c[1].toString(16).padStart(6, '0')})`; b.style.textShadow = '0 1px 2px rgba(0,0,0,.6)'; }
+      b.onclick = () => {
+        if (!own) { sfx.hit(); b.innerHTML = `<b>😢</b>Beat<br>Lv ${n}!`; return; }
+        sfx.coin(); save[key] = id; writeSave(); applyCosmetic(); pig.mood = 'cheer'; pig.moodT = 1.2; renderShop();
+      };
+      box.appendChild(b);
+    }
+  }
+}
+const wardGo = d => { wardW = ((wardW + d) % NWORLDS + NWORLDS) % NWORLDS; sfx.coin(); renderWard(); };
+$('wardPrev').onclick = () => wardGo(-1); $('wardNext').onclick = () => wardGo(1); $('wardPrev10').onclick = () => wardGo(-10); $('wardNext10').onclick = () => wardGo(10);
+$('wardNow').onclick = () => { wardW = Math.floor((Math.min(save.max, TOTAL_LEVELS) - 1) / 10); sfx.coin(); renderWard(); };
 
 /* ============================================================ level flow (multi-stage) */
 let harassTimer = 5, levelT = 0;
+/* ============================================================ victory cheers: every level has its own dance + particle show */
+const CHEERS = [{ n: 'Spin & Hop', e: '🌀' }, { n: 'Backflip', e: '🤸' }, { n: 'Moonwalk', e: '🌙' }, { n: 'Cartwheel', e: '🎡' }, { n: 'Pogo Jump', e: '🦘' }, { n: 'Wiggle Dance', e: '💃' },
+  { n: 'Rocket Boost', e: '🚀' }, { n: 'Ballet Twirl', e: '🦢' }, { n: 'Bunny Hop', e: '🐰' }, { n: 'Robot Dance', e: '🤖' }, { n: 'Superhero Flight', e: '🦸' }, { n: 'Conga Circle', e: '🎶' }];
+const CHEER_FX = ['Confetti', 'Fireworks', 'Hearts', 'Stars', 'Bubbles', 'Rainbow Ring'];
+const cheerIdx = n => ((n | 0) * 7) % 12, cheerFxIdx = n => (((n | 0) * 5) + Math.floor((n | 0) / 6)) % 6;
+const RAINBOW = [0xff4f5a, 0xff9a2a, 0xffe45c, 0x6ae05a, 0x4fb8ff, 0xb06aff];
+let cheerOn = false, cheerT = 0, cheerFlip = 0, cheerRate = 0, cheerHs = 0, cheerFxT = 0, cheerFxK = 0;
+function cheerReset() {
+  if (cheerOn) { rig.inner.rotation.y = 0; rig.inner.position.x = rig.inner.position.z = 0; }
+  cheerOn = false; cheerT = 0; cheerFlip = 0; cheerHs = 0; cheerFxT = 0; cheerFxK = 0;
+}
+/* physics side of the dance: hops, spins (called while the win state is on) */
+function cheerStep(dt) {
+  const c = ((L && L.cheer) | 0) % 12; cheerOn = true; cheerT += dt; cheerHs = 0; pig.thrusting = false;
+  if (pig.grounded) cheerFlip = 0; else cheerFlip += cheerRate * dt;
+  const hop = (v, snd) => { if (pig.grounded) { pig.vy = v; pig.grounded = false; cheerRate = TAU / Math.max(.25, 2 * v / GRAV); if (snd !== false) sfx.squeak(); } };
+  switch (c) {
+    case 0: pig.heading += dt * 5.2; hop(7.5); break;                                   // spin & hop
+    case 1: hop(10.5); break;                                                           // backflip (pose does the flip)
+    case 2: cheerHs = 4; break;                                                         // moonwalk (legs walk, body slides back)
+    case 3: pig.heading += dt * .9; hop(8.5); break;                                    // cartwheel
+    case 4: hop(11.5, false); break;                                                    // pogo
+    case 5: break;                                                                      // wiggle (pose only)
+    case 6: pig.heading += dt * 9; hop(15, false); if (!pig.grounded && pig.vy > 0) pig.thrusting = true; break;   // rocket
+    case 7: pig.heading += dt * 9.5; hop(4.2, false); break;                            // ballet
+    case 8: hop(6.4); break;                                                            // bunny hop
+    case 9: break;                                                                      // robot (pose only)
+    case 10: pig.heading += dt * .7; hop(9); if (!pig.grounded) pig.thrusting = true; break;   // superhero flight
+    default: cheerHs = 3.5; hop(3.2, false); break;                                      // conga
+  }
+}
+/* visual side of the dance: overrides the rig pose after rig.animate (visual only, the real pig position is untouched) */
+function cheerPose(g) {
+  if (!cheerOn) return;
+  if (state !== 'win') { cheerReset(); return; }
+  const c = ((L && L.cheer) | 0) % 12, t = cheerT, I = rig.inner, air = !pig.grounded;
+  switch (c) {
+    case 1: I.rotation.x = -cheerFlip; break;
+    case 2: { const b = 1.3 - ((t * .9) % 1) * 2.6; g.position.x -= Math.sin(pig.heading) * b; g.position.z -= Math.cos(pig.heading) * b; I.rotation.x = -.18; break; }
+    case 3: I.rotation.z = cheerFlip; break;
+    case 4: { I.scale.set(air ? .9 : 1.15, air ? 1.15 : .8, air ? .9 : 1.15); I.rotation.z = Math.sin(t * 9) * .12; break; }
+    case 5: I.rotation.z = Math.sin(t * 13) * .32; I.rotation.y = Math.sin(t * 6.5) * .6; I.scale.y *= 1 + .06 * Math.sin(t * 13); break;
+    case 6: I.rotation.x = 0; break;
+    case 7: I.rotation.x = -.12; I.rotation.z = Math.sin(t * 5) * .1; break;
+    case 8: g.rotation.y += Math.sin(t * 4) * .5; I.rotation.x = air ? -.25 : .1; break;
+    case 9: { const k = Math.floor(t / .38); g.rotation.y += (k % 4) * Math.PI / 2; I.rotation.z = (k % 2 ? 1 : -1) * .28; I.rotation.x = 0; break; }
+    case 10: I.rotation.x = air ? 1.15 : .1; break;
+    case 11: { const a = t * 1.6; g.position.x += (Math.cos(a) - 1) * 2.6; g.position.z += Math.sin(a) * 2.6; g.rotation.y = Math.atan2(-Math.sin(a), Math.cos(a)); I.rotation.z = Math.sin(t * 8) * .12; break; }
+  }
+}
+/* the particle show that goes with the dance */
+function cheerFx(dt) {
+  cheerFxT -= dt; if (cheerFxT > 0) return; cheerFxT = .13; cheerFxK++;
+  const v = cheerFxIdx(L && L.n), x = pig.x, y = pig.y, z = pig.z, k = cheerFxK;
+  if (v === 0) confetti(x, y + 1.8, z, 5);
+  else if (v === 1) { if (k % 4 === 1) { const cx = x + rand(-6, 6), cy = 9 + rand(0, 4), cz = z + rand(-6, 6), col = pick(CONF); for (let i = 0; i < 24; i++) { const a = rand(0, TAU), b = rand(-1, 1), s = Math.sqrt(1 - b * b) * 7; emit(cx, cy, cz, Math.cos(a) * s, b * 7, Math.sin(a) * s, rand(.7, 1.1), col, rand(.5, .8), 0); } sfx.pop(); } }
+  else if (v === 2) emit(x + rand(-2.5, 2.5), y + 1.5, z + rand(-2.5, 2.5), rand(-.6, .6), rand(3, 4.5), rand(-.6, .6), 1.5, pick([0xff4f7a, 0xff7aa8, 0xff3a5a]), rand(.7, 1.1), -.3);
+  else if (v === 3) { for (let i = 0; i < 2; i++) emit(x + rand(-7, 7), y + 9, z + rand(-7, 7), 0, -4, 0, 1.7, pick([0xffe45c, 0xffffff, 0xfff0a0]), rand(.6, 1), 0); if (k % 6 === 0) sfx.sparkle(); }
+  else if (v === 4) { for (let i = 0; i < 2; i++) emit(x + rand(-5, 5), .4, z + rand(-5, 5), rand(-.4, .4), rand(3, 4.4), rand(-.4, .4), 2.2, pick([0xbfe8ff, 0xd8f4ff, 0xffffff]), rand(.9, 1.5), .1); }
+  else { for (let i = 0; i < 6; i++) { const a = k * .9 + i * TAU / 6; emit(x, y + 1.2, z, Math.cos(a) * 6, rand(2, 4), Math.sin(a) * 6, .9, RAINBOW[i], .8, .2); } }
+}
+
 const goalRing = new THREE.Mesh(new THREE.TorusGeometry(5.2, .25, 8, 32), new THREE.MeshBasicMaterial({ color: 0xff4f4f, transparent: true, opacity: .7 })); goalRing.rotation.x = Math.PI / 2; goalRing.position.set(GOAL.x, .25, GOAL.z); goalRing.visible = false; farm.add(goalRing);
 function setHud(v) {
   for (const id of ['hud', 'objs', 'pause', 'mute', 'jump', 'shoot', 'fuelwrap', 'jl']) $(id).style.display = v ? '' : 'none';
@@ -1745,14 +2122,83 @@ function setHud(v) {
   else { $('emotes').style.display = MP.active ? '' : 'none'; $('mpScore').style.display = MP.active ? '' : 'none'; }
 }
 function resetRun() {
-  speedMode = L.mod === 'speedy'; iceMode = L.mod === 'ice'; GRAV = L.mod === 'lowgrav' ? 12 : 26; curMod = L.mod; windMode = L.mod === 'wind'; bounceMode = L.mod === 'bouncy'; partyMode = L.mod === 'party'; windA = Math.random() * TAU; chickGrp.followers.length = 0;
+  cheerReset(); speedMode = L.mod === 'speedy'; iceMode = L.mod === 'ice'; GRAV = L.mod === 'lowgrav' ? 12 : 26; curMod = L.mod; windMode = L.mod === 'wind'; bounceMode = L.mod === 'bouncy'; partyMode = L.mod === 'party'; windA = Math.random() * TAU; chickGrp.followers.length = 0;
   pig.x = 0; pig.z = L.dash ? dash.startZ : 24; pig.y = 0; pig.vx = pig.vz = pig.vy = 0; pig.heading = Math.PI; pig.fuel = 1; pig.grounded = true; pig.falling = false; pig.coy = 0; pig.stun = 0; pig.mood = 'normal'; pig.moodT = 0;
   camYaw = Math.PI; camPitch = .5; camManT = 0; runCoins = 0; magnetT = 0; dashSlowT = 0;
   hearts = 3; invuln = 0; tripleT = 0; shootCd = 0; combo = 0; comboT = 0; foxQueue = 0; foxTimer = 2; pickupTimer = 7; harassTimer = 6; levelT = 0; stageIdx = 0; usedCkpt = false;
   waves.queue = 0; waves.num = 0; waves.total = 1; simon.pads.length = 0; simon.phase = 'idle'; flagState.left = 0; flagState.active = null;
 }
+/* ============================================================ landmark architecture: 0-3 toon buildings per level, themed by world */
+const archGroup = new THREE.Group(); farm.add(archGroup);
+const archCache = {}; let archCols = [], archList = [];
+const ARCH_THEME = { 0: ['treehouse', 'castle', 'clocktower'], 1: ['treehouse', 'tipi', 'clocktower'], 2: ['lighthouse', 'castle'], 3: ['gingerbread', 'carousel'], 4: ['igloo', 'castle'], 5: ['tipi', 'treehouse'], 6: ['pyramid', 'tipi'], 7: ['lighthouse', 'treehouse'], 8: ['mushroom', 'castle'], 9: ['clocktower', 'castle'],
+  10: ['castle', 'clocktower'], 11: ['carousel', 'clocktower'], 12: ['rocket'], 13: ['castle', 'carousel'], 14: ['lighthouse', 'clocktower'], 15: ['treehouse', 'pyramid', 'tipi'], 16: ['pyramid', 'castle'], 17: ['castle', 'pagoda'], 18: ['castle', 'clocktower', 'carousel'], 19: ['lighthouse', 'castle'],
+  20: ['rocket', 'clocktower'], 21: ['pagoda', 'clocktower'], 22: ['castle', 'carousel'], 23: ['pagoda', 'rocket'], 24: ['castle', 'lighthouse'], 25: ['lighthouse', 'pagoda'], 26: ['gingerbread', 'igloo', 'carousel'], 27: ['castle', 'clocktower'], 28: ['mushroom', 'treehouse'], 29: ['pagoda', 'castle'] };
+const archFixed = [{ x: 0, z: 24, r: 14 }, { x: GOAL.x, z: GOAL.z, r: 13 }, { x: -42, z: -60, r: 17 }, { x: 30, z: -75, r: 9 }, { x: POND.x, z: POND.z, r: POND.r + 2 }];
+/* bake a building into one mesh per material (a castle drops from ~120 draw calls to ~10) */
+function mergeByMaterial(root) {
+  root.updateMatrixWorld(true);
+  const buckets = new Map();
+  root.traverse(o => { if (o.isMesh && o.visible) { let b = buckets.get(o.material); if (!b) buckets.set(o.material, b = []); b.push(o); } });
+  const out = new THREE.Group(), v = new THREE.Vector3(), nm = new THREE.Matrix3();
+  for (const [mat, list] of buckets) {
+    let nv = 0, ni = 0; for (const o of list) { const ge = o.geometry; nv += ge.attributes.position.count; ni += ge.index ? ge.index.count : ge.attributes.position.count; }
+    const pos = new Float32Array(nv * 3), nor = new Float32Array(nv * 3), uv = new Float32Array(nv * 2), idx = new Uint32Array(ni); let vo = 0, io = 0;
+    for (const o of list) {
+      const ge = o.geometry, P = ge.attributes.position, N = ge.attributes.normal, U = ge.attributes.uv, m = o.matrixWorld, flip = m.determinant() < 0; nm.getNormalMatrix(m);
+      for (let i = 0; i < P.count; i++) {
+        v.fromBufferAttribute(P, i).applyMatrix4(m); pos[(vo + i) * 3] = v.x; pos[(vo + i) * 3 + 1] = v.y; pos[(vo + i) * 3 + 2] = v.z;
+        if (N) { v.fromBufferAttribute(N, i).applyMatrix3(nm).normalize(); nor[(vo + i) * 3] = v.x; nor[(vo + i) * 3 + 1] = v.y; nor[(vo + i) * 3 + 2] = v.z; }
+        if (U) { uv[(vo + i) * 2] = U.getX(i); uv[(vo + i) * 2 + 1] = U.getY(i); }
+      }
+      const cnt = ge.index ? ge.index.count : P.count, ix = k => ge.index ? ge.index.getX(k) : k;
+      for (let i = 0; i < cnt; i += 3) { const a = ix(i) + vo, b = ix(i + 1) + vo, c = ix(i + 2) + vo; idx[io + i] = a; idx[io + i + 1] = flip ? c : b; idx[io + i + 2] = flip ? b : c; }
+      vo += P.count; io += cnt;
+    }
+    const mg = new THREE.BufferGeometry(); mg.setAttribute('position', new THREE.BufferAttribute(pos, 3)); mg.setAttribute('normal', new THREE.BufferAttribute(nor, 3)); mg.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); mg.setIndex(new THREE.BufferAttribute(idx, 1)); mg.computeBoundingSphere();
+    const mesh = new THREE.Mesh(mg, mat); mesh.renderOrder = list[0].renderOrder; out.add(mesh);
+  }
+  return out;
+}
+function clearArch() {
+  for (const a of archList) for (const m of a.mats) m.dispose();
+  for (const c of archCols) { const i = cols.indexOf(c); if (i >= 0) cols.splice(i, 1); }
+  archCols = []; archList = []; for (const ch of archGroup.children.slice()) archGroup.remove(ch);
+}
+/* buildings that stand between the camera and Piggy (or around the camera) fade out so the view is never blocked */
+function updateArch(dt) {
+  if (!archList.length) return;
+  const cx = camera.position.x, cz = camera.position.z, sx = pig.x - cx, sz = pig.z - cz, sl = sx * sx + sz * sz || 1;
+  for (const a of archList) {
+    const t = clamp(((a.x - cx) * sx + (a.z - cz) * sz) / sl, 0, 1), d = Math.hypot(cx + sx * t - a.x, cz + sz * t - a.z);
+    const want = (Math.hypot(cx - a.x, cz - a.z) < a.rad + 3 || (d < a.rad * .9 && t < .97)) ? .14 : 1;
+    if (a.alpha === want) continue;
+    a.alpha += (want - a.alpha) * Math.min(1, 8 * dt); if (Math.abs(want - a.alpha) < .01) a.alpha = want;
+    for (const m of a.mats) m.opacity = a.alpha;
+  }
+}
+function placeArch() {
+  clearArch();
+  if (!L || L.dash || L.mp) return;
+  const n = L.n | 0, cnt = n < 3 ? 0 : n < 10 ? 1 : n < 30 ? 2 : 3; if (!cnt) return;
+  const R = mulberry32(n * 6151 + 29), ti = THEME_ORDER[L.world % THEME_ORDER.length], pref = ARCH_THEME[ti] || ['castle'], all = Chars.BUILDINGS, used = [];
+  for (let i = 0; i < cnt; i++) {
+    let kind = R() < .65 ? pref[(i + Math.floor(R() * pref.length)) % pref.length] : all[Math.floor(R() * all.length)], guard = 0;
+    while (used.includes(kind) && guard++ < 12) kind = all[Math.floor(R() * all.length)];
+    used.push(kind);
+    const b = archCache[kind] || (archCache[kind] = (() => { const o = Chars.makeBuilding(kind); o.g = mergeByMaterial(o.g); return o; })());
+    const sc = (b.r > 6 ? .9 : 1.05) * (.92 + R() * .2), rad = b.r * sc;
+    for (let t = 0; t < 70; t++) {
+      const a = R() * TAU, rr = 24 + R() * 26, x = Math.cos(a) * rr, z = Math.sin(a) * rr;
+      if (archFixed.some(f => Math.hypot(x - f.x, z - f.z) < f.r + rad) || archList.some(o => Math.hypot(x - o.x, z - o.z) < o.rad + rad + 5) || blocked(x, z, rad + 1.5)) continue;
+      const g = new THREE.Group(), body = b.g.clone(true), mats = []; body.traverse(o => { if (o.isMesh) { o.material = o.material.clone(); o.material.transparent = true; mats.push(o.material); } }); g.add(body); g.position.set(x, 0, z); g.scale.setScalar(sc); g.rotation.y = Math.atan2(-x, -z) + (R() - .5) * .6;
+      g.updateMatrixWorld(true); g.traverse(o => { if (o !== g) o.matrixAutoUpdate = false; });
+      archGroup.add(g); const c = { x, z, r: rad * .85 }; cols.push(c); archCols.push(c); archList.push({ kind, x, z, rad, g, mats, alpha: 1 }); break;
+    }
+  }
+}
 function loadLevelObj(Lv, preview) {
-  L = Lv; level = Lv.n || level; clearLevel(); applyTheme(L.theme, L.mod);
+  L = Lv; level = Lv.n || level; clearLevel(); applyTheme(L.theme, L.mod); placeArch();
   if (L.dash) { dash.startZ = 34; } resetRun();
   camera.position.set(0, 16, L.dash ? 56 : 38);
   if (preview) { spawnPreview(); state = 'menu'; el.bossbar.style.display = 'none'; return; }
@@ -1778,6 +2224,10 @@ function beginStage(i, first) {
     else if (o.type === 'stars') for (let k = 0; k < o.need; k++) spawnStar();
     else if (o.type === 'gifts') for (let k = 0; k < o.need; k++) spawnGift();
     else if (o.type === 'chicks') spawnChicks(o.need);
+    else if (o.type === 'coins') for (let k = 0; k < o.need; k++) { const p = spot(6, 10), c = spawnCoin(p.x, p.z); c.mission = true; }
+    else if (o.type === 'fireflies') for (let k = 0; k < o.need; k++) spawnFirefly();
+    else if (o.type === 'seeds') for (let k = 0; k < o.need; k++) spawnSeed();
+    else if (o.type === 'cages') for (let k = 0; k < o.need; k++) spawnCage();
     else if (o.type === 'foxes') foxQueue = o.need;
     else if (o.type === 'baddies') { waves.queue = o.need; waves.size = L.waveSize; waves.total = Math.ceil(o.need / L.waveSize); waves.num = 0; waves.timer = 2.2; waves.cool = 1.2; }
     else if (o.type === 'flags') flagState.left = o.need;
@@ -1789,6 +2239,7 @@ function beginStage(i, first) {
   goalRing.visible = st.objs.some(o => o.type === 'foxes' || o.type === 'chicks');
   if (!L.mp) for (let k = 0; k < L.hazCount; k++) spawnHazard(k);
   if (!L.dash && !L.mp) spawnFun();
+  if (L.star && !L.dash && !L.mp && !L.boss && !st.objs.some(o => o.type === 'boss')) { const se = spawnKind(L.star, null, false); if (se) burst(se.x, 1, se.z, 0xffffff, 8, 4, .8); }   // every level has its own star villain
   el.time.textContent = timeLeft; el.time.classList.remove('low'); updateHearts(); renderObjs();
   if (bossRef) el.bossbar.style.display = 'block';
   showBanner(i); state = 'intro'; introT = first ? 2.8 : 2.0; sfx.start();
@@ -1799,7 +2250,7 @@ function showBanner(i) {
   $('bnTitle').textContent = i === 0 ? L.title : `Stage ${i + 1} of ${L.stages.length}`;
   $('bnTheme').textContent = i === 0 ? `${L.theme.emoji} World ${L.world + 1} · ${L.theme.name}` : `${L.theme.emoji} ${L.title}`;
   $('bnMission').textContent = missionOf(st, L.world);
-  $('bnMod').textContent = i === 0 && L.mod ? `${MODS[L.mod].e} ${MODS[L.mod].name}` : '';
+  $('bnMod').textContent = i === 0 ? [L.mod ? `${MODS[L.mod].e} ${MODS[L.mod].name}` : '', L.star ? `${VILLAINS[L.star].e} Watch out: ${VILLAINS[L.star].n}!` : ''].filter(Boolean).join('   ·   ') : '';
   $('bnHint').textContent = i === 0 ? L.hint : (st.objs[0] && KIND_HINT[st.objs[0].type]) || ''; el.banner.classList.add('show');
 }
 function startLevel(n) { if (MP.inRoom) MP.leave(true); hideAll(); audioInit(); loadLevel(n); }
@@ -1818,14 +2269,18 @@ function winLevel() {
   if (MP.active) { MP.onWin(); return; }
   state = 'win'; sfx.win(); buzz(80); dpadReset();
   const frac = levelT / L.totalTime, stars = frac <= .4 && hearts >= 2 ? 3 : frac <= .65 ? 2 : 1;
-  const prev = +save.stars[level - 1]; if (stars > prev) save.stars = save.stars.slice(0, level - 1) + stars + save.stars.slice(level);
+  const prev = +save.stars[level - 1], firstClear = !(prev > 0); if (stars > prev) save.stars = save.stars.slice(0, level - 1) + stars + save.stars.slice(level);
   if (level >= save.max && level < TOTAL_LEVELS) save.max = level + 1;
   const bonus = Math.round((stars * 5 + Math.round(level / 40)) * (partyMode ? 1.5 : 1)); save.coins += bonus; runCoins += bonus; updCoins(); writeSave();
-  confetti(pig.x, 2, pig.z, 70); popText('🎉', pig.x, pig.y + 4, pig.z, 'gold'); pig.mood = 'cheer'; pig.moodT = 3;
+  const ch = CHEERS[cheerIdx(level)]; cheerReset(); confetti(pig.x, 2, pig.z, 70); popText(`${ch.e} ${ch.n}!`, pig.x, pig.y + 4.5, pig.z, 'gold'); pig.mood = 'cheer'; pig.moodT = 3;
+  if (firstClear) setTimeout(() => { if (state === 'win') popText('🎁 New hat + skin!', pig.x, pig.y + 6, pig.z, 'good'); }, 600);
   setTimeout(() => {
     if (state !== 'win') return; el.banner.classList.remove('show');
     $('winTitle').textContent = L.boss ? `${BOSSES[bossType(L.world)].name} defeated!` : L.dash ? 'You made it to the finish!' : 'Level Complete!'; $('winStars').innerHTML = [0, 1, 2].map(i => `<span style="animation-delay:${(.12 + i * .28).toFixed(2)}s">${i < stars ? '⭐' : '☆'}</span>`).join(''); if (stars === 3) setTimeout(() => { if (state === 'win') sfx.sparkle(); }, 800);
     $('winMsg').textContent = pick(['Super piggy! 🐷', 'Oink-credible!', 'Ham-azing job!', 'The farm is saved!', 'Snout-standing!', 'You rock, piggy! 🎸', 'Pig-tastic! 🌟']) + `  +${runCoins} 🪙` + (partyMode ? '  🎉 Party bonus x1.5!' : '') + (level >= TOTAL_LEVELS ? '  🏆 You finished all 1000 levels!' : ''); $('next').style.display = level >= TOTAL_LEVELS ? 'none' : '';
+    $('winCheer').textContent = `${ch.e} ${ch.n}  ·  ✨ ${CHEER_FX[cheerFxIdx(level)]}`;
+    const gift = $('winGift'); gift.style.display = firstClear ? '' : 'none';
+    if (firstClear) { const hi = hatInfo('h' + level), si = skinInfo('s' + level); $('winGiftTxt').textContent = `🎁 New hat: ${hi.e} ${hi.n}  ·  New skin: ${si.e} ${si.n}`; const w = $('winWear'); w.textContent = '👕 WEAR THEM'; w.onclick = () => { save.hat = 'h' + level; save.skin = 's' + level; writeSave(); applyCosmetic(); sfx.sparkle(); w.textContent = '✔ Wearing!'; pig.mood = 'cheer'; pig.moodT = 2; }; }
     $('win').classList.add('show');
   }, 1300);
 }
@@ -1847,7 +2302,7 @@ $('retryStage').onclick = () => {
 /* ============================================================ menus */
 let viewWorld = 0;
 function renderLevels() {
-  const t = THEMES[viewWorld % THEMES.length]; $('wtitle').textContent = `${t.emoji} ${t.name}`; $('wnum').textContent = `World ${viewWorld + 1} of ${NWORLDS}`;
+  const t = themeFor(viewWorld); $('wtitle').textContent = `${t.emoji} ${t.name}`; $('wnum').textContent = `World ${viewWorld + 1} of ${NWORLDS}`;
   const grid = $('lvgrid'); grid.innerHTML = '';
   for (let i = 0; i < 10; i++) {
     const n = viewWorld * 10 + i + 1, b = document.createElement('button'), locked = n > save.max, st = +save.stars[n - 1], dsh = isDashLevel(n);
@@ -1865,7 +2320,7 @@ function openMenu() {
   const w = Math.floor((Math.min(save.max, TOTAL_LEVELS) - 1) / 10); loadLevel(w * 10 + 1, true); pig.heading = camYaw + Math.PI;
   $('menuStars').textContent = `⭐ ${totalStars()}   ·   Level ${Math.min(save.max, TOTAL_LEVELS)}   ·   🪙 ${save.coins}`; $('play').textContent = save.max > 1 ? 'CONTINUE' : 'PLAY'; $('menu').classList.add('show'); state = 'menu'; musicMode('farm', 104);
 }
-function openShop() { audioInit(); hideAll(); renderShop(); $('shop').classList.add('show'); state = 'shop'; }
+function openShop() { audioInit(); hideAll(); wardW = Math.floor((Math.min(save.max, TOTAL_LEVELS) - 1) / 10); renderShop(); $('shop').classList.add('show'); state = 'shop'; }
 $('play').onclick = () => { audioInit(); startLevel(Math.min(save.max, TOTAL_LEVELS)); };
 $('btnLevels').onclick = () => { audioInit(); openLevels(); };
 $('btnShop').onclick = openShop; $('shopBack').onclick = openMenu;
@@ -1929,7 +2384,8 @@ function updatePig(dt) {
   }
   if (pig.falling && pig.y < -11 && live) dashFall(); else if (pig.falling && pig.y < -30) dashFall();
   if (pig.grounded) pig.fuel = Math.min(1, pig.fuel + .7 * dt);
-  if (state === 'win' && onRoad && !pig.falling) { pig.heading += dt * 5.2; if (pig.grounded) { pig.vy = 7.5; pig.grounded = false; sfx.squeak(); } }    // victory dance: spin + hop!
+  if (state === 'win' && onRoad && !pig.falling) { cheerStep(dt); cheerFx(dt); }    // victory dance: 12 different cheers + 6 particle shows, picked by level
+  else if (cheerOn) cheerReset();
   if (live && !dashOn && !botMode && pig.grounded && !(pig.stun > 0) && !input.shootHeld && !input.mx && !input.my) {
     pig.idleT = (pig.idleT || 0) + dt;
     if (pig.idleT > 6) { pig.idleT = 0; pig.vy = 8.5; pig.grounded = false; sfx.oink(); popText(pick(['Oink?', 'Hello?', 'Snort snort', 'Bored...']), pig.x, pig.y + 4.5, pig.z, ''); }   // tiny "are you there?" hop
@@ -1940,8 +2396,8 @@ function updatePig(dt) {
   pig.moodT -= dt; if (pig.moodT <= 0) pig.mood = IDLE(state) ? 'happy' : (pig.stun > 0 ? 'hurt' : 'normal');
   pig.squash = Math.max(0, pig.squash - dt); const sq = pig.squash > 0 ? 1 - Math.sin(pig.squash / .25 * Math.PI) * .18 : 1;
   pig.recoil = Math.max(0, pig.recoil - dt);
-  rig.animate(dt, { t: clock, speed: hs, grounded: pig.grounded, thrusting: pig.thrusting, vy: pig.vy, squash: sq, recoil: pig.recoil, mood: pig.mood });
-  const g = pigParts.g; g.position.set(pig.x, pig.y, pig.z); g.rotation.y = pig.heading; g.visible = state === 'levels' ? false : invuln > 0 && live ? Math.floor(clock * 14) % 2 === 0 : true;
+  rig.animate(dt, { t: clock, speed: hs + cheerHs, grounded: pig.grounded, thrusting: pig.thrusting, vy: pig.vy, squash: sq, recoil: pig.recoil, mood: pig.mood });
+  const g = pigParts.g; g.position.set(pig.x, pig.y, pig.z); g.rotation.y = pig.heading; g.visible = state === 'levels' ? false : invuln > 0 && live ? Math.floor(clock * 14) % 2 === 0 : true; cheerPose(g);
   const sh = pigParts.shadow, sc = Math.max(.35, 1 - Math.max(0, pig.y) * .06) * 1.6; sh.visible = !pig.falling && state !== 'levels'; sh.position.set(pig.x, .06, pig.z); sh.scale.setScalar(sc); sh.material.opacity = Math.max(.35, 1 - Math.max(0, pig.y) * .06);
 }
 
@@ -1982,7 +2438,7 @@ function objTarget() {
   if (open.includes('boss') && bossRef) return { t: bossRef, e: '👑' };
   if (open.includes('simon') && simon.pads.length) { const p = simon.pads[0]; return { t: { x: p.x - 3.5 * Math.SQRT1_2 * 1.0, z: p.z - 3.5 * Math.SQRT1_2 }, e: '🎵' }; }
   if (open.includes('chicks')) { const F = chickGrp.followers, lost = ents.filter(e => e.kind === 'chick' && e.st === 'lost' && !e.dead); if (F.length && (!lost.length || F.length >= 3)) return { t: { x: GOAL.x, z: GOAL.z, y: 0 }, e: '🏠' }; eat(e => e.kind === 'chick' && e.st === 'lost'); if (best) return { t: best, e: '🐥' }; }
-  const want = { gifts: e => e.kind === 'gift', sheep: e => e.kind === 'sheep' && e.st !== 'fly', balloons: e => e.kind === 'balloon', pins: e => e.kind === 'pin' && e.st === 'stand', stars: e => e.kind === 'star', targets: e => e.kind === 'target' && !e.hit, foxes: e => e.kind === 'fox' && e.st === 'run', baddies: e => e.kind === 'enemy' && e.mission };
+  const want = { coins: e => e.kind === 'coin' && e.mission, fireflies: e => e.kind === 'firefly', seeds: e => e.kind === 'seed' && !e.done, cages: e => e.kind === 'cage' && e.st === 'locked', gifts: e => e.kind === 'gift', sheep: e => e.kind === 'sheep' && e.st !== 'fly', balloons: e => e.kind === 'balloon', pins: e => e.kind === 'pin' && e.st === 'stand', stars: e => e.kind === 'star', targets: e => e.kind === 'target' && !e.hit, foxes: e => e.kind === 'fox' && e.st === 'run', baddies: e => e.kind === 'enemy' && e.mission };
   for (const ty of open) if (want[ty]) eat(want[ty]);
   return best ? { t: best, e: '' } : null;
 }
@@ -2028,7 +2484,7 @@ function tick(dt) {
   windmillBlades.rotation.z += dt * .8; goalRing.scale.setScalar(1 + Math.sin(clock * 4) * .06);
   for (const c of clouds) { c.position.x += dt * 1.2; if (c.position.x > 240) c.position.x = -240; if (dash.on) { if (c.position.z > pig.z + 260) c.position.z -= 520; else if (c.position.z < pig.z - 260) c.position.z += 520; } }
   el.fuel.style.width = (pig.fuel * 100) + '%';
-  updateCamera(dt); updateArrow();
+  updateCamera(dt); updateArch(dt); updateArrow();
 }
 document.addEventListener('visibilitychange', () => { last = performance.now(); if (document.hidden && state === 'play' && !MP.active) { state = 'pause'; $('pauseMenu').classList.add('show'); } });
 
@@ -2048,7 +2504,8 @@ const MP_COL = ['#ff6aa8', '#4fb8ff', '#ffd23a', '#6adf5a'];
 const MP_EMOTES = ['😀', '👋', '😂', '❤️', '👍', '🎉'];
 const mnum = (v, lim) => typeof v === 'number' && isFinite(v) ? clamp(v, -lim, lim) : 0;
 const cleanName = s => String(s || '').replace(/[^A-Za-z0-9 ]/g, '').trim().slice(0, 18) || 'Piggy';
-const okHat = h => HATS.some(x => x.id === h) ? h : 'hat0', okSkin = s => SKINS.some(x => x.id === s) ? s : 'skin0';
+const okLv = (v, k) => { const m = lvRe.exec(v); return !!m && m[1] === k && +m[2] >= 1 && +m[2] <= TOTAL_LEVELS; };
+const okHat = h => (HATS.some(x => x.id === h) || okLv(h, 'h')) ? h : 'hat0', okSkin = s => (SKINS.some(x => x.id === s) || okLv(s, 's')) ? s : 'skin0';
 const rid = n => { const a = 'abcdefghjkmnpqrstuvwxyz23456789'; let s = ''; for (let i = 0; i < n; i++) s += a[Math.floor(Math.random() * a.length)]; return s; };
 function newName() { return pick(MP_ADJ) + ' ' + pick(MP_ANI); }
 MP.me.name = save.mpName || (save.mpName = newName());
@@ -2392,7 +2849,7 @@ openMenu();
 requestAnimationFrame(frame);
 window.__game = {
   cols, ents, pig, input, MP, dash, THEMES, TOTAL_LEVELS, genLevel, loadLevel, startLevel, tick, rig, save: () => save,
-  spawn: { cupcake: spawnCupcake, snowman: spawnSnowman, jack: spawnJack, bee: spawnBee, robot: spawnRobot, gift: spawnGift, chick: spawnChick, chicks: spawnChicks }, chickGrp, hurt: () => hearts, hasFlag: () => ({ wind: windMode, bounce: bounceMode, party: partyMode }),
+  spawn: { cupcake: spawnCupcake, snowman: spawnSnowman, jack: spawnJack, bee: spawnBee, robot: spawnRobot, gift: spawnGift, chick: spawnChick, chicks: spawnChicks, crabby: spawnCrabby, boo: spawnBoo, spinny: spawnSpinny, rexy: spawnRexy, drizzle: spawnDrizzle, gummy: spawnGummy, firefly: spawnFirefly, seed: spawnSeed, cage: spawnCage }, chickGrp, CHEERS, cheerIdx, cheerFxIdx, hatInfo, skinInfo, levelDone, archInfo: () => archList.map(o => ({ kind: o.kind, x: o.x, z: o.z, r: o.rad })), renderWard, setWardW: v => { wardW = v; }, cheerState: () => ({ on: cheerOn, t: cheerT, flip: cheerFlip }), hurt: () => hearts, hasFlag: () => ({ wind: windMode, bounce: bounceMode, party: partyMode }),
   setBot: v => { botMode = v; }, setYaw: v => { camYaw = v; }, camYawGet: () => camYaw, camPitchGet: () => camPitch, applyCosmetic, dressRig, winNow: () => { if (state === 'play') { state = 'play'; winLevel(); } },
   forceHearts: () => { hearts = 3; invuln = 0; }, setTime: v => { timeLeft = v; }, ballsFire: shoot, openMenu, openLevels, openShop, beginStage, stageClear, dashResume, hostStart,
   get state() { return state; }, set state(v) { state = v; }, get L() { return L; }, get objs() { return objs; }, get hearts() { return hearts; }, get timeLeft() { return timeLeft; }, get boss() { return bossRef; },

@@ -28,11 +28,12 @@ class WebAssetsTest {
 
     @Test
     fun characterScriptsLoadInDependencyOrder() {
-        // ch_extra.js wraps makeBoss/makeHat from ch_bosses.js/ch_core.js and must run before game.js uses them; a wrong order only fails at runtime.
+        // ch_extra.js wraps makeBoss/makeHat from ch_bosses.js/ch_core.js, ch_extra2.js wraps makeBoss/makeCritter again (bosses 12-17, new pals) and
+        // ch_world.js wraps makeHat/makePig (1000 level hats + skins) and adds the buildings. All must run before game.js uses them; a wrong order only fails at runtime.
         val scripts = Regex("""<script[^>]+src=["']([^"']+)["']""").findAll(html).map { it.groupValues[1] }.toList()
-        val order = listOf("ch_core.js", "ch_bosses.js", "ch_extra.js", "game.js").map { scripts.indexOf(it) }
-        assertTrue("ch_core.js, ch_bosses.js, ch_extra.js and game.js must all be loaded: $scripts", order.all { it >= 0 })
-        assertTrue("scripts must load in the order ch_core, ch_bosses, ch_extra, game: $scripts", order == order.sorted())
+        val order = listOf("ch_core.js", "ch_bosses.js", "ch_extra.js", "ch_extra2.js", "ch_world.js", "game.js").map { scripts.indexOf(it) }
+        assertTrue("ch_core.js, ch_bosses.js, ch_extra.js, ch_extra2.js, ch_world.js and game.js must all be loaded: $scripts", order.all { it >= 0 })
+        assertTrue("scripts must load in the order ch_core, ch_bosses, ch_extra, ch_extra2, ch_world, game: $scripts", order == order.sorted())
     }
 
     @Test

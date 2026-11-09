@@ -1,6 +1,19 @@
 # Piggy Farm: Android app (Gradle project)
 
-A real Gradle/Kotlin Android project that wraps the v5.2 web game (`app/src/main/assets/www`) in a full-screen WebView and builds a **Play-ready AAB** in CI. v5.1 was the prebuilt `PiggyFarm-v5_1.apk`; v5.2 adds the kid-friendly content below.
+A real Gradle/Kotlin Android project that wraps the v5.3 web game (`app/src/main/assets/www`) in a full-screen WebView and builds a **Play-ready AAB** in CI. v5.1 was the prebuilt `PiggyFarm-v5_1.apk`; v5.2 adds the kid-friendly content below.
+
+## What's new in v5.3 (versionCode 8)
+
+* **1000 levels, 100 worlds.** 30 themed worlds plus 70 generated **Dream / Twilight / Neon** variants (hue-shifted sky, ground and trees), so no two neighbouring worlds look alike. New worlds: Robot Factory, Neon City, Pixel Park, Hologram Hills (the "AI" worlds), Cloud Kingdom, Bubble Lagoon, Ice Cream Parlor, Haunted Hollow, Enchanted Forest and Dragon Mountain.
+* **Villains in every level.** 6 new grumpy-cute villains (Crabby, Peek-a-boo Ghost, Spinny Top, Baby Rexy, Drizzle, Gummy Bear). Every level has a "star villain" (always one you have already met) plus each world's favourites.
+* **18 bosses** (was 12): Captain Crabby, Boo King, Rex the Roar, Sundae Sam, Teddy Titan, Professor Hoot. They repeat with new colours and bigger bodies in later worlds.
+* **4 new objectives**: Shiny Coins, Fireflies (they flee!), Magic Seeds (stand on the soil until it blooms) and Caged Pals (bonk or stomp the cage).
+* **A hat and a skin for every level.** Beat level *n* and you unlock hat `h<n>` and skin `s<n>` (27 hat shapes x colourways, skins = generated colours x 8 patterns). The win screen offers them with a WEAR button; the shop has a *Level Rewards* wardrobe with one page per world.
+* **12 cheering dances** (Spin & Hop, Backflip, Moonwalk, Cartwheel, Pogo, Wiggle, Rocket Boost, Ballet, Bunny Hop, Robot, Superhero Flight, Conga) and **6 particle shows** (confetti, fireworks, hearts, stars, bubbles, rainbow ring), picked per level. The farm pals cheer in four different ways too.
+* **Architecture**: 12 toon landmarks (castle, lighthouse, igloo, pagoda, tipi, treehouse, rocket, pyramid, clock tower, carousel, gingerbread house, mushroom house), 0-3 per level, chosen by world. They have colliders and fade out when they would block the camera. Each building is baked into a handful of draw calls.
+* **6 new farm pals** (elephant, owl, turtle, lion, koala, dino).
+* Source files: `ch_extra2.js` (villains, bosses 12-17, pals), `ch_world.js` (hats, skins, buildings), `game.js` (levels, AI, objectives, cheers, wardrobe, architecture).
+* Not tested on a real phone yet (headless Chrome only). Watch the frame rate on older phones in the Dream/Neon worlds with 3 buildings.
 
 ## What's new in v5.2 (versionCode 7)
 
